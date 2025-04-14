@@ -6,11 +6,11 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:57:21 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 14:57:39 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/14 15:57:05 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Macros.hpp"
 #include "parsing.hpp"
 
 static bool is_valid_password(std::string const& password_str)

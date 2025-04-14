@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 14:53:34 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/14 17:49:10 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 #include <exception>
 #include <map>
 #include <string>
+#include <cstring>
 #include <limits>
+#include <netinet/in.h> //struct sockaddr_in
 #include <sys/socket.h> //socket, setsockopt, getsockname...
 #include <unistd.h> //close, lseek
 #include <netdb.h> //getprotobyname, gethostbyname, getaddrinfo...
@@ -42,13 +44,18 @@
 #define	RESET		"\033[0m"
 #define BORDEAUX	"\033[38;2;128;0;32m"
 #define NEON_GREEN	"\033[38;2;57;255;20m"
+
+/****** TEXT FORMATTING ******/
+
 #define BOLD		"\033[1m"
 
 /****** DEFINES ******/
 
-#define INVALID_FD 		-1
-#define INVALID_PORT 	-1
+#define INVALID_PORT	-1
+#define INVALID_BIND	-1
+#define INVALID_LISTEN	-1
 #define EXIT_FAILURE	1
+#define INVALID_SOCKET	0
 #define EXIT_SUCCESS	0
 #define FALSE			0
 #define TRUE			1

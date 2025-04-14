@@ -12,15 +12,19 @@ CFLAG		= -std=c++98 -Wall -Wextra -Werror -g3 ${INC}
 
 INC		=	-I./include
 
-HEADERS		=	include/Server.hpp \
-				include/Macros.hpp
+HEADERS		=	include/Macros.hpp \
+				include/Server.hpp \
+				include/Client.hpp
 
 ################################################################################
 #                                 Sources                                      #
 ################################################################################
 
 SRC			=	main.cpp \
-				srcs/parsing.cpp
+				srcs/parsing.cpp \
+				srcs/Server.cpp \
+				srcs/Client.cpp \
+				srcs/commands/command_kick.cpp
 
 ################################################################################
 #                                   Objects                                    #
