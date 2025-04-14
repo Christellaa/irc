@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:57:21 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 14:55:09 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/14 14:57:39 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static bool is_valid_port(std::string const& port_str)
 	for (std::string::const_iterator it = port_str.begin(); it != port_str.end(); it++)
 	{
 		if (!std::isdigit(static_cast<unsigned char>(*it)))
-            return FALSE;
+			return FALSE;
 	}
 	long port_number = std::strtol(port_str.c_str(), NULL, 10);
 	return port_number >= 1024 && port_number <= 49151;
