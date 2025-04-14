@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:57:21 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 13:23:48 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/14 14:55:09 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,19 @@ bool check_arguments(int argc, char **argv)
 {
 	if (argc != 3)
 	{
-		std::cerr << BORDEAUX "Error: invalid number of arguments, try ./ircserv <port> <password>" RESET << std::endl;
+		std::cerr << BOLD BORDEAUX "Error: invalid number of arguments, try ./ircserv <port> <password>" RESET << std::endl;
 		return FALSE;
 	}
 	if (is_valid_port(argv[1]) == FALSE)
 	{
-		std::cerr << BORDEAUX "Error: invalid user port, try a number between 1024 and 49151" RESET << std::endl;
+		std::cerr << BOLD BORDEAUX "Error: invalid user port, try a number between 1024 and 49151" RESET << std::endl;
 		return FALSE;
 	}
 	if (is_valid_password(argv[2]) == FALSE)
 	{
-		std::cerr << BORDEAUX "Error: invalid password, try a password like 'angrybots' with no spaces" RESET << std::endl;
+		std::cerr << BOLD BORDEAUX "Error: invalid password, try a password like 'angrybots' with no spaces" RESET << std::endl;
 		return FALSE;
 	}
-	std::cout << NEON_GREEN "YAY PARSING WORKS" RESET << std::endl;
+	std::cout << BOLD NEON_GREEN "YAY PARSING WORKS" RESET << std::endl;
 	return TRUE;
 }
