@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/15 14:55:53 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:07:54 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int main(int argc, char **argv)
 		int port = std::atoi(argv[1]);
 		Server theServer(port, argv[2]);
 		theServer.launch_angrybots_server();
+		// epoll -> y mettre server's socket
+		// boucle d'ecoute du server
 	}catch(const std::exception& e)
 	{
 		std::cout << "Exception caught: " << e.what() << std::endl;

@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/15 14:56:47 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:11:43 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@ void Server::setting_server_socket(void)
 	this->_socketfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_socketfd < INVALID_SOCKET)
 		throw Server::InvalidSocket();
+
+	int flags = fcntl(this->_socketfd, F_GETFL, 0);
+	fcntl(this->_socketfd, F_SETFL, flags | O_NONBLOCK);
 
 	struct sockaddr_in address;
 	std::memset(&address, 0, sizeof(address));
