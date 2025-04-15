@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 16:08:12 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/15 14:55:53 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	try
 	{
-		Server theServer(argv[1], argv[2]);
+		int port = std::atoi(argv[1]);
+		Server theServer(port, argv[2]);
 		theServer.launch_angrybots_server();
 	}catch(const std::exception& e)
 	{

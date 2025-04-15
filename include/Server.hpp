@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 17:50:57 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/15 14:56:51 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@
 class Server
 {
 	private:
-		std::string _port;
+		int _port;
 		std::string _password;
 		int	_socketfd;
 	public:
 		Server();
-		Server(std::string port, std::string password);
+		Server(int port, std::string password);
 		~Server();
 
 		void launch_angrybots_server(void);
 		void setting_server_socket(void);
 
 		std::string getPassword(void);
-		std::string getPort(void);
+		int getPort(void);
 
 		class InvalidSocket : public std::exception{
 			public:

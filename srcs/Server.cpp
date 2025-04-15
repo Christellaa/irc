@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 17:51:47 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/15 14:56:47 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 Server::Server() : _port(), _password(){}
 
-Server::Server(std::string port, std::string password)
+Server::Server(int port, std::string password)
 {
 	this->_port = port;
 	this->_password = password;
@@ -35,7 +35,7 @@ std::string Server::getPassword(void)
 	return this->_password;
 }
 
-std::string Server::getPort(void)
+int Server::getPort(void)
 {
 	return this->_port;
 }
@@ -69,9 +69,9 @@ void Server::setting_server_socket(void)
 	struct sockaddr_in address;
 	std::memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
-	long port_long = std::strtol(this->_port.c_str(), NULL, 10);
-	uint16_t port_number = static_cast<uint16_t>(port_long);
-	address.sin_port = htons(port_number);
+	// long port_long = std::strtol(this->_port.c_str(), NULL, 10);
+	// uint16_t port_number = static_cast<uint16_t>(port_long);
+	address.sin_port = htons(_port);
 	address.sin_addr.s_addr = INADDR_ANY;
 
 	if (bind(_socketfd, (struct sockaddr*)&address, sizeof(address)) == INVALID_BIND)
