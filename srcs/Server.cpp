@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/15 15:11:43 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:07:06 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "parsing.hpp"
 
 //####
 //#Constructors & Destructors
@@ -40,6 +41,16 @@ int Server::getPort(void)
 	return this->_port;
 }
 
+int Server::getSocket(void)
+{
+	return this->_socketfd;
+}
+
+std::map<int, Client*>& Server::getClients(void)
+{
+	return this->_clients;
+}
+
 //####
 //#Exceptions
 //##################
@@ -66,8 +77,7 @@ void Server::setting_server_socket(void)
 	if (this->_socketfd < INVALID_SOCKET)
 		throw Server::InvalidSocket();
 
-	int flags = fcntl(this->_socketfd, F_GETFL, 0);
-	fcntl(this->_socketfd, F_SETFL, flags | O_NONBLOCK);
+	set_socket_non_blocking(this->_socketfd);
 
 	struct sockaddr_in address;
 	std::memset(&address, 0, sizeof(address));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/15 15:07:32 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:07:10 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define SERVER_HPP
 
 #include "Macros.hpp"
+#include "Client.hpp"
 
 class Server
 {
@@ -21,6 +22,7 @@ class Server
 		int _port;
 		std::string _password;
 		int	_socketfd;
+		std::map<int, Client*> _clients;
 	public:
 		Server();
 		Server(int port, std::string password);
@@ -31,6 +33,8 @@ class Server
 
 		std::string getPassword(void);
 		int getPort(void);
+		int getSocket(void);
+		std::map<int, Client*>& getClients(void);
 
 		class InvalidSocket : public std::exception{
 			public:

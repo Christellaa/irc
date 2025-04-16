@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:57:21 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 15:57:05 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/16 14:00:53 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,10 @@ bool check_arguments(int argc, char **argv)
 	}
 	std::cout << BOLD NEON_GREEN "YAY PARSING WORKS" RESET << std::endl;
 	return TRUE;
+}
+
+void set_socket_non_blocking(int socketfd)
+{
+	int flags = fcntl(socketfd, F_GETFL, 0);
+	fcntl(socketfd, F_SETFL, flags | O_NONBLOCK);
 }

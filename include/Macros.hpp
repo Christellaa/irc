@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/14 17:49:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/16 14:04:51 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <exception>
+#include <stdexcept>
 #include <map>
 #include <string>
 #include <cstring>
 #include <limits>
+#include <cerrno>
 #include <netinet/in.h> //struct sockaddr_in
 #include <sys/socket.h> //socket, setsockopt, getsockname...
 #include <unistd.h> //close, lseek
@@ -51,14 +53,17 @@
 
 /****** DEFINES ******/
 
-#define INVALID_PORT	-1
-#define INVALID_BIND	-1
-#define INVALID_LISTEN	-1
-#define EXIT_FAILURE	1
-#define INVALID_SOCKET	0
-#define EXIT_SUCCESS	0
-#define FALSE			0
-#define TRUE			1
+#define INVALID_PORT		-1
+#define INVALID_BIND		-1
+#define INVALID_LISTEN		-1
+#define EXIT_FAILURE		1
+#define INVALID_SOCKET		0
+#define EXIT_SUCCESS		0
+#define FALSE				0
+#define TRUE				1
+#define MAX_CLIENTS			10
+#define MAX_CHAR_MSG		512
+#define MAX_CHAR_CHANNEL	50
 
 /****** ENUM ******/
 
