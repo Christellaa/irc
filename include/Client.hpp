@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/16 15:24:08 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/17 15:12:12 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ class Client
 		std::string getNickname(void);
 		std::string getUsername(void);
 		std::string& getMsg(void);
+		void 		setPassword(std::string& password);
+		void 		setNickname(std::string& nickname);
+		void 		setUsername(std::string& username);
+
+		bool 		isWelcome;
 };
 
 #endif

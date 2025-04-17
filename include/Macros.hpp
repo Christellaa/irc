@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/16 14:04:51 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/17 13:59:46 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@
 #define MAX_CLIENTS			10
 #define MAX_CHAR_MSG		512
 #define MAX_CHAR_CHANNEL	50
+
+/****** SERVER MESSAGE ******/
+
 
 /****** ENUM ******/
 
