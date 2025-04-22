@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 13:47:03 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 15:23:59 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ class Client
 		std::string getNickname(void);
 		std::string getUsername(void);
 		std::string& getMsg(void);
+		int getSocket(void);
 	
 		void 		setPassword(std::string& password);
 		void 		setNickname(std::string& nickname);
 		void 		setUsername(std::string& username);
 	
 		static Client* findClient(std::vector<clientPair>& clients, int clientfd);
-		void readClientMessage(int currentClientfd);
-		void parseClientMessage(int currentClientfd);
+		void readClientMessage();
+		void parseClientMessage();
+		void parseWelcomeMessage();
 
 		bool 		isWelcome;
 };

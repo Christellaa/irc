@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 14:53:30 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 15:14:27 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_e
 			{
 				Client* client = Client::findClient(theServer.getClients(), currentClientfd);
 				if (client)
-					client->readClientMessage(currentClientfd);
+					client->readClientMessage();
 			}
 		}
 	}

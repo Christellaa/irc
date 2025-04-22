@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 13:46:41 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 15:22:46 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ std::string& Client::getMsg(void)
 	return this->_msg;
 }
 
+int Client::getSocket(void)
+{
+	return this->_socketfd;
+}
+
 
 void 		Client::setPassword(std::string& password) { this->_password = password;}
 void 		Client::setNickname(std::string& nickname) { this->_nickname = nickname;}
@@ -70,7 +75,45 @@ Client* Client::findClient(std::vector<clientPair>& clients, int clientfd)
 	return NULL;
 }
 
-void Client::parseClientMessage(int currentClientfd)
+void Client::readClientMessage()
+{
+	char buffer[MAX_CHAR_MSG];
+	while (1)
+	{
+		if (this->getMsg().find("\n") != std::string::npos)
+			break;
+		ssize_t bytes = recv(this->getSocket(), buffer, sizeof(buffer), MSG_DONTWAIT);
+		if (bytes == -1)
+		{
+			if (errno == EAGAIN || errno == EWOULDBLOCK)
+				return;
+			else
+				throw std::runtime_error("recv failed");
+		}
+		else if (bytes == 0)
+		{
+			// cleanup + exit
+			break; // to delete
+		}
+		else
+		{
+			this->getMsg().append(buffer, bytes);
+			std::cout << "Message: " << this->getMsg() << std::endl;
+		}
+	}
+	parseClientMessage();
+}
+
+void Client::parseClientMessage()
+{
+	if (this->getPassword().empty() || this->getNickname().empty() || this->getUsername().empty()){
+		parseWelcomeMessage();
+	}
+	this->getMsg().clear();
+	// parsing messages
+}
+
+void Client::parseWelcomeMessage()
 {
 	std::istringstream iss(this->getMsg());
 	std::string word;
@@ -98,37 +141,7 @@ void Client::parseClientMessage(int currentClientfd)
 	if (this->isWelcome && !this->getPassword().empty() && !this->getNickname().empty() && !this->getUsername().empty())
 	{
 		std::string welcome_msg = welcome_client(this->getNickname(), this->getUsername());
-		send(currentClientfd, welcome_msg.c_str(), welcome_msg.length(), 0);
+		send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
 		this->isWelcome = false;
 	}
-	this->getMsg().clear();
-}
-
-void Client::readClientMessage(int currentClientfd)
-{
-	char buffer[MAX_CHAR_MSG];
-	while (1)
-	{
-		if (this->getMsg().find("\n") != std::string::npos)
-			break;
-		ssize_t bytes = recv(currentClientfd, buffer, sizeof(buffer), MSG_DONTWAIT);
-		if (bytes == -1)
-		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-				return;
-			else
-				throw std::runtime_error("recv failed");
-		}
-		else if (bytes == 0)
-		{
-			// cleanup + exit
-			break; // to delete
-		}
-		else
-		{
-			this->getMsg().append(buffer, bytes);
-			std::cout << "Message: " << this->getMsg() << std::endl;
-		}
-	}
-	parseClientMessage(currentClientfd);
 }
