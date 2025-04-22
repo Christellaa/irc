@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/16 15:07:06 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 13:01:03 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 #include "parsing.hpp"
 
 //####
-//#Constructors & Destructors
+//#Constructor & Destructor
 //##################
-
-Server::Server() : _port(), _password(){}
 
 Server::Server(int port, std::string password)
 {
@@ -46,7 +44,7 @@ int Server::getSocket(void)
 	return this->_socketfd;
 }
 
-std::map<int, Client*>& Server::getClients(void)
+std::vector<clientPair>& Server::getClients(void)
 {
 	return this->_clients;
 }

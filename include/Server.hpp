@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/16 15:07:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 13:10:15 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ class Server
 		int _port;
 		std::string _password;
 		int	_socketfd;
-		std::map<int, Client*> _clients;
-	public:
+		std::vector<clientPair> _clients;
 		Server();
+	public:
 		Server(int port, std::string password);
 		~Server();
 
@@ -34,7 +34,7 @@ class Server
 		std::string getPassword(void);
 		int getPort(void);
 		int getSocket(void);
-		std::map<int, Client*>& getClients(void);
+		std::vector<clientPair>& getClients(void);
 
 		class InvalidSocket : public std::exception{
 			public:

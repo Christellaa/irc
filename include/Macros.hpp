@@ -6,12 +6,14 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/17 13:59:46 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 13:42:15 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MACROS_HPP
 #define MACROS_HPP
+
+class Client;
 
 /****** LIBRARIES ******/
 
@@ -19,11 +21,13 @@
 #include <cstdlib>
 #include <exception>
 #include <stdexcept>
-#include <map>
+#include <vector>
 #include <string>
+#include <algorithm>
 #include <cstring>
 #include <limits>
 #include <cerrno>
+#include <sstream>
 #include <netinet/in.h> //struct sockaddr_in
 #include <sys/socket.h> //socket, setsockopt, getsockname...
 #include <unistd.h> //close, lseek
@@ -65,8 +69,13 @@
 #define MAX_CHAR_MSG		512
 #define MAX_CHAR_CHANNEL	50
 
-/****** SERVER MESSAGE ******/
+/****** TYPEDEF ******/
 
+typedef std::pair<int, Client*> clientPair;
+
+/****** FUNCTIONS ******/
+
+std::string welcome_client(std::string nickname, std::string username);
 
 /****** ENUM ******/
 

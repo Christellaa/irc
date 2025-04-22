@@ -6,83 +6,12 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/17 15:12:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 13:52:39 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
 #include "parsing.hpp"
-
-#include <sstream>
-
-std::string welcome_client(std::string nickname, std::string username)
-{
-	return ":ircserv 001 " + nickname + " :Welcome, " + username + "\n";
-}
-
-void parseInfo(int currentClientfd, Client& client)
-{
-	std::istringstream iss(client.getMsg());
-	std::string word;
-	while (iss >> word)
-	{
-		if (word == "PASS")
-		{
-			iss >> word;
-			client.setPassword(word);
-		}
-		else if (word == "NICK")
-		{
-			iss >> word;
-			client.setNickname(word);
-		}
-		else if (word == "USER")
-		{
-			std::string line;
-			std::getline(iss, line);
-			char pos = line.find(":");
-			line = line.substr(pos + 1, line.length());
-			client.setUsername(line);
-		}
-	}
-	if (client.isWelcome && !client.getPassword().empty() && !client.getNickname().empty() && !client.getUsername().empty())
-	{
-		std::string welcome_msg = welcome_client(client.getNickname(), client.getUsername());
-		send(currentClientfd, welcome_msg.c_str(), welcome_msg.length(), 0);
-		client.isWelcome = false;
-	}
-	client.getMsg().clear();
-}
-
-void parseClientMessage(int currentClientfd, Client& client)
-{
-	char buffer[MAX_CHAR_MSG];
-	while (1)
-	{
-		if (client.getMsg().find("\n") != std::string::npos)
-			break;
-		ssize_t bytes = recv(currentClientfd, buffer, sizeof(buffer), MSG_DONTWAIT);
-		if (bytes == -1)
-		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-				return;
-			else
-				throw std::runtime_error("recv failed");
-		}
-		else if (bytes == 0)
-		{
-			// cleanup + exit
-			break; // to delete
-		}
-		else
-		{
-			client.getMsg().append(buffer, bytes);
-			std::cout << "Message: " << client.getMsg() << std::endl;
-		}
-	}
-	parseInfo(currentClientfd, client);
-}
 
 static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_event* events, int epoll_fd)
 {
@@ -111,18 +40,14 @@ static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_e
 				{
 					throw std::runtime_error("Error: epoll_ctl failure");
 				}
-				// ajouter dans classe client
-				theServer.getClients().insert(std::pair<int, Client*>(clientfd, new Client(clientfd)));
+				theServer.getClients().push_back(clientPair(clientfd, new Client(clientfd)));
 				std::cout << "New client connected: " << clientfd << std::endl;
 			}
 			else
 			{
-				std::map<int, Client*>::iterator it = theServer.getClients().find(currentClientfd);
-				if (it == theServer.getClients().end())
-					break; // couldn't find client in map => prob an error
-				Client& client = *it->second;			
-				parseClientMessage(currentClientfd, client);
-				//std::cout << "password: [" << client.getPassword() << "] nick: [" << client.getNickname() << "] username: [" << client.getUsername() << "]" << std::endl;
+				Client* client = Client::findClient(theServer.getClients(), currentClientfd);
+				if (client)
+					client->readClientMessage(currentClientfd);
 			}
 		}
 	}
@@ -157,11 +82,9 @@ int main(int argc, char **argv)
 		struct epoll_event ev, events[MAX_CLIENTS];
 		int epoll_fd = epoll_stuff(theServer, ev);
 		epoll_loop(theServer, ev, events, epoll_fd);
-		// boucle d'ecoute du server
 	}catch(const std::exception& e)
 	{
 		std::cout << "Exception caught: " << e.what() << std::endl;
-		//clean()
 		exit(EXIT_FAILURE);
 	}
 	
