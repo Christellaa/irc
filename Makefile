@@ -25,6 +25,7 @@ SRC			=	main.cpp \
 				srcs/Server.cpp \
 				srcs/Client.cpp \
 				srcs/Macros.cpp \
+				srcs/signal.cpp \
 				srcs/commands/command_kick.cpp
 
 ################################################################################

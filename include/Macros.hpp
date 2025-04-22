@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 13:42:15 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 14:14:51 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class Client;
 #include <unistd.h> //close, lseek
 #include <netdb.h> //getprotobyname, gethostbyname, getaddrinfo...
 #include <arpa/inet.h> //htons, htonl, ntohs...
-#include <signal.h> //signal, sigaction
+#include <csignal> //signal, sigaction
 #include <fcntl.h> //fcntl
 #include <poll.h> //poll
 #include <sys/epoll.h> //epoll
@@ -76,6 +76,8 @@ typedef std::pair<int, Client*> clientPair;
 /****** FUNCTIONS ******/
 
 std::string welcome_client(std::string nickname, std::string username);
+
+void	handle_signals(void);
 
 /****** ENUM ******/
 

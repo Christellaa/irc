@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 13:52:39 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 14:12:10 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	try
 	{
+		handle_signals();
 		int port = std::atoi(argv[1]);
 		Server theServer(port, argv[2]);
 		theServer.launch_angrybots_server();
