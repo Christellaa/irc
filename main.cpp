@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 14:12:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 14:53:30 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,12 @@ static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_e
 	{
 		waitingfd = epoll_wait(epoll_fd, events, MAX_CLIENTS, -1);
 		if (waitingfd == -1)
-		{
 			throw std::runtime_error("Error: epoll_wait failure");
-		}
 		for (int i = 0; i < waitingfd; ++i)
 		{
 			int currentClientfd = events[i].data.fd;
 			if (currentClientfd == theServer.getSocket())
-			{
-				int clientfd = accept(theServer.getSocket(), NULL, NULL);
-				if (clientfd == -1)
-				{
-					throw std::runtime_error("Error: client connexion failure");
-				}
-				set_socket_non_blocking(clientfd);
-				ev.events = EPOLLIN | EPOLLET;
-				ev.data.fd = clientfd;
-				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientfd, &ev) == -1)
-				{
-					throw std::runtime_error("Error: epoll_ctl failure");
-				}
-				theServer.getClients().push_back(clientPair(clientfd, new Client(clientfd)));
-				std::cout << "New client connected: " << clientfd << std::endl;
-			}
+				theServer.addNewClient(epoll_fd, ev);
 			else
 			{
 				Client* client = Client::findClient(theServer.getClients(), currentClientfd);
@@ -86,7 +69,9 @@ int main(int argc, char **argv)
 	}catch(const std::exception& e)
 	{
 		std::cout << "Exception caught: " << e.what() << std::endl;
-		exit(EXIT_FAILURE);
+		if (g_signal != 0)
+			return g_signal;
+		return EXIT_FAILURE;
 	}
 	
 	return EXIT_SUCCESS;

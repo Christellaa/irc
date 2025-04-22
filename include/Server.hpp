@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 13:10:15 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 14:38:19 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ class Server
 		int getPort(void);
 		int getSocket(void);
 		std::vector<clientPair>& getClients(void);
+		void addNewClient(int epoll_fd, struct epoll_event& ev);
+
 
 		class InvalidSocket : public std::exception{
 			public:

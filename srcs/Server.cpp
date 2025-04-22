@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 13:01:03 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 15:01:31 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,16 @@ Server::Server(int port, std::string password)
 	this->_password = password;
 }
 
-Server::~Server(){}
+Server::~Server(){
+	std::vector<clientPair>::iterator it = this->_clients.begin();
+	std::vector<clientPair>::iterator ite = this->_clients.end();
+	for (; it != ite; ++it)
+	{
+		delete it->second;
+		this->_clients.erase(it);
+	}
+	this->_clients.clear();
+}
 
 //####
 //#Getters & Setters
@@ -80,8 +89,6 @@ void Server::setting_server_socket(void)
 	struct sockaddr_in address;
 	std::memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
-	// long port_long = std::strtol(this->_port.c_str(), NULL, 10);
-	// uint16_t port_number = static_cast<uint16_t>(port_long);
 	address.sin_port = htons(_port);
 	address.sin_addr.s_addr = INADDR_ANY;
 
@@ -105,6 +112,22 @@ void Server::launch_angrybots_server(void)
 	std::cout << CYAN "SERVER PASSWORD: " << RESET << getPassword() << std::endl;
 
 	setting_server_socket();
-	//bind
-	//listen
+}
+
+void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
+{
+	int clientfd = accept(this->getSocket(), NULL, NULL);
+	if (clientfd == -1)
+	{
+		throw std::runtime_error("Error: client connexion failure");
+	}
+	set_socket_non_blocking(clientfd);
+	ev.events = EPOLLIN | EPOLLET;
+	ev.data.fd = clientfd;
+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientfd, &ev) == -1)
+	{
+		throw std::runtime_error("Error: epoll_ctl failure");
+	}
+	this->getClients().push_back(clientPair(clientfd, new Client(clientfd)));
+	std::cout << "New client connected: " << clientfd << std::endl;
 }

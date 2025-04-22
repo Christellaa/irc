@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 14:14:51 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/22 14:58:12 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,13 @@ std::string welcome_client(std::string nickname, std::string username);
 
 void	handle_signals(void);
 
-/****** ENUM ******/
+/****** SIGNALS ******/
+
+extern int g_signal;
+
+class SignalQuit : public std::exception{
+	public:
+		virtual const char* what() const throw();
+};
 
 #endif
