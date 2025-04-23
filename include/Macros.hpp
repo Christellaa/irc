@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 14:58:12 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/23 14:43:54 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MACROS_HPP
 
 class Client;
+class Server;
 
 /****** LIBRARIES ******/
 
@@ -69,9 +70,8 @@ class Client;
 #define MAX_CHAR_MSG		512
 #define MAX_CHAR_CHANNEL	50
 
-/****** TYPEDEF ******/
-
-typedef std::pair<int, Client*> clientPair;
+/****** TYPEDEF ******/ // A MODIFIER
+void join(Client* client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 

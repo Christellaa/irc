@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 15:23:59 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/23 14:10:54 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ class Client
 		void 		setNickname(std::string& nickname);
 		void 		setUsername(std::string& username);
 	
-		static Client* findClient(std::vector<clientPair>& clients, int clientfd);
-		void readClientMessage();
-		void parseClientMessage();
+		static Client* findClient(std::vector<Client*>& clients, int clientfd);
+		void readClientMessage(Server& theServer);
+		void parseClientMessage(Server& theServer);
 		void parseWelcomeMessage();
 
 		bool 		isWelcome;

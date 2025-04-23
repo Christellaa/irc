@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 14:38:19 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/23 14:17:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Macros.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Server
 {
@@ -22,7 +23,8 @@ class Server
 		int _port;
 		std::string _password;
 		int	_socketfd;
-		std::vector<clientPair> _clients;
+		std::vector<Client*> _clients;
+		std::vector<Channel*> _channels;
 		Server();
 	public:
 		Server(int port, std::string password);
@@ -34,7 +36,8 @@ class Server
 		std::string getPassword(void);
 		int getPort(void);
 		int getSocket(void);
-		std::vector<clientPair>& getClients(void);
+		std::vector<Client*>& getClients(void);
+		std::vector<Channel*>& getChannels(void);
 		void addNewClient(int epoll_fd, struct epoll_event& ev);
 
 

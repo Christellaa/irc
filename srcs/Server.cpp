@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 15:01:31 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/23 14:17:35 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ Server::Server(int port, std::string password)
 }
 
 Server::~Server(){
-	std::vector<clientPair>::iterator it = this->_clients.begin();
-	std::vector<clientPair>::iterator ite = this->_clients.end();
+	std::vector<Client*>::iterator it = this->_clients.begin();
+	std::vector<Client*>::iterator ite = this->_clients.end();
 	for (; it != ite; ++it)
 	{
-		delete it->second;
+		delete *it;
 		this->_clients.erase(it);
 	}
 	this->_clients.clear();
@@ -53,9 +53,14 @@ int Server::getSocket(void)
 	return this->_socketfd;
 }
 
-std::vector<clientPair>& Server::getClients(void)
+std::vector<Client*>& Server::getClients(void)
 {
 	return this->_clients;
+}
+
+std::vector<Channel*>& Server::getChannels(void)
+{
+	return this->_channels;
 }
 
 //####
@@ -128,6 +133,6 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 	{
 		throw std::runtime_error("Error: epoll_ctl failure");
 	}
-	this->getClients().push_back(clientPair(clientfd, new Client(clientfd)));
+	this->getClients().push_back(new Client(clientfd));
 	std::cout << "New client connected: " << clientfd << std::endl;
 }

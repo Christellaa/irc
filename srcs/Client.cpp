@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 15:22:46 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/23 14:44:02 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ void 		Client::setUsername(std::string& username) { this->_username = username;}
 //#Functions
 //##################
 
-Client* Client::findClient(std::vector<clientPair>& clients, int clientfd)
+Client* Client::findClient(std::vector<Client*>& clients, int clientfd)
 {
-	std::vector<clientPair>::iterator it = clients.begin();
-	std::vector<clientPair>::iterator ite = clients.end();
+	std::vector<Client*>::iterator it = clients.begin();
+	std::vector<Client*>::iterator ite = clients.end();
 	for (; it != ite; ++it)
 	{
-		if (clientfd == it->first)
-			return it->second;
+		if (clientfd == (*it)->getSocket())
+			return *it;
 	}
 	return NULL;
 }
 
-void Client::readClientMessage()
+void Client::readClientMessage(Server& theServer)
 {
 	char buffer[MAX_CHAR_MSG];
 	while (1)
@@ -101,16 +101,21 @@ void Client::readClientMessage()
 			std::cout << "Message: " << this->getMsg() << std::endl;
 		}
 	}
-	parseClientMessage();
+	parseClientMessage(theServer);
 }
 
-void Client::parseClientMessage()
+void Client::parseClientMessage(Server& theServer)
 {
-	if (this->getPassword().empty() || this->getNickname().empty() || this->getUsername().empty()){
+	if (this->isWelcome){
 		parseWelcomeMessage();
 	}
+	// check le premier mot pour connaitre la commande
+	std::istringstream iss(this->getMsg());
+	std::string word;
+	iss >> word;
+	if (word == "JOIN")
+		join(this, theServer, iss);
 	this->getMsg().clear();
-	// parsing messages
 }
 
 void Client::parseWelcomeMessage()

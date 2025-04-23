@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 15:14:27 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/23 14:10:19 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_e
 			{
 				Client* client = Client::findClient(theServer.getClients(), currentClientfd);
 				if (client)
-					client->readClientMessage();
+					client->readClientMessage(theServer);
 			}
 		}
 	}
@@ -64,6 +64,7 @@ int main(int argc, char **argv)
 		Server theServer(port, argv[2]);
 		theServer.launch_angrybots_server();
 		struct epoll_event ev, events[MAX_CLIENTS];
+		std::memset(&ev, 0, sizeof(ev));
 		int epoll_fd = epoll_stuff(theServer, ev);
 		epoll_loop(theServer, ev, events, epoll_fd);
 	}catch(const std::exception& e)
