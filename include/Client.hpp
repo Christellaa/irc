@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/23 14:10:54 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 12:23:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,17 @@ class Client
 		std::string& getMsg(void);
 		int getSocket(void);
 	
-		void 		setPassword(std::string& password);
-		void 		setNickname(std::string& nickname);
-		void 		setUsername(std::string& username);
+		void 		setPassword(std::string const& password);
+		void 		setNickname(std::string const& nickname);
+		void 		setUsername(std::string const& username);
 	
 		static Client* findClient(std::vector<Client*>& clients, int clientfd);
 		void readClientMessage(Server& theServer);
 		void parseClientMessage(Server& theServer);
-		void parseWelcomeMessage();
+		void parseWelcomeMessage(Server& theServer);
+
+		bool badPassword(Server& theServer);
+		void sameNickname(Server& theServer);
 
 		bool 		isWelcome;
 };

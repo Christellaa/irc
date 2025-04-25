@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/23 14:17:35 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 13:58:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,24 @@ Server::Server(int port, std::string password)
 }
 
 Server::~Server(){
-	std::vector<Client*>::iterator it = this->_clients.begin();
-	std::vector<Client*>::iterator ite = this->_clients.end();
-	for (; it != ite; ++it)
 	{
-		delete *it;
-		this->_clients.erase(it);
+		std::vector<Client*>::iterator it = this->_clients.begin();
+		std::vector<Client*>::iterator ite = this->_clients.end();
+		for (; it != ite; ++it)
+		{
+			delete *it;
+		}
+		this->_clients.clear();
 	}
-	this->_clients.clear();
+	{
+		std::vector<Channel*>::iterator it = this->_channels.begin();
+		std::vector<Channel*>::iterator ite = this->_channels.end();
+		for (; it != ite; ++it)
+		{
+			delete *it;
+		}
+		this->_channels.clear();
+	}
 }
 
 //####
@@ -126,6 +136,13 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 	{
 		throw std::runtime_error("Error: client connexion failure");
 	}
+	if (this->getClients().size() >= MAX_CLIENTS)
+	{
+		const char* msg = "Server full. Try again later.\n";
+		send(clientfd, msg, strlen(msg), 0);
+		close(clientfd);
+		return;
+	}
 	set_socket_non_blocking(clientfd);
 	ev.events = EPOLLIN | EPOLLET;
 	ev.data.fd = clientfd;
@@ -134,5 +151,5 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 		throw std::runtime_error("Error: epoll_ctl failure");
 	}
 	this->getClients().push_back(new Client(clientfd));
-	std::cout << "New client connected: " << clientfd << std::endl;
+	std::cout << "New client connected on fd " << clientfd << std::endl;
 }

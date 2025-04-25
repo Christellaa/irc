@@ -1,0 +1,4 @@
+- remettre suffix de sameNickname() a 0
+- check mode pour join un channel
+- parser commande QUIT en priorite (pour voir si client size retourne a 0 pour connecter de nouveaux clients)
+- trunc nickname if > 9 in setNickname()

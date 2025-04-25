@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/23 14:44:02 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 14:28:11 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,14 @@ int Client::getSocket(void)
 }
 
 
-void 		Client::setPassword(std::string& password) { this->_password = password;}
-void 		Client::setNickname(std::string& nickname) { this->_nickname = nickname;}
-void 		Client::setUsername(std::string& username) { this->_username = username;}
+void 		Client::setPassword(std::string const& password) { this->_password = password;}
+void 		Client::setNickname(std::string const& nickname)
+{
+	// if word > 9 -> trunc
+	this->_nickname = nickname;
+}
+
+void 		Client::setUsername(std::string const& username) { this->_username = username;}
 
 //####
 //#Exceptions
@@ -93,6 +98,7 @@ void Client::readClientMessage(Server& theServer)
 		else if (bytes == 0)
 		{
 			// cleanup + exit
+			std::cout << "Client left the server" << std::endl;
 			break; // to delete
 		}
 		else
@@ -106,8 +112,10 @@ void Client::readClientMessage(Server& theServer)
 
 void Client::parseClientMessage(Server& theServer)
 {
-	if (this->isWelcome){
-		parseWelcomeMessage();
+	if (this->isWelcome)
+	{
+		parseWelcomeMessage(theServer);
+		return;
 	}
 	// check le premier mot pour connaitre la commande
 	std::istringstream iss(this->getMsg());
@@ -115,10 +123,60 @@ void Client::parseClientMessage(Server& theServer)
 	iss >> word;
 	if (word == "JOIN")
 		join(this, theServer, iss);
+	// if (word == "QUIT")
+	// 	quit(this, theServer, iss);
 	this->getMsg().clear();
 }
 
-void Client::parseWelcomeMessage()
+bool Client::badPassword(Server& theServer)
+{
+	if (this->getPassword() != theServer.getPassword())
+	{
+		std::vector<Client*>::iterator it = theServer.getClients().begin();
+		std::vector<Client*>::iterator ite = theServer.getClients().end();
+		for (; it != ite; ++it)
+		{
+			if (this->getNickname() == (*it)->getNickname())
+			{
+				const char* msg = "Connection refused: wrong password\n";
+				send(this->getSocket(), msg, strlen(msg), 0);
+				close(this->getSocket());
+				theServer.getClients().erase(it);
+				delete this;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+std::string intToString(int number)
+{
+	std::ostringstream oss;
+	oss << number;
+	return oss.str();
+}
+
+void Client::sameNickname(Server& theServer)
+{
+	static int suffix = 0;
+	// si getClients size == 0 -> suffix = 0
+	// (=> ca arrive quand /quit pour tous les clients mais pas quitter le server)
+	std::vector<Client*>::iterator it = theServer.getClients().begin();
+	++it;
+	std::vector<Client*>::iterator ite = theServer.getClients().end();
+	for (; it != ite; ++it)
+	{
+		if (this->getNickname() == (*it)->getNickname())
+		{
+			this->setNickname(this->getNickname() + intToString(suffix));
+			suffix++;
+			return;
+		}
+	}
+}
+
+void Client::parseWelcomeMessage(Server& theServer)
 {
 	std::istringstream iss(this->getMsg());
 	std::string word;
@@ -145,6 +203,14 @@ void Client::parseWelcomeMessage()
 	}
 	if (this->isWelcome && !this->getPassword().empty() && !this->getNickname().empty() && !this->getUsername().empty())
 	{
+		// check nickname:
+		// - sameNickname
+		// - length of 9 max
+		// - bloquer nombre de clients avant atoi max
+		sameNickname(theServer);
+		// check password:
+		if (badPassword(theServer))
+			return;
 		std::string welcome_msg = welcome_client(this->getNickname(), this->getUsername());
 		send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
 		this->isWelcome = false;
