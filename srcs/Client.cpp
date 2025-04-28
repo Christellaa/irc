@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/25 14:28:11 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/28 09:33:38 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ void 		Client::setUsername(std::string const& username) { this->_username = user
 //#Functions
 //##################
 
-Client* Client::findClient(std::vector<Client*>& clients, int clientfd)
+Client* Client::findClient(ClientVec& clients, int clientfd)
 {
-	std::vector<Client*>::iterator it = clients.begin();
-	std::vector<Client*>::iterator ite = clients.end();
+	ClientIterator it = clients.begin();
+	ClientIterator ite = clients.end();
 	for (; it != ite; ++it)
 	{
 		if (clientfd == (*it)->getSocket())
@@ -123,8 +123,11 @@ void Client::parseClientMessage(Server& theServer)
 	iss >> word;
 	if (word == "JOIN")
 		join(this, theServer, iss);
-	// if (word == "QUIT")
-	// 	quit(this, theServer, iss);
+	else if (word == "QUIT")
+	{
+		quit(this, theServer);
+		return;
+	}
 	this->getMsg().clear();
 }
 
@@ -132,8 +135,8 @@ bool Client::badPassword(Server& theServer)
 {
 	if (this->getPassword() != theServer.getPassword())
 	{
-		std::vector<Client*>::iterator it = theServer.getClients().begin();
-		std::vector<Client*>::iterator ite = theServer.getClients().end();
+		ClientIterator it = theServer.getClients().begin();
+		ClientIterator ite = theServer.getClients().end();
 		for (; it != ite; ++it)
 		{
 			if (this->getNickname() == (*it)->getNickname())
@@ -150,21 +153,14 @@ bool Client::badPassword(Server& theServer)
 	return false;
 }
 
-std::string intToString(int number)
-{
-	std::ostringstream oss;
-	oss << number;
-	return oss.str();
-}
-
 void Client::sameNickname(Server& theServer)
 {
 	static int suffix = 0;
 	// si getClients size == 0 -> suffix = 0
 	// (=> ca arrive quand /quit pour tous les clients mais pas quitter le server)
-	std::vector<Client*>::iterator it = theServer.getClients().begin();
+	ClientIterator it = theServer.getClients().begin();
 	++it;
-	std::vector<Client*>::iterator ite = theServer.getClients().end();
+	ClientIterator ite = theServer.getClients().end();
 	for (; it != ite; ++it)
 	{
 		if (this->getNickname() == (*it)->getNickname())

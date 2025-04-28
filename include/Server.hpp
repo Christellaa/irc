@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/23 14:17:12 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/28 09:47:30 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ class Server
 		int _port;
 		std::string _password;
 		int	_socketfd;
-		std::vector<Client*> _clients;
-		std::vector<Channel*> _channels;
+		int	_epoll_fd;
+		ClientVec _clients;
+		ChannelVec _channels;
 		Server();
 	public:
 		Server(int port, std::string password);
@@ -36,8 +37,12 @@ class Server
 		std::string getPassword(void);
 		int getPort(void);
 		int getSocket(void);
-		std::vector<Client*>& getClients(void);
-		std::vector<Channel*>& getChannels(void);
+		int getEpollfd(void);
+		ClientVec& getClients(void);
+		ChannelVec& getChannels(void);
+
+		void setEpollfd(int fd);
+
 		void addNewClient(int epoll_fd, struct epoll_event& ev);
 
 

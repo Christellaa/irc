@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/23 14:43:54 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/28 09:27:05 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 class Client;
 class Server;
+class Channel;
 
 /****** LIBRARIES ******/
 
@@ -70,14 +71,28 @@ class Server;
 #define MAX_CHAR_MSG		512
 #define MAX_CHAR_CHANNEL	50
 
-/****** TYPEDEF ******/ // A MODIFIER
+
+/****** TYPEDEFS ******/
+
+typedef std::vector<Client*> ClientVec;
+typedef std::vector<Channel*> ChannelVec;
+
+typedef ClientVec::iterator ClientIterator;
+typedef ChannelVec::iterator ChannelIterator;
+
+
+/****** UTIL FUNCTIONS ******/
+
 void join(Client* client, Server& theServer, std::istringstream& iss);
+void quit(Client* client, Server& theServer);
 
 /****** FUNCTIONS ******/
 
 std::string welcome_client(std::string nickname, std::string username);
 
 void	handle_signals(void);
+
+std::string intToString(int number);
 
 /****** SIGNALS ******/
 

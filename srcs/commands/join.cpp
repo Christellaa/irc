@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/25 09:06:10 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/28 09:23:02 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 	iss >> word;
 	word = word.substr(1);
 	// std::cout << "word: " << word << std::endl;
-	std::vector<Channel*>::iterator it = theServer.getChannels().begin();
-	std::vector<Channel*>::iterator ite = theServer.getChannels().end();
+	ChannelIterator it = theServer.getChannels().begin();
+	ChannelIterator ite = theServer.getChannels().end();
 	for (; it != ite; ++it)
 	{
 		if (word == (*it)->getName())

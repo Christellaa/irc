@@ -2,3 +2,4 @@
 - check mode pour join un channel
 - parser commande QUIT en priorite (pour voir si client size retourne a 0 pour connecter de nouveaux clients)
 - trunc nickname if > 9 in setNickname()
+- return 0 or signal number when quitting with signal?

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/23 14:10:19 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/28 09:46:42 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,15 @@ int main(int argc, char **argv)
 		theServer.launch_angrybots_server();
 		struct epoll_event ev, events[MAX_CLIENTS];
 		std::memset(&ev, 0, sizeof(ev));
-		int epoll_fd = epoll_stuff(theServer, ev);
-		epoll_loop(theServer, ev, events, epoll_fd);
+		theServer.setEpollfd(epoll_stuff(theServer, ev));
+		epoll_loop(theServer, ev, events, theServer.getEpollfd());
 	}catch(const std::exception& e)
 	{
-		std::cout << "Exception caught: " << e.what() << std::endl;
+		// close epoll_fd
+		std::cout << e.what() << std::endl;
 		if (g_signal != 0)
-			return g_signal;
+			// return g_signal;
+			return EXIT_SUCCESS;
 		return EXIT_FAILURE;
 	}
 	

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/25 13:58:30 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/28 09:47:51 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,26 @@ Server::Server(int port, std::string password)
 
 Server::~Server(){
 	{
-		std::vector<Client*>::iterator it = this->_clients.begin();
-		std::vector<Client*>::iterator ite = this->_clients.end();
+		ClientIterator it = this->_clients.begin();
+		ClientIterator ite = this->_clients.end();
 		for (; it != ite; ++it)
 		{
+			close((*it)->getSocket());
 			delete *it;
 		}
 		this->_clients.clear();
 	}
 	{
-		std::vector<Channel*>::iterator it = this->_channels.begin();
-		std::vector<Channel*>::iterator ite = this->_channels.end();
+		ChannelIterator it = this->_channels.begin();
+		ChannelIterator ite = this->_channels.end();
 		for (; it != ite; ++it)
 		{
 			delete *it;
 		}
 		this->_channels.clear();
 	}
+	close(this->_epoll_fd);
+	close(this->_socketfd);
 }
 
 //####
@@ -63,14 +66,24 @@ int Server::getSocket(void)
 	return this->_socketfd;
 }
 
-std::vector<Client*>& Server::getClients(void)
+ClientVec& Server::getClients(void)
 {
 	return this->_clients;
 }
 
-std::vector<Channel*>& Server::getChannels(void)
+ChannelVec& Server::getChannels(void)
 {
 	return this->_channels;
+}
+
+int Server::getEpollfd(void)
+{
+	return this->_epoll_fd;
+}
+
+void Server::setEpollfd(int fd)
+{
+	this->_epoll_fd = fd;
 }
 
 //####
@@ -78,15 +91,15 @@ std::vector<Channel*>& Server::getChannels(void)
 //##################
 
 const char* Server::InvalidSocket::what() const throw(){
-	return BOLD RED "Socket creation failure" RESET;
+	return BOLD RED "Error: socket creation failure" RESET;
 }
 
 const char* Server::BindingFailure::what() const throw(){
-	return BOLD RED "Binding failure" RESET;
+	return BOLD RED "Error: binding failure" RESET;
 }
 
 const char* Server::ListenFailure::what() const throw(){
-	return BOLD RED "Listen failure" RESET;
+	return BOLD RED "Error: listen failure" RESET;
 }
 
 //####

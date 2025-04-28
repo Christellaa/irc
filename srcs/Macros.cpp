@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/22 14:56:30 by jewu             ###   ########.fr       */
+/*   Updated: 2025/04/28 09:15:14 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,12 @@ std::string welcome_client(std::string nickname, std::string username)
 }
 
 const char* SignalQuit::what() const throw(){
-	return BOLD RED "Quitting server..." RESET;
+	return BOLD BLUE "\nQuitting server..." RESET;
+}
+
+std::string intToString(int number)
+{
+	std::ostringstream oss;
+	oss << number;
+	return oss.str();
 }
