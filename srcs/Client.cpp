@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 14:59:21 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:22:23 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,10 @@ int Client::getSocket(void)
 
 void 		Client::setPassword(std::string const& password) { this->_password = password;}
 
-void 		Client::setNickname(std::string const& nickname)
+void 		Client::setNickname(std::string& nickname)
 {
-	// if word > 9 -> trunc
+	// if (nickname.length() > 8)
+	// 	nickname = nickname.substr(0, 8);
 	this->_nickname = nickname;
 }
 
@@ -118,7 +119,6 @@ void Client::parseClientMessage(Server& theServer)
 		parseWelcomeMessage(theServer);
 		return;
 	}
-	// check le premier mot pour connaitre la commande
 	std::istringstream iss(this->getMsg());
 	std::string word;
 	iss >> word;
@@ -205,8 +205,6 @@ void Client::parseWelcomeMessage(Server& theServer)
 	}
 	if (this->isWelcome && !this->getPassword().empty() && !this->getNickname().empty() && !this->getUsername().empty())
 	{
-		// check nickname:
-		// - length of 9 max
 		sameNickname(theServer);
 		if (badPassword(theServer))
 			return;

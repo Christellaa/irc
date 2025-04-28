@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 09:19:41 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:18:52 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class Client
 		int getSocket(void);
 	
 		void 		setPassword(std::string const& password);
-		void 		setNickname(std::string const& nickname);
+		void 		setNickname(std::string& nickname);
 		void 		setUsername(std::string const& username);
 	
 		static Client* findClient(ClientVec& clients, int clientfd);
