@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 09:46:42 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:09:36 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int main(int argc, char **argv)
 		// close epoll_fd
 		std::cout << e.what() << std::endl;
 		if (g_signal != 0)
-			// return g_signal;
 			return EXIT_SUCCESS;
 		return EXIT_FAILURE;
 	}

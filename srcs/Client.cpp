@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 09:33:38 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:59:21 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int Client::getSocket(void)
 
 
 void 		Client::setPassword(std::string const& password) { this->_password = password;}
+
 void 		Client::setNickname(std::string const& nickname)
 {
 	// if word > 9 -> trunc
@@ -155,21 +156,26 @@ bool Client::badPassword(Server& theServer)
 
 void Client::sameNickname(Server& theServer)
 {
-	static int suffix = 0;
-	// si getClients size == 0 -> suffix = 0
-	// (=> ca arrive quand /quit pour tous les clients mais pas quitter le server)
-	ClientIterator it = theServer.getClients().begin();
-	++it;
-	ClientIterator ite = theServer.getClients().end();
-	for (; it != ite; ++it)
+	int suffix = 0;
+	bool conflict = true;
+	std::string baseName = this->getNickname();
+	std::string newName = baseName;
+	while (conflict)
 	{
-		if (this->getNickname() == (*it)->getNickname())
+		conflict = false;
+		ClientIterator it = theServer.getClients().begin();
+		ClientIterator ite = theServer.getClients().end();
+		for (; it != ite; ++it)
 		{
-			this->setNickname(this->getNickname() + intToString(suffix));
-			suffix++;
-			return;
+			if (this != *it && (*it)->getNickname() == newName)
+			{
+				conflict = true;
+				newName = baseName + intToString(suffix++);
+				break;
+			}
 		}
 	}
+	this->setNickname(newName);
 }
 
 void Client::parseWelcomeMessage(Server& theServer)
@@ -200,11 +206,8 @@ void Client::parseWelcomeMessage(Server& theServer)
 	if (this->isWelcome && !this->getPassword().empty() && !this->getNickname().empty() && !this->getUsername().empty())
 	{
 		// check nickname:
-		// - sameNickname
 		// - length of 9 max
-		// - bloquer nombre de clients avant atoi max
 		sameNickname(theServer);
-		// check password:
 		if (badPassword(theServer))
 			return;
 		std::string welcome_msg = welcome_client(this->getNickname(), this->getUsername());

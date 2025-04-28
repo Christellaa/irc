@@ -1,5 +1,15 @@
-- remettre suffix de sameNickname() a 0
 - check mode pour join un channel
-- parser commande QUIT en priorite (pour voir si client size retourne a 0 pour connecter de nouveaux clients)
 - trunc nickname if > 9 in setNickname()
+
+
+
+
+
+
 - return 0 or signal number when quitting with signal?
+
+`
+		const char* msg = "Server full. Try again later.\n";
+		send(clientfd, msg, strlen(msg), 0);
+		close(clientfd);
+` => reused so need a util function

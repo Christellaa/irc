@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 09:23:02 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:07:29 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 	std::string word;
 	iss >> word;
 	word = word.substr(1);
-	// std::cout << "word: " << word << std::endl;
 	ChannelIterator it = theServer.getChannels().begin();
 	ChannelIterator ite = theServer.getChannels().end();
 	for (; it != ite; ++it)

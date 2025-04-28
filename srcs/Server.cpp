@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 09:47:51 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:58:34 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ Server::Server(int port, std::string password)
 {
 	this->_port = port;
 	this->_password = password;
+	this->_epoll_fd = -1;
+	this->_socketfd = -1;
 }
 
 Server::~Server(){
@@ -43,8 +45,10 @@ Server::~Server(){
 		}
 		this->_channels.clear();
 	}
-	close(this->_epoll_fd);
-	close(this->_socketfd);
+	if (this->_epoll_fd != -1)
+		close(this->_epoll_fd);
+	if (this->_socketfd != -1)
+		close(this->_socketfd);
 }
 
 //####
@@ -94,6 +98,10 @@ const char* Server::InvalidSocket::what() const throw(){
 	return BOLD RED "Error: socket creation failure" RESET;
 }
 
+const char* Server::SetsockoptFailure::what() const throw(){
+	return BOLD RED "Error: setsockopt failure" RESET;
+}
+
 const char* Server::BindingFailure::what() const throw(){
 	return BOLD RED "Error: binding failure" RESET;
 }
@@ -120,17 +128,13 @@ void Server::setting_server_socket(void)
 	address.sin_port = htons(_port);
 	address.sin_addr.s_addr = INADDR_ANY;
 
+	int reusePort = 1;
+	if (setsockopt(this->_socketfd, SOL_SOCKET, SO_REUSEADDR, &reusePort, sizeof(reusePort)) == -1)
+		throw Server::SetsockoptFailure();
 	if (bind(_socketfd, (struct sockaddr*)&address, sizeof(address)) == INVALID_BIND)
-	{
-		close(_socketfd);
 		throw Server::BindingFailure();
-	}
-
 	if (listen(_socketfd, 5) == INVALID_LISTEN)
-	{
-		close(_socketfd);
 		throw Server::ListenFailure();
-	}
 }
 
 void Server::launch_angrybots_server(void)
@@ -166,3 +170,4 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 	this->getClients().push_back(new Client(clientfd));
 	std::cout << "New client connected on fd " << clientfd << std::endl;
 }
+
