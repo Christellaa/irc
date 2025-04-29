@@ -1,12 +1,8 @@
 - check mode pour join un channel
-- trunc nickname if > 9 in setNickname()
+- all other commands
 
 
 
-
-
-
-- return 0 or signal number when quitting with signal?
 
 `
 		const char* msg = "Server full. Try again later.\n";

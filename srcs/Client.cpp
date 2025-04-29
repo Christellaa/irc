@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 10:51:11 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/29 12:36:19 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,18 @@ Client* Client::findClient(ClientVec& clients, int clientfd)
 	for (; it != ite; ++it)
 	{
 		if (clientfd == (*it)->getSocket())
+			return *it;
+	}
+	return NULL;
+}
+
+Channel* Client::findChannel(Channel& channel)
+{
+	ChannelIterator it = this->_isInvited.begin();
+	ChannelIterator ite = this->_isInvited.end();
+	for (; it != ite; ++it)
+	{
+		if ((*it)->getName() == channel.getName())
 			return *it;
 	}
 	return NULL;
