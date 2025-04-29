@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 12:58:37 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:35:44 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class Server
 		int	_socketfd;
 		int	_epoll_fd;
 		ClientVec _clients;
-		ChannelVec _channels;
+		ChannelVec _channels; // max channels
 		Server();
 	public:
 		Server(int port, std::string password);

@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 14:59:32 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:25:10 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef ChannelVec::iterator ChannelIterator;
 /****** UTIL FUNCTIONS ******/
 
 void join(Client* client, Server& theServer, std::istringstream& iss);
+void mode(Client* client, Server& theServer, std::istringstream& iss);
 void quit(Client* client, Server& theServer);
 
 /****** FUNCTIONS ******/
