@@ -30,7 +30,8 @@ SRC			=	main.cpp \
 				srcs/signal.cpp \
 				srcs/commands/command_kick.cpp \
 				srcs/commands/join.cpp \
-				srcs/commands/quit.cpp
+				srcs/commands/quit.cpp \
+				srcs/commands/mode.cpp
 
 ################################################################################
 #                                   Objects                                    #

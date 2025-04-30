@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 14:40:44 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:04:11 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ void Client::parseClientMessage(Server& theServer)
 		quit(this, theServer);
 		return;
 	}
-	// else if (word == "MODE")
-	// 	mode(this, theServer, iss);
+	else if (word == "MODE")
+		mode(theServer, iss);
 	this->getMsg().clear();
 }
 

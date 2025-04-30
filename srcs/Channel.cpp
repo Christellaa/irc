@@ -6,11 +6,12 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 11:36:06 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:00:39 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "Client.hpp"
 
 Channel::Channel(std::string const& name)
 : _name(name), _topic(""), _inviteOnly(false), _topicScope(false),
@@ -29,7 +30,7 @@ std::string Channel::getPassword(void)
 	return "";
 }
 
-double Channel::getUserLimit(void)
+int Channel::getUserLimit(void)
 {
 	if (this->_hasUserLimit)
 		return this->_userLimit;
@@ -38,9 +39,43 @@ double Channel::getUserLimit(void)
 
 bool Channel::isInviteOnly(void) { return this->_inviteOnly;}
 
+void Channel::setInviteOnly(bool value) { this->_inviteOnly = value;}
+
+void Channel::setTopicScope(bool value) { this->_inviteOnly = value;}
+
+void Channel::setUserLimit(bool value, int newLimit)
+{
+	this->_hasUserLimit = value;
+	this->_userLimit = newLimit;
+}
+
+void Channel::setPassword(bool value, std::string const& password)
+{
+	this->_hasPassword = value;
+	this->_password = password;
+}
+
+
+
 void Channel::giveOperatorRights(ClientIterator oldestClient)
 {
-	if (this->getOperators().size() != 0)
+	if (!*oldestClient)
 		return;
+	ClientIterator it = this->getOperators().begin();
+	ClientIterator ite = this->getOperators().end();
+	for (; it != ite; ++it)
+	{
+		if ((*oldestClient)->getNickname() == (*it)->getNickname())
+			return;
+	}
 	this->getOperators().push_back(*oldestClient);
+}
+
+void Channel::removeOperatorRights(ClientIterator client)
+{
+	if (!*client)
+		return;
+	ClientIterator clientToRemove = std::find(this->getOperators().begin(), this->getOperators().end(), *client);
+	if (clientToRemove != this->getOperators().end())
+		this->getOperators().erase(clientToRemove);
 }

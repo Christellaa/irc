@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 14:36:09 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:00:03 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ class Channel
 		bool _hasPassword;
 		std::string _password; // bloquer longueur
 		bool _hasUserLimit;
-		double _userLimit; // max TOTAL USER et min 1
-		ClientVec _clients; // max clients
+		int _userLimit;
+		ClientVec _clients;
 		ClientVec _operators;
 
-	Channel();
+		Channel();
 
 	public:
 		Channel(std::string const& name);
@@ -42,11 +42,17 @@ class Channel
 		ClientVec& getOperators(void);
 
 		std::string getPassword(void);
-		double getUserLimit(void);
+		int getUserLimit(void);
 		bool isInviteOnly(void);
+
+		void setInviteOnly(bool value);
+		void setTopicScope(bool value);
+		void setUserLimit(bool value, int newLimit);
+		void setPassword(bool value, std::string const& password);
 
 
 		void giveOperatorRights(ClientIterator oldestClient);
+		void removeOperatorRights(ClientIterator client);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 12:41:00 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:52:21 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool checkModeK(std::string word, Channel& channel)
 
 bool checkModeL(Channel& channel)
 {
-	return ((channel.getClients().size() < channel.getUserLimit()) || channel.getUserLimit() == 0);
+	return (((int)channel.getClients().size() < channel.getUserLimit()) || channel.getUserLimit() == 0);
 }
 
 bool checkModeI(Client& client, Channel& channel)

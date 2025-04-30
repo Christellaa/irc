@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 14:25:10 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:04:06 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ class Channel;
 #define MAX_CLIENTS			10
 #define MAX_CHAR_MSG		512
 #define MAX_CHAR_CHANNEL	50
+#define MAX_PASS_LEN		15
 
 
 /****** TYPEDEFS ******/
@@ -84,7 +85,7 @@ typedef ChannelVec::iterator ChannelIterator;
 /****** UTIL FUNCTIONS ******/
 
 void join(Client* client, Server& theServer, std::istringstream& iss);
-void mode(Client* client, Server& theServer, std::istringstream& iss);
+void mode(Server& theServer, std::istringstream& iss);
 void quit(Client* client, Server& theServer);
 
 /****** FUNCTIONS ******/
