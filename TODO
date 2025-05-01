@@ -1,10 +1,7 @@
-- check mode pour join un channel
-- all other commands
-
 - PRIVMSG
-- NICK
 - commands operators
-- modes channel
+
+
 - bot
 
 

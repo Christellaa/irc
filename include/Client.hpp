@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 12:37:59 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:29:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ class Client
 		void 		setNickname(std::string const& nickname);
 		void 		setUsername(std::string const& username);
 	
-		static Client* findClient(ClientVec& clients, int clientfd);
 		Channel* findChannel(Channel& channel);
 		
 		void readClientMessage(Server& theServer);

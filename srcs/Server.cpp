@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 12:58:34 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:39:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,3 +171,15 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 	std::cout << "New client connected on fd " << clientfd << std::endl;
 }
 
+
+Client* Server::findClient(int clientfd)
+{
+	ClientIterator it = this->getClients().begin();
+	ClientIterator ite = this->getClients().end();
+	for (; it != ite; ++it)
+	{
+		if (clientfd == (*it)->getSocket())
+			return *it;
+	}
+	return NULL;
+}

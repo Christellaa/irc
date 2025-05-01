@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/30 11:04:06 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:12:15 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,11 @@ typedef ChannelVec::iterator ChannelIterator;
 /****** UTIL FUNCTIONS ******/
 
 void join(Client* client, Server& theServer, std::istringstream& iss);
+void nick(Client& client, Server& theServer, std::istringstream& iss);
+void pong(Client& client, std::istringstream& iss);
 void mode(Server& theServer, std::istringstream& iss);
 void quit(Client* client, Server& theServer);
+void privmsg(Client& client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 

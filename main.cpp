@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 10:52:25 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/01 09:57:35 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_e
 				theServer.addNewClient(epoll_fd, ev);
 			else
 			{
-				Client* client = Client::findClient(theServer.getClients(), currentClientfd);
+				Client* client = theServer.findClient(currentClientfd);
+				if (events[i].events & (EPOLLERR | EPOLLHUP))
+				{
+					quit(client, theServer);
+					continue;
+				}
 				if (client)
 					client->readClientMessage(theServer);
 			}

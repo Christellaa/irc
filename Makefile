@@ -31,7 +31,10 @@ SRC			=	main.cpp \
 				srcs/commands/command_kick.cpp \
 				srcs/commands/join.cpp \
 				srcs/commands/quit.cpp \
-				srcs/commands/mode.cpp
+				srcs/commands/mode.cpp \
+				srcs/commands/nick.cpp \
+				srcs/commands/privmsg.cpp \
+				srcs/commands/pong.cpp
 
 ################################################################################
 #                                   Objects                                    #

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/29 14:35:44 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/01 09:55:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ class Server
 		void setEpollfd(int fd);
 
 		void addNewClient(int epoll_fd, struct epoll_event& ev);
+
+		Client* findClient(int clientfd);
 
 		class InvalidSocket : public std::exception{
 			public:

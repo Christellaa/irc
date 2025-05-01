@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/30 11:04:11 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:03:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,6 @@ void 		Client::setUsername(std::string const& username) { this->_username = user
 //#Functions
 //##################
 
-Client* Client::findClient(ClientVec& clients, int clientfd)
-{
-	ClientIterator it = clients.begin();
-	ClientIterator ite = clients.end();
-	for (; it != ite; ++it)
-	{
-		if (clientfd == (*it)->getSocket())
-			return *it;
-	}
-	return NULL;
-}
-
 Channel* Client::findChannel(Channel& channel)
 {
 	ChannelIterator it = this->_isInvited.begin();
@@ -105,7 +93,7 @@ void Client::readClientMessage(Server& theServer)
 		else if (bytes == 0)
 		{
 			std::cout << "Client left the server" << std::endl;
-			return;
+			break;
 		}
 		else
 		{
@@ -135,6 +123,12 @@ void Client::parseClientMessage(Server& theServer)
 	}
 	else if (word == "MODE")
 		mode(theServer, iss);
+	else if (word == "PING")
+		pong(*this, iss);
+	else if (word == "NICK")
+		nick(*this, theServer, iss);
+	else if (word == "PRIVMSG")
+		privmsg(*this, theServer, iss);
 	this->getMsg().clear();
 }
 

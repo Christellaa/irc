@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Macros.cpp                                         :+:      :+:    :+:   */
+/*   pong.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/01 12:50:19 by codespace        ###   ########.fr       */
+/*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
+/*   Updated: 2025/05/01 09:45:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Macros.hpp"
+#include "Server.hpp"
 
-std::string welcome_client(std::string nickname, std::string username)
+void pong(Client& client, std::istringstream& iss)
 {
-	return ":ircserv 001 " + nickname + " :Welcome, " + username + "\n";
-}
-
-const char* SignalQuit::what() const throw(){
-	return BOLD BLUE "\nQuitting server..." RESET;
-}
-
-std::string intToString(int number)
-{
-	std::ostringstream oss;
-	oss << number;
-	return oss.str();
+	std::string word;
+	iss >> word;
+	std::string answer = "PONG " + word + "\r\n";
+	send(client.getSocket(), answer.c_str(), answer.length(), 0);
+	std::cout << answer << std::endl;
 }
