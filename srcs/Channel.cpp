@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/30 11:00:39 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:19:15 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "Client.hpp"
 
 Channel::Channel(std::string const& name)
-: _name(name), _topic(""), _inviteOnly(false), _topicScope(false),
-_hasPassword(false), _password(""), _hasUserLimit(false), _userLimit(0) {}
+: _name(name), _topic(""), _password(""), _hasPassword(false),
+_topicScope(false), _inviteOnly(false), _hasUserLimit(false), _userLimit(0) {}
 
 Channel::~Channel() {}
 

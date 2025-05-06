@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/01 09:55:55 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/06 12:14:39 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,35 @@ class Server
 {
 	private:
 		int _port;
-		std::string _password;
 		int	_socketfd;
 		int	_epoll_fd;
+
+		std::string _password;
+	
 		ClientVec _clients;
+	
 		ChannelVec _channels; // max channels
+	
 		Server();
+
 	public:
 		Server(int port, std::string password);
 		~Server();
 
 		void launch_angrybots_server(void);
 		void setting_server_socket(void);
+		void setEpollfd(int fd);
+		void addNewClient(int epoll_fd, struct epoll_event& ev);
 
-		std::string getPassword(void);
 		int getPort(void);
 		int getSocket(void);
 		int getEpollfd(void);
+	
+		std::string getPassword(void);
+
 		ClientVec& getClients(void);
+	
 		ChannelVec& getChannels(void);
-
-		void setEpollfd(int fd);
-
-		void addNewClient(int epoll_fd, struct epoll_event& ev);
 
 		Client* findClient(int clientfd);
 

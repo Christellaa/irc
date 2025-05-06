@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/01 13:29:46 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/06 12:14:52 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ class Client
 {
 	private:
 		int			_socketfd;
+
 		std::string _nickname;
 		std::string _username;
 		std::string _password;
 		std::string _msg;
+		std::string _buffer; //TEST
+
 		ChannelVec _isInvited;
 	// quand clientA invite clientB, on va dans clientB et on rajoute le channel de clientA dans le vector isInvited
 	// ici on check si on trouve le channel que clientB tente de join dans son vector isInvited
@@ -37,6 +40,7 @@ class Client
 		std::string getNickname(void);
 		std::string getUsername(void);
 		std::string& getMsg(void);
+	
 		int getSocket(void);
 	
 		void 		setPassword(std::string const& password);
@@ -46,13 +50,14 @@ class Client
 		Channel* findChannel(Channel& channel);
 		
 		void readClientMessage(Server& theServer);
-		void parseClientMessage(Server& theServer);
-		void parseWelcomeMessage(Server& theServer);
-
-		bool badPassword(Server& theServer);
+		//void parseClientMessage(Server& theServer);
+		//void parseWelcomeMessage(Server& theServer);
+		void parseClientMessage(const std::string& line, Server& theServer);
+		void parseWelcomeMessage(const std::string& line, Server& theServer);
 		void sameNickname(Server& theServer);
 
-		bool 		isWelcome;
+		bool badPassword(Server& theServer);
+		bool isWelcome;
 };
 
 

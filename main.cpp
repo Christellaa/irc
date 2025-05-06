@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/01 09:57:35 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/06 12:32:49 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int epoll_stuff(Server& theServer, struct epoll_event& ev)
 	{
 		throw std::runtime_error("Error: epoll_ctl failure");
 	}
-	std::cout << "Server listening on port: " << theServer.getPort() << std::endl;
+	std::cout << BOLD YELLOW "Server listening on port: " RESET << theServer.getPort() << std::endl;
 	return epoll_fd;
 }
 

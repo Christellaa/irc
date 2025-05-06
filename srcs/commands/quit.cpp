@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/30 09:20:26 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:54:46 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void quit(Client* client, Server& theServer)
 	{
 		if (client->getSocket() == (*it)->getSocket())
 		{
+			std::cout << BOLD RED "Client " << (*it)->getSocket() << " left, bye!" RESET << std::endl;
 			close(client->getSocket());
 			delete client;
 			theServer.getClients().erase(it);

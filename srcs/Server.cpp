@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/01 10:39:48 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/06 12:33:17 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 		throw std::runtime_error("Error: epoll_ctl failure");
 	}
 	this->getClients().push_back(new Client(clientfd));
-	std::cout << "New client connected on fd " << clientfd << std::endl;
+	std::cout << BOLD NEON_GREEN "New client connected on fd " RESET << clientfd << std::endl;
 }
 
 
