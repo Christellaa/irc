@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/30 11:20:07 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 08:41:33 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void handleMode(std::istringstream& iss, Channel& channel, std::string word)
 	}
 }
 
-void mode(Server& theServer, std::istringstream& iss)
+void mode(Client& client, Server& theServer, std::istringstream& iss)
 {
 	std::string word;
 	iss >> word;
@@ -152,8 +152,16 @@ void mode(Server& theServer, std::istringstream& iss)
 	{
 		if (word == (*it)->getName())
 		{
-			iss >> word;
-			handleMode(iss, *(*it), word);
+			ClientIterator currentOperator = (*it)->getOperators().begin();
+			ClientIterator lastOperator = (*it)->getOperators().end();
+			for (; currentOperator != lastOperator; ++currentOperator)
+			{
+				if ((*currentOperator)->getNickname() == client.getNickname())
+				{
+					iss >> word;
+					handleMode(iss, *(*it), word);
+				}
+			}
 			return;
 		}
 	}

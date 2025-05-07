@@ -1,11 +1,14 @@
-- PRIVMSG
-- commands operators
+- PRIVMSG -> nothing shows for other clients in channel
+- commands operators:
+	- KICK
+	- INVITE
+	- TOPIC
+
+- PART?
+
 
 
 - bot
-
-
-
 
 `
 		const char* msg = "Server full. Try again later.\n";

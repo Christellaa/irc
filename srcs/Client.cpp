@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/06 13:34:56 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 08:28:53 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ bool Client::parseClientMessage(const std::string& line, Server& theServer)
         return false;
     }
     else if (word == "MODE")
-        mode(theServer, iss);
+        mode(*this, theServer, iss);
     else if (word == "PING")
         pong(*this, iss);
     else if (word == "NICK")
