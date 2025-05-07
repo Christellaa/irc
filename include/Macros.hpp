@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 14:37:36 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:29:03 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,7 @@ class SignalQuit : public std::exception{
 #define PONG(nickname, serverName) ":" + nickname + " PONG :" + serverName + "\r\n"
 #define QUIT(prefix) ":" + prefix + " QUIT :leaving" + "\r\n"
 #define MODE(nickname, channelName, modes, options) ":" + nickname + " MODE " + channelName + " " + modes + " " + options + "\r\n"
+
+#define ERR_PASSWORD(nickname) ":ircserv 464 " + nickname + " :Password incorrect\r\n"
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 15:21:05 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 15:39:14 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
         sameNickname(theServer);
         if (badPassword(theServer))
             return false;
-
         std::string welcome_msg = WELCOME(this->getNickname());
         // std::string welcome_msg = welcome_client(this->getNickname());
         send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
@@ -216,9 +215,10 @@ bool Client::badPassword(Server& theServer)
         ClientIterator client = theServer.findClient(this->getSocket());
         if (client != theServer.getClients().end())
         {
-            const char* msg = "Connection refused: wrong password\n";
-            send(this->getSocket(), msg, strlen(msg), 0);
+			std::string msg = ERR_PASSWORD(this->getNickname());
+            send(this->getSocket(), msg.c_str(), msg.size(), 0);
             close(this->getSocket());
+			std::cout << BOLD RED "Connection failed: wrong password" RESET << std::endl;
             theServer.getClients().erase(client);
             delete this;
             return true;
