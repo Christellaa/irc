@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 15:20:15 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 17:38:51 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Client
     std::string _username;
     std::string _password;
     std::string _msg;
-    std::string _buffer; // TEST
+    std::string _buffer;
 
     ChannelVec _isInvited;
     // quand clientA invite clientB, on va dans clientB et on rajoute le channel
@@ -51,14 +51,13 @@ class Client
     Channel* findChannel(Channel& channel);
 
     void readClientMessage(Server& theServer);
+	void sameNickname(Server& theServer);
+	//void parseWelcomeMessage(const std::string& line, Server& theServer);
     // void parseClientMessage(Server& theServer);
     // void parseWelcomeMessage(Server& theServer);
+
     bool parseClientMessage(const std::string& line, Server& theServer);
 	bool parseWelcomeMessage(const std::string& line, Server& theServer);
-
-    //void parseWelcomeMessage(const std::string& line, Server& theServer);
-    void sameNickname(Server& theServer);
-
     bool badPassword(Server& theServer);
     bool isWelcome;
 };
