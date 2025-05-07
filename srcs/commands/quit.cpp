@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 10:14:44 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:34:44 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void quit(Client* client, Server& theServer)
 	ClientIterator clientIt = theServer.findClient(client->getSocket());
 	if (clientIt != theServer.getClients().end())
 	{
+		std::string answer = QUIT(userPrefix(client->getNickname(), client->getUsername()));
+		send(client->getSocket(), answer.c_str(), answer.size(), 0);
 		std::cout << BOLD RED "Client " << (*clientIt)->getSocket() << " left, bye!" RESET << std::endl;
 		close(client->getSocket());
 		delete client;

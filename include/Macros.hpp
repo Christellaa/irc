@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 08:29:47 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:37:36 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,9 @@ void privmsg(Client& client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 
-std::string welcome_client(std::string nickname, std::string username);
+std::string userPrefix(std::string nickname, std::string username);
+// std::string welcome_client(std::string nickname, std::string prefix);
+// std::string messageToSend(std::string const& prefix, std::string const& channelName, std::string const& message);
 
 void	handle_signals(void);
 
@@ -107,5 +109,12 @@ class SignalQuit : public std::exception{
 	public:
 		virtual const char* what() const throw();
 };
+
+#define WELCOME(nickname) ":ircserv 001 " + nickname + " :Welcome, " + nickname + "\r\n"
+#define PRIVMSG(nickname, channelName, message)  ":" + nickname + " PRIVMSG #" + channelName + " :" + message + "\r\n"
+#define JOIN(prefix, channelName) ":" + prefix + " JOIN :#" + channelName + "\r\n"
+#define PONG(nickname, serverName) ":" + nickname + " PONG :" + serverName + "\r\n"
+#define QUIT(prefix) ":" + prefix + " QUIT :leaving" + "\r\n"
+#define MODE(nickname, channelName, modes, options) ":" + nickname + " MODE " + channelName + " " + modes + " " + options + "\r\n"
 
 #endif

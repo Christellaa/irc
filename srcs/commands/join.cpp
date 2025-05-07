@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 10:25:29 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:16:00 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 			(*channel)->getClients().push_back(client);
 			std::cout << "Added " << client->getNickname() << " to channel " << (*channel)->getName() << std::endl;
 		}
+
+		std::string answer = JOIN(userPrefix(client->getNickname(), client->getUsername()), (*channel)->getName());
+		// std::string answer = ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " JOIN :#" + (*channel)->getName() + "\r\n";
+		send(client->getSocket(), answer.c_str(), answer.length(), 0);
+		std::cout << answer << std::endl;
 		return;
 	}
 	if (word.length() > MAX_CHAR_CHANNEL)
@@ -81,4 +86,9 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 	newChannel->getClients().push_back(client);
 	newChannel->getOperators().push_back(client);
 	std::cout << "Added " << client->getNickname() << " to NEW channel " << newChannel->getName() << std::endl;
+
+	std::string answer = JOIN(userPrefix(client->getNickname(), client->getUsername()), newChannel->getName());
+	// std::string answer = ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " JOIN :#" + newChannel->getName() + "\r\n";
+	send(client->getSocket(), answer.c_str(), answer.length(), 0);
+	std::cout << answer << std::endl;
 }

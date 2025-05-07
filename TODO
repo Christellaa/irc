@@ -1,4 +1,3 @@
-- PRIVMSG -> nothing shows for other clients in channel
 - commands operators:
 	- KICK
 	- INVITE

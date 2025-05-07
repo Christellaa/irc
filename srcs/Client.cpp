@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 10:11:42 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:05:53 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,9 @@ void Client::parseWelcomeMessage(const std::string& line, Server& theServer)
         std::string user, unused1, unused2, realName;
         iss >> user >> unused1 >> unused2;
         std::getline(iss, realName);
-        if (!realName.empty() && realName[0] == ':')
-            realName = realName.substr(1);
+        if (!realName.empty())
+            realName = realName.substr(2);
+        std::cout << "USERNAME: [" << realName << "]" << std::endl;
         this->setUsername(realName);
     }
 
@@ -118,7 +119,8 @@ void Client::parseWelcomeMessage(const std::string& line, Server& theServer)
         if (badPassword(theServer))
             return;
 
-        std::string welcome_msg = welcome_client(this->getNickname(), this->getUsername());
+        std::string welcome_msg = WELCOME(this->getNickname());
+        // std::string welcome_msg = welcome_client(this->getNickname());
         send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
         this->isWelcome = false;
     }

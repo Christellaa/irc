@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 10:15:20 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:31:11 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ class Server
 		ChannelVec& getChannels(void);
 
 		ClientIterator findClient(int clientfd);
+		Client* findClientBis(int clientfd);
 		ChannelIterator findChannel(std::string const& channelName);
 
 		class InvalidSocket : public std::exception{
