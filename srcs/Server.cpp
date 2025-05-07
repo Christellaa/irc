@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 12:23:10 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:01:55 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 	this->getClients().push_back(new Client(clientfd));
 	std::cout << BOLD NEON_GREEN "New client connected on fd " RESET << clientfd << std::endl;
 }
-
 
 ClientIterator Server::findClient(int clientfd)
 {
