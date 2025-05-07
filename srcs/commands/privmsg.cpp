@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 14:12:52 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:13:24 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void privmsg(Client& client, Server& theServer, std::istringstream& iss)
 				continue;
 			std::string line = PRIVMSG(client.getNickname(), (*channel)->getName(), message);
 			// std::string line = messageToSend(client.getNickname(), (*channel)->getName(), message);
-			std::cout << BOLD YELLOW "LINE TO SEND " << ": " << line << RESET << std::endl;
+			std::cout << line << RESET << std::endl;
 			send((*it)->getSocket(), line.c_str(), line.size(), 0);
-			std::cout << "sending msg to: " << (*it)->getSocket() << std::endl;
+			std::cout << GREEN "sending msg to: " << (*it)->getSocket() << " from client: " RESET << client.getSocket() << std::endl;
 		}
 	}
 }

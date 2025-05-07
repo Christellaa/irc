@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 15:39:14 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 16:53:06 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void Client::readClientMessage(Server& theServer)
     }
     _buffer.append(buffer, bytes);
     size_t pos;
-    std::cout << "buffer: " << _buffer << std::endl;
+    std::cout << _buffer << std::endl;
     while ((pos = _buffer.find("\n")) != std::string::npos)
     {
         std::string line = _buffer.substr(0, pos);
