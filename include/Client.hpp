@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/06 13:34:33 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:20:15 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ class Client
     // void parseClientMessage(Server& theServer);
     // void parseWelcomeMessage(Server& theServer);
     bool parseClientMessage(const std::string& line, Server& theServer);
-    void parseWelcomeMessage(const std::string& line, Server& theServer);
+	bool parseWelcomeMessage(const std::string& line, Server& theServer);
+
+    //void parseWelcomeMessage(const std::string& line, Server& theServer);
     void sameNickname(Server& theServer);
 
     bool badPassword(Server& theServer);

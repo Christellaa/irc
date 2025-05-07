@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 15:05:36 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 15:21:05 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,50 @@ Channel* Client::findChannel(Channel& channel)
     return NULL;
 }
 
-void Client::parseWelcomeMessage(const std::string& line, Server& theServer)
+//void Client::parseWelcomeMessage(const std::string& line, Server& theServer)
+//{
+//    std::istringstream iss(line);
+//    std::string        word;
+//    iss >> word;
+
+//    if (word == "PASS")
+//    {
+//        iss >> word;
+//        this->setPassword(word);
+//    }
+//    else if (word == "NICK")
+//    {
+//        iss >> word;
+//        if (word.length() > 8)
+//            word = word.substr(0, 8);
+//        this->setNickname(word);
+//    }
+//    else if (word == "USER")
+//    {
+//        std::string user, unused1, unused2, realName;
+//        iss >> user >> unused1 >> unused2;
+//        std::getline(iss, realName);
+//        if (!realName.empty())
+//            realName = realName.substr(2);
+//        std::cout << "USERNAME: [" << realName << "]" << std::endl;
+//        this->setUsername(realName);
+//    }
+
+//    if (!this->getPassword().empty() && !this->getNickname().empty() &&
+//        !this->getUsername().empty())
+//    {
+//        sameNickname(theServer);
+//        if (badPassword(theServer))
+//            return;
+
+//        std::string welcome_msg = WELCOME(this->getNickname());
+//        // std::string welcome_msg = welcome_client(this->getNickname());
+//        send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
+//        this->isWelcome = false;
+//    }
+//}
+
+bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
 {
     std::istringstream iss(line);
     std::string        word;
@@ -95,13 +138,14 @@ void Client::parseWelcomeMessage(const std::string& line, Server& theServer)
     {
         sameNickname(theServer);
         if (badPassword(theServer))
-            return;
+            return false;
 
         std::string welcome_msg = WELCOME(this->getNickname());
         // std::string welcome_msg = welcome_client(this->getNickname());
         send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
         this->isWelcome = false;
     }
+	return true;
 }
 
 bool Client::parseClientMessage(const std::string& line, Server& theServer)
@@ -156,7 +200,10 @@ void Client::readClientMessage(Server& theServer)
             line.erase(line.size() - 1, 1);
         std::cout << BOLD GREEN "Ligne reçue : [" RESET << line << "]" << std::endl;
         if (this->isWelcome)
-            parseWelcomeMessage(line, theServer);
+		{
+            if (!parseWelcomeMessage(line, theServer))
+				return;
+		}
         else if (!parseClientMessage(line, theServer))
             return;
     }
