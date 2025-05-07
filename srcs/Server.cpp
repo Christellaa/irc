@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/06 12:33:17 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 10:06:14 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,14 +172,26 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 }
 
 
-Client* Server::findClient(int clientfd)
+ClientIterator Server::findClient(int clientfd)
 {
 	ClientIterator it = this->getClients().begin();
 	ClientIterator ite = this->getClients().end();
 	for (; it != ite; ++it)
 	{
 		if (clientfd == (*it)->getSocket())
-			return *it;
+			return it;
 	}
-	return NULL;
+	return ite;
+}
+
+ChannelIterator Server::findChannel(std::string const& channelName)
+{
+	ChannelIterator it = this->getChannels().begin();
+	ChannelIterator ite = this->getChannels().end();
+	for (; it != ite; ++it)
+	{
+		if (channelName == (*it)->getName())
+			return it;
+	}
+	return ite;
 }

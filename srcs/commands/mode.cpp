@@ -6,49 +6,41 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 08:41:33 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:29:22 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void handleO(std::string& option, Channel& channel, bool isPositive)
+void handleO(std::string const& option, Channel& channel, bool isPositive)
 {
 	if (option.empty())
 		return;
 	if (isPositive)
 	{
-		ClientIterator it = channel.getClients().begin();
-		ClientIterator ite = channel.getClients().end();
-		for (; it != ite; ++it)
+		ClientIterator client = channel.findClient(option);
+		if (client != channel.getClients().end())
 		{
-			if (option == (*it)->getNickname())
-			{
-				channel.giveOperatorRights(it);
-				std::cout << "changed +o" << std::endl;
-				return;
-			}
+			channel.giveOperatorRights(client);
+			std::cout << (*client)->getNickname() << " changed " << channel.getName() << " to +o" << std::endl;
+			return;
 		}
 		std::cout << option << " isn't part of " << channel.getName() << std::endl;
 	}
 	else
 	{
-		ClientIterator it = channel.getOperators().begin();
-		ClientIterator ite = channel.getOperators().end();
-		for (; it != ite; ++it)
+		ClientIterator channelOperator = channel.findOperator(option);
+		if (channelOperator != channel.getOperators().end())
 		{
-			if (option == (*it)->getNickname())
-			{
-				channel.removeOperatorRights(it);
-				std::cout << "changed -o" << std::endl;
-				return;
-			}
+			channel.removeOperatorRights(*(*channelOperator));
+			std::cout << (*channelOperator)->getNickname() << " changed " << channel.getName() << " to -o" << std::endl;
+			return;
 		}
 		std::cout << option << " isn't an operator of " << channel.getName() << std::endl;
 	}
 }
 
-void handleI(std::string& option, Channel& channel, bool isPositive)
+void handleI(std::string const& option, Channel& channel, bool isPositive)
 {
 	(void)option;
 	if (isPositive)
@@ -58,7 +50,7 @@ void handleI(std::string& option, Channel& channel, bool isPositive)
 	std::cout << "changed +i -i" << std::endl;
 }
 
-void handleT(std::string& option, Channel& channel, bool isPositive)
+void handleT(std::string const& option, Channel& channel, bool isPositive)
 {
 	(void)option;
 	if (isPositive)
@@ -68,7 +60,7 @@ void handleT(std::string& option, Channel& channel, bool isPositive)
 	std::cout << "changed +t -t" << std::endl;
 }
 
-void handleL(std::string& option, Channel& channel, bool isPositive)
+void handleL(std::string const& option, Channel& channel, bool isPositive)
 {
 	if (isPositive)
 	{
@@ -92,7 +84,7 @@ void handleL(std::string& option, Channel& channel, bool isPositive)
 	std::cout << "changed +l -l" << std::endl;
 }
 
-void handleK(std::string& option, Channel& channel, bool isPositive)
+void handleK(std::string const& option, Channel& channel, bool isPositive)
 {
 	if (isPositive)
 	{
@@ -113,7 +105,7 @@ void handleK(std::string& option, Channel& channel, bool isPositive)
 void handleMode(std::istringstream& iss, Channel& channel, std::string word)
 {
 	std::string modes = "oitlk";
-	void (*toHandle[5])(std::string& option, Channel& channel, bool isPositive) = {handleO, handleI, handleT, handleL, handleK};
+	void (*toHandle[5])(std::string const& option, Channel& channel, bool isPositive) = {handleO, handleI, handleT, handleL, handleK};
 
 	bool isPositive = true;
 	std::string option;
@@ -146,23 +138,14 @@ void mode(Client& client, Server& theServer, std::istringstream& iss)
 	std::string word;
 	iss >> word;
 	word = word.substr(1);
-	ChannelIterator it = theServer.getChannels().begin();
-	ChannelIterator ite = theServer.getChannels().end();
-	for (; it != ite; ++it)
+	ChannelIterator channel = theServer.findChannel(word);
+	if (channel != theServer.getChannels().end())
 	{
-		if (word == (*it)->getName())
+		ClientIterator channelOperator = (*channel)->findOperator(client.getNickname());
+		if (channelOperator != (*channel)->getOperators().end())
 		{
-			ClientIterator currentOperator = (*it)->getOperators().begin();
-			ClientIterator lastOperator = (*it)->getOperators().end();
-			for (; currentOperator != lastOperator; ++currentOperator)
-			{
-				if ((*currentOperator)->getNickname() == client.getNickname())
-				{
-					iss >> word;
-					handleMode(iss, *(*it), word);
-				}
-			}
-			return;
+			iss >> word;
+			handleMode(iss, *(*channel), word);
 		}
 	}
 }

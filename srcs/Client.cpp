@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 08:28:53 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:11:42 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,19 +296,15 @@ bool Client::badPassword(Server& theServer)
 {
     if (this->getPassword() != theServer.getPassword())
     {
-        ClientIterator it  = theServer.getClients().begin();
-        ClientIterator ite = theServer.getClients().end();
-        for (; it != ite; ++it)
+        ClientIterator client = theServer.findClient(this->getSocket());
+        if (client != theServer.getClients().end())
         {
-            if (this->getNickname() == (*it)->getNickname())
-            {
-                const char* msg = "Connection refused: wrong password\n";
-                send(this->getSocket(), msg, strlen(msg), 0);
-                close(this->getSocket());
-                theServer.getClients().erase(it);
-                delete this;
-                return true;
-            }
+            const char* msg = "Connection refused: wrong password\n";
+            send(this->getSocket(), msg, strlen(msg), 0);
+            close(this->getSocket());
+            theServer.getClients().erase(client);
+            delete this;
+            return true;
         }
     }
     return false;

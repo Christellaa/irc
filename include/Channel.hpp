@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/06 12:19:57 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 10:23:40 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ class Client;
 class Channel
 {
 	private:
-		std::string _name; // bloquer longueur
+		std::string _name;
 		std::string _topic; // bloquer longueur
-		std::string _password; // bloquer longueur
+		std::string _password;
 		bool _hasPassword;
 		bool _topicScope;
 		bool _inviteOnly;
@@ -43,6 +43,9 @@ class Channel
 		ClientVec& getClients(void);
 		ClientVec& getOperators(void);
 
+		ClientIterator findOperator(std::string const& operatorNickname);
+		ClientIterator findClient(std::string const& clientNickname);
+
 		int getUserLimit(void);
 	
 		bool isInviteOnly(void);
@@ -52,7 +55,7 @@ class Channel
 		void setUserLimit(bool value, int newLimit);
 		void setPassword(bool value, std::string const& password);
 		void giveOperatorRights(ClientIterator oldestClient);
-		void removeOperatorRights(ClientIterator client);
+		void removeOperatorRights(Client& client);
 };
 
 #endif

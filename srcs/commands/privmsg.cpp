@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/01 13:28:41 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/07 11:01:15 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,19 @@ void privmsg(Client& client, Server& theServer, std::istringstream& iss)
 	int pos = line.find(':');
 	line = line.substr(pos + 1);
 
-	ChannelIterator currentChannel = theServer.getChannels().begin();
-	ChannelIterator lastChannel = theServer.getChannels().end();
-	for (; currentChannel != lastChannel; ++currentChannel)
+	ChannelIterator channel = theServer.findChannel(channelName);
+	if (channel != theServer.getChannels().end())
 	{
-		if ((*currentChannel)->getName() == channelName)
+		ClientIterator it = (*channel)->getClients().begin();
+		ClientIterator ite = (*channel)->getClients().end();
+		for (; it != ite; ++it)
 		{
-			ClientIterator it = (*currentChannel)->getClients().begin();
-			ClientIterator ite = (*currentChannel)->getClients().end();
-			for (; it != ite; ++it)
-			{
-				// don't send to client who sent
-				send((*it)->getSocket(), line.c_str(), line.length(), 0);
-				std::cout << "sending msg to: " << (*it)->getSocket() << std::endl;
-			}
-			return;
+			if (client.getSocket() == (*it)->getSocket())
+				continue;
+			send((*it)->getSocket(), line.c_str(), line.length(), 0);
+			std::cout << "sending msg to: " << (*it)->getSocket() << std::endl;
 		}
+		return;
 	}
 }
 

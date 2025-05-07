@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/06 12:19:15 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 10:03:31 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,39 @@ void Channel::giveOperatorRights(ClientIterator oldestClient)
 {
 	if (!*oldestClient)
 		return;
+	ClientIterator channelOperator = this->findOperator((*oldestClient)->getNickname());
+	if (channelOperator != this->getOperators().end())
+		return;
+	this->getOperators().push_back(*oldestClient);
+}
+
+void Channel::removeOperatorRights(Client& client)
+{
+	ClientIterator clientToRemove = this->findOperator(client.getNickname());
+	if (clientToRemove != this->getOperators().end())
+		this->getOperators().erase(clientToRemove);
+}
+
+ClientIterator Channel::findOperator(std::string const& operatorNickname)
+{
 	ClientIterator it = this->getOperators().begin();
 	ClientIterator ite = this->getOperators().end();
 	for (; it != ite; ++it)
 	{
-		if ((*oldestClient)->getNickname() == (*it)->getNickname())
-			return;
+		if (operatorNickname == (*it)->getNickname())
+			return it;
 	}
-	this->getOperators().push_back(*oldestClient);
+	return ite;
 }
 
-void Channel::removeOperatorRights(ClientIterator client)
+ClientIterator Channel::findClient(std::string const& clientNickname)
 {
-	if (!*client)
-		return;
-	ClientIterator clientToRemove = std::find(this->getOperators().begin(), this->getOperators().end(), *client);
-	if (clientToRemove != this->getOperators().end())
-		this->getOperators().erase(clientToRemove);
+	ClientIterator it = this->getClients().begin();
+	ClientIterator ite = this->getClients().end();
+	for (; it != ite; ++it)
+	{
+		if (clientNickname == (*it)->getNickname())
+			return it;
+	}
+	return ite;
 }

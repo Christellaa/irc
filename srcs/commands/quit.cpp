@@ -3,41 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/06 12:54:46 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/07 10:14:44 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void removeClientFromChannel(Client* clientToRemove, ChannelIterator channel)
+void removeClientFromChannel(std::string const& clientNickname, Channel& channel)
 {
-	ClientIterator currentClient = (*channel)->getClients().begin();
-	ClientIterator lastClient = (*channel)->getClients().end();
-	for (; currentClient != lastClient; ++currentClient)
-	{
-		if (clientToRemove->getSocket() == (*currentClient)->getSocket())
-		{
-			currentClient = (*channel)->getClients().erase(currentClient);
-			break;
-		}
-	}
+	ClientIterator client = channel.findClient(clientNickname);
+	if (client != channel.getClients().end())
+		channel.getClients().erase(client);
 }
 
-void removeOperator(Client* clientToRemove, ChannelIterator channel)
+void removeOperator(std::string const& operatorNickname, Channel& channel)
 {
-	ClientIterator currentOperator = (*channel)->getOperators().begin();
-	ClientIterator lastOperator = (*channel)->getOperators().end();
-	for (; currentOperator != lastOperator; ++currentOperator)
-	{
-		if (clientToRemove->getSocket() == (*currentOperator)->getSocket())
-		{
-			currentOperator = (*channel)->getOperators().erase(currentOperator);
-			break;
-		}
-	}
+	ClientIterator channelOperator = channel.findOperator(operatorNickname);
+	if (channelOperator != channel.getOperators().end())
+		channel.getOperators().erase(channelOperator);
 }
 
 void removeClientFromChannels(Client* client, Server& theServer)
@@ -45,8 +31,8 @@ void removeClientFromChannels(Client* client, Server& theServer)
 	ChannelIterator currentChannel = theServer.getChannels().begin();
 	while (currentChannel != theServer.getChannels().end())
 	{
-		removeClientFromChannel(client, currentChannel);
-		removeOperator(client, currentChannel);
+		removeClientFromChannel(client->getNickname(), *(*currentChannel));
+		removeOperator(client->getNickname(), *(*currentChannel));
 		if ((*currentChannel)->getClients().size() == 0)
 		{
 			delete *currentChannel;
@@ -63,18 +49,13 @@ void removeClientFromChannels(Client* client, Server& theServer)
 
 void quit(Client* client, Server& theServer)
 {
-	ClientIterator it = theServer.getClients().begin();
-	ClientIterator ite = theServer.getClients().end();
 	removeClientFromChannels(client, theServer);
-	for (; it != ite; ++it)
+	ClientIterator clientIt = theServer.findClient(client->getSocket());
+	if (clientIt != theServer.getClients().end())
 	{
-		if (client->getSocket() == (*it)->getSocket())
-		{
-			std::cout << BOLD RED "Client " << (*it)->getSocket() << " left, bye!" RESET << std::endl;
-			close(client->getSocket());
-			delete client;
-			theServer.getClients().erase(it);
-			break;
-		}
+		std::cout << BOLD RED "Client " << (*clientIt)->getSocket() << " left, bye!" RESET << std::endl;
+		close(client->getSocket());
+		delete client;
+		theServer.getClients().erase(clientIt);
 	}
 }

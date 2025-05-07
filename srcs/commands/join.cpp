@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/30 10:52:21 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:25:29 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,22 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 	std::string word;
 	iss >> word;
 	word = word.substr(1);
-	ChannelIterator it = theServer.getChannels().begin();
-	ChannelIterator ite = theServer.getChannels().end();
-	for (; it != ite; ++it)
+	ChannelIterator channel = theServer.findChannel(word);
+	if (channel != theServer.getChannels().end())
 	{
-		if (word == (*it)->getName())
+		std::cout << "word: " << word << " + channel name: " << (*channel)->getName() << std::endl;
+		iss >> word;
+		if (checkModes(word, *(*channel), *client))
 		{
-			std::cout << "word: " << word << " + channel name: " << (*it)->getName() << std::endl;
-			iss >> word;
-			if (checkModes(word, *(*it), *client))
-			{
-				(*it)->getClients().push_back(client);
-				std::cout << "Added " << client->getNickname() << " to channel " << (*it)->getName() << std::endl;
-			}
-			return;
+			(*channel)->getClients().push_back(client);
+			std::cout << "Added " << client->getNickname() << " to channel " << (*channel)->getName() << std::endl;
 		}
+		return;
+	}
+	if (word.length() > MAX_CHAR_CHANNEL)
+	{
+		std::cout << "Channel name must be maximum " << MAX_CHAR_CHANNEL << " characters" << std::endl;
+		return;
 	}
 	Channel* newChannel = new Channel(word);
 	theServer.getChannels().push_back(newChannel);
