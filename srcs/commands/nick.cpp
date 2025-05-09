@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 14:07:48 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:25:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ void nick(Client& client, Server& theServer, std::istringstream& iss)
 	}
 	if (word.length() > 8)
 		word = word.substr(0, 8);
+	std::string oldNickname = client.getNickname();
 	client.setNickname(word);
 	client.sameNickname(theServer);
-	std::string welcome_msg = WELCOME(client.getNickname());
-	// std::string welcome_msg = welcome_client(client.getNickname(), userPrefix(client.getNickname(), client.getUsername()));
-	send(client.getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
+	sendServerReply(client, RPL_SAVENICK(oldNickname, client.getNickname()));
 }

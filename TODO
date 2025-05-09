@@ -3,14 +3,10 @@
 	- INVITE
 	- TOPIC
 
-- PART?
+- messages d'erreur et de commandes
+- MAX_CHANNELS allowed in the server (in join function)
 
 
-
+BONUS:
 - bot
-
-`
-		const char* msg = "Server full. Try again later.\n";
-		send(clientfd, msg, strlen(msg), 0);
-		close(clientfd);
-` => reused so need a util function
+- file transfer

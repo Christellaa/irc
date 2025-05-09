@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 17:38:51 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/09 13:57:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,13 @@ class Client
     void setNickname(std::string const& nickname);
     void setUsername(std::string const& username);
 
-    Channel* findChannel(Channel& channel);
+    Channel* findInvitedChannel(Channel& channel);
 
     void readClientMessage(Server& theServer);
-	void sameNickname(Server& theServer);
-	//void parseWelcomeMessage(const std::string& line, Server& theServer);
-    // void parseClientMessage(Server& theServer);
-    // void parseWelcomeMessage(Server& theServer);
+	  void sameNickname(Server& theServer);
 
     bool parseClientMessage(const std::string& line, Server& theServer);
-	bool parseWelcomeMessage(const std::string& line, Server& theServer);
+	  bool parseWelcomeMessage(const std::string& line, Server& theServer);
     bool badPassword(Server& theServer);
     bool isWelcome;
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 17:38:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/09 15:08:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,18 +86,24 @@ typedef ChannelVec::iterator ChannelIterator;
 
 void join(Client* client, Server& theServer, std::istringstream& iss);
 void nick(Client& client, Server& theServer, std::istringstream& iss);
-void pong(Client& client, std::istringstream& iss);
+void pong(Client& client);
 void mode(Client& client, Server& theServer, std::istringstream& iss);
 void quit(Client* client, Server& theServer);
 void privmsg(Client& client, Server& theServer, std::istringstream& iss);
+void part(Client& client, Server& theServer, std::istringstream& iss);
+void kick(Client& client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 
-std::string userPrefix(std::string nickname, std::string username);
+void sendServerReply(Client& client, std::string const& reply);
+std::string welcomeClient(Client& client);
+std::string userPrefix(Client& client);
 std::string intToString(int number);
+std::string getIrcDate();
 
-// std::string welcome_client(std::string nickname, std::string prefix);
-// std::string messageToSend(std::string const& prefix, std::string const& channelName, std::string const& message);
+
+void removeClientFromChannel(std::string const& clientNickname, Channel& channel);
+void removeOperator(std::string const& operatorNickname, Channel& channel);
 
 void	handle_signals(void);
 
@@ -112,12 +118,23 @@ class SignalQuit : public std::exception{
 
 /****** DEFINE COMMANDS ******/
 
-#define WELCOME(nickname) ":ircserv 001 " + nickname + " :Welcome, " + nickname + "\r\n"
-#define PRIVMSG(nickname, channelName, message)  ":" + nickname + " PRIVMSG #" + channelName + " :" + message + "\r\n"
-#define JOIN(prefix, channelName) ":" + prefix + " JOIN :#" + channelName + "\r\n"
-#define PONG(nickname, serverName) ":" + nickname + " PONG :" + serverName + "\r\n"
-#define QUIT(prefix) ":" + prefix + " QUIT :leaving" + "\r\n"
+#define RPL_WELCOME(nickname, prefix) ":ircserv 001 " + nickname + " :Welcome to ircserv, " + prefix + "\r\n"
+#define RPL_YOURHOST(nickname) ":ircserv 002 " + nickname + " :Your host is ircserv, running version 1.0" + "\r\n"
+#define RPL_CREATED(nickname, date) ":ircserv 003 " + nickname + " :This server was created " + date + "\r\n"
+#define RPL_SAVENICK(oldnickname, nickname) ":" + oldnickname + " NICK" + " :" + nickname + "\r\n"
+#define PRIVMSG(nickname, target, message) ":" + nickname + " PRIVMSG #" + target + " :" + message + "\r\n"
+// if target is clientB and not channelA?
+#define JOIN(nickname, channelName) ":" + nickname + " JOIN :#" + channelName + "\r\n"
+#define PART(nickname, channelName) ":" + nickname + " PART :#" + channelName + "\r\n"
+#define PONG(nickname) ":" + nickname + " PONG :ircserv" + "\r\n"
+#define QUIT(nickname, clientSocket) ":" + nickname + " QUIT :" + nickname + " on fd " + clientSocket + " left the server" + "\r\n"
 #define MODE(nickname, channelName, modes, options) ":" + nickname + " MODE " + channelName + " " + modes + " " + options + "\r\n"
+#define KICK(nickname, channelName, target, message) ":" + nickname + " KICK #" + channelName + " " + target + " :" + message + "\r\n"
+// KICK #test codespac0 :message de la mort
+#define INVITE(nickname, channelName, target) ":" + nickname + " INVITE " + target + " #" + channelName + "\r\n"
+// INVITE codespac0 #test
+#define TOPIC(nickname, channelName, target, message) ":" + nickname + " TOPIC #" + channelName + " :" + message + "\r\n"
+// TOPIC #test :lolololol
 
 /****** DEFINE ERRORS ******/
 

@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pong.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 14:17:51 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:44:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void pong(Client& client, std::istringstream& iss)
+void pong(Client& client)
 {
-	std::string word;
-	iss >> word;
-	std::string answer = PONG(client.getNickname(), word);
-	// std::string answer = ":" + client.getNickname() + " PONG :" + word + "\r\n";
-	send(client.getSocket(), answer.c_str(), answer.length(), 0);
-	std::cout << answer << std::endl;
+	sendServerReply(client, PONG(client.getNickname()));
 }

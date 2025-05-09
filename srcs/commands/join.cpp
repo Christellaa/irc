@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 14:16:00 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:01:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool checkModeL(Channel& channel)
 
 bool checkModeI(Client& client, Channel& channel)
 {
-	if (client.findChannel(channel))
+	if (client.findInvitedChannel(channel))
 		return true;
 	return false;
 }
@@ -68,12 +68,10 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 		{
 			(*channel)->getClients().push_back(client);
 			std::cout << "Added " << client->getNickname() << " to channel " << (*channel)->getName() << std::endl;
+			sendServerReply(*client, JOIN(client->getNickname(), (*channel)->getName()));
 		}
-
-		std::string answer = JOIN(userPrefix(client->getNickname(), client->getUsername()), (*channel)->getName());
-		// std::string answer = ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " JOIN :#" + (*channel)->getName() + "\r\n";
-		send(client->getSocket(), answer.c_str(), answer.length(), 0);
-		std::cout << answer << std::endl;
+		else
+			std::cout << "Error in checkmodes, JOIN fail" << std::endl;
 		return;
 	}
 	if (word.length() > MAX_CHAR_CHANNEL)
@@ -81,14 +79,12 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
 		std::cout << "Channel name must be maximum " << MAX_CHAR_CHANNEL << " characters" << std::endl;
 		return;
 	}
+	// check if MAX_CHANNELS reached
 	Channel* newChannel = new Channel(word);
 	theServer.getChannels().push_back(newChannel);
 	newChannel->getClients().push_back(client);
 	newChannel->getOperators().push_back(client);
 	std::cout << "Added " << client->getNickname() << " to NEW channel " << newChannel->getName() << std::endl;
 
-	std::string answer = JOIN(userPrefix(client->getNickname(), client->getUsername()), newChannel->getName());
-	// std::string answer = ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " JOIN :#" + newChannel->getName() + "\r\n";
-	send(client->getSocket(), answer.c_str(), answer.length(), 0);
-	std::cout << answer << std::endl;
+	sendServerReply(*client, JOIN(client->getNickname(), newChannel->getName()));
 }

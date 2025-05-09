@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 14:27:09 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:44:24 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,7 @@ void mode(Client& client, Server& theServer, std::istringstream& iss)
 			handleMode(iss, *(*channel), word);
 			std::string option;
 			std::getline(iss, option);
-			std::string answer = MODE(client.getNickname(), (*channel)->getName(), word, option);
-			// std::string answer = ":" + client.getNickname() + " MODE :" + word + "\r\n";
-			send(client.getSocket(), answer.c_str(), answer.length(), 0);
-			std::cout << answer << std::endl;
+			sendServerReply(client, MODE(client.getNickname(), (*channel)->getName(), word, option));
 		}
 	}
 }
