@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 10:07:37 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:21:34 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ std::string Channel::getPassword(void)
     return "";
 }
 
+std::string Channel::getTopicMessage(void){ return this->_topic; }
+
+bool Channel::getTopicScope(void){ return this->_topicScope; }
+
 int Channel::getUserLimit(void)
 {
     if (this->_hasUserLimit)
@@ -61,6 +65,11 @@ void Channel::setInviteOnly(bool value)
 void Channel::setTopicScope(bool value)
 {
     this->_inviteOnly = value;
+}
+
+void Channel::setTopicMessage(std::string message)
+{
+    this->_topic = message;
 }
 
 void Channel::setUserLimit(bool value, int newLimit)

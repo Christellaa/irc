@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 16:47:01 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:53:34 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void privmsg(Client& client, Server& theServer, std::istringstream& iss);
 void part(Client& client, Server& theServer, std::istringstream& iss);
 void kick(Client& client, Server& theServer, std::istringstream& iss);
 void invite(Client& client, Server& theServer, std::istringstream& iss);
+void topic(Client& client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 
@@ -128,6 +129,9 @@ class SignalQuit : public std::exception
 #define RPL_CREATED(nickname, date)                                                                \
     ":ircserv 003 " + nickname + " :This server was created " + date + "\r\n"
 #define RPL_SAVENICK(oldnickname, nickname) ":" + oldnickname + " NICK" + " :" + nickname + "\r\n"
+#define RPL_NOTOPICSET(nickname, channelName, message) ":ircserv 331 " +  nickname + " #" + channelName + message + "\r\n"
+#define RPL_TOPIC(nickname, channelName, message) ":ircserv 332 " + nickname + " #" + channelName + message + "\r\n"
+
 #define PRIVMSG(nickname, target, message)                                                         \
     ":" + nickname + " PRIVMSG #" + target + " :" + message + "\r\n"
 // if target is clientB and not channelA?
@@ -144,7 +148,6 @@ class SignalQuit : public std::exception
     ":" + nickname + " INVITE " + target + " #" + channelName + "\r\n"
 #define TOPIC(nickname, channelName, target, message)                                              \
     ":" + nickname + " TOPIC #" + channelName + " :" + message + "\r\n"
-// TOPIC #test :lolololol
 
 /****** DEFINE ERRORS ******/
 

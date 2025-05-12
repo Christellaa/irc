@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:58:18 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 14:31:05 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:52:47 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void kick(Client& client, Server& theServer, std::istringstream& iss)
         ClientIterator it  = (*channel)->getClients().begin();
         ClientIterator ite = (*channel)->getClients().end();
         for (; it != ite; ++it)
-            sendServerReply(*(*it), KICK(client.getNickname(), channelName, clientToKick, message));
+            sendServerReply(*(*it), TOPIC(client.getNickname(), channelName, clientToKick, message));
         removeClientFromChannel(clientToKick, *(*channel));
         removeOperator(clientToKick, *(*channel));
         if ((*channel)->getClients().size() == 0)

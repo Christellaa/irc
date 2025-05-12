@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 15:15:52 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:11:53 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,8 @@ bool Client::parseClientMessage(const std::string& line, Server& theServer)
         kick(*this, theServer, iss);
     else if (word == "INVITE")
         invite(*this, theServer, iss);
+	else if (word == "TOPIC")
+        topic(*this, theServer, iss);
     return true;
 }
 

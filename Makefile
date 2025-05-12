@@ -36,7 +36,8 @@ SRC			=	main.cpp \
 				srcs/commands/privmsg.cpp \
 				srcs/commands/pong.cpp \
 				srcs/commands/part.cpp \
-				srcs/commands/invite.cpp
+				srcs/commands/invite.cpp \
+				srcs/commands/topic.cpp
 
 ################################################################################
 #                                   Objects                                    #
