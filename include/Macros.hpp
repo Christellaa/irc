@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 15:47:15 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:24:52 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,5 +176,6 @@ class SignalQuit : public std::exception
     ":ircserv 443 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"
 #define ERR_NOSUCHNICK(nickname, target, message)                                                  \
     ":ircserv 401 " + nickname + " " + target + " :" + message + "\r\n"
+#define ERR_NICKNAMEINUSE(nickname, message) ":ircserv 433 * " + nickname + message + "\r\n"
 
 #endif
