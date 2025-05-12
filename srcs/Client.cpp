@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/09 14:56:33 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/12 12:57:52 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,45 @@ Client::~Client() {}
 //#Getters & Setters
 //##################
 
-std::string Client::getNickname(void){ return this->_nickname; }
+std::string& Client::getNickname(void)
+{
+    return this->_nickname;
+}
 
-std::string Client::getPassword(void){ return this->_password; }
+std::string& Client::getPassword(void)
+{
+    return this->_password;
+}
 
-std::string Client::getUsername(void){ return this->_username; }
+std::string& Client::getUsername(void)
+{
+    return this->_username;
+}
 
-std::string& Client::getMsg(void){ return this->_msg; }
+std::string& Client::getMsg(void)
+{
+    return this->_msg;
+}
 
-int Client::getSocket(void){ return this->_socketfd; }
+int Client::getSocket(void)
+{
+    return this->_socketfd;
+}
 
-void Client::setPassword(std::string const& password){ this->_password = password; }
+void Client::setPassword(std::string const& password)
+{
+    this->_password = password;
+}
 
-void Client::setNickname(std::string const& nickname){ this->_nickname = nickname; }
+void Client::setNickname(std::string const& nickname)
+{
+    this->_nickname = nickname;
+}
 
-void Client::setUsername(std::string const& username){ this->_username = username; }
+void Client::setUsername(std::string const& username)
+{
+    this->_username = username;
+}
 
 //####
 //#Exceptions
@@ -96,12 +120,10 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
         sameNickname(theServer);
         if (badPassword(theServer))
             return false;
-		sendServerReply(*this, welcomeClient(*this));
-        // std::string welcome_msg = welcomeClient(*this);
-        // send(this->getSocket(), welcome_msg.c_str(), welcome_msg.length(), 0);
+        sendServerReply(*this, welcomeClient(*this));
         this->isWelcome = false;
     }
-	return true;
+    return true;
 }
 
 bool Client::parseClientMessage(const std::string& line, Server& theServer)
@@ -160,10 +182,10 @@ void Client::readClientMessage(Server& theServer)
             line.erase(line.size() - 1, 1);
         std::cout << BOLD GREEN "Ligne reçue : [" RESET << line << "]" << std::endl;
         if (this->isWelcome)
-		{
+        {
             if (!parseWelcomeMessage(line, theServer))
-				return;
-		}
+                return;
+        }
         else if (!parseClientMessage(line, theServer))
             return;
     }
@@ -176,11 +198,9 @@ bool Client::badPassword(Server& theServer)
         ClientIterator client = theServer.findClient(this->getSocket());
         if (client != theServer.getClients().end())
         {
-		    sendServerReply(*this, ERR_PASSWORD(this->getNickname()));
-			// std::string msg = ERR_PASSWORD(this->getNickname());
-            // send(this->getSocket(), msg.c_str(), msg.size(), 0);
+            sendServerReply(*this, ERR_PASSWORD(this->getNickname()));
             close(this->getSocket());
-			std::cout << BOLD RED "Connection failed: wrong password" RESET << std::endl;
+            std::cout << BOLD RED "Connection failed: wrong password" RESET << std::endl;
             theServer.getClients().erase(client);
             delete this;
             return true;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/09 13:57:52 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/12 10:01:44 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ class Client
     Client(int socketfd);
     ~Client();
 
-    std::string  getPassword(void);
-    std::string  getNickname(void);
-    std::string  getUsername(void);
+    std::string& getPassword(void);
+    std::string& getNickname(void);
+    std::string& getUsername(void);
     std::string& getMsg(void);
 
     int getSocket(void);
@@ -51,10 +51,10 @@ class Client
     Channel* findInvitedChannel(Channel& channel);
 
     void readClientMessage(Server& theServer);
-	  void sameNickname(Server& theServer);
+    void sameNickname(Server& theServer);
 
     bool parseClientMessage(const std::string& line, Server& theServer);
-	  bool parseWelcomeMessage(const std::string& line, Server& theServer);
+    bool parseWelcomeMessage(const std::string& line, Server& theServer);
     bool badPassword(Server& theServer);
     bool isWelcome;
 };
