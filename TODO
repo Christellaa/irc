@@ -1,11 +1,6 @@
 - commands operators:
-	- KICK
 	- INVITE
 	- TOPIC
-
-- messages d'erreur et de commandes
-- MAX_CHANNELS allowed in the server (in join function)
-
 
 BONUS:
 - bot

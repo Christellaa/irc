@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 12:51:51 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:27:20 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void privmsg(Client& client, Server& theServer, std::istringstream& iss)
         {
             if (client.getSocket() == (*it)->getSocket())
                 continue;
-            std::string line = PRIVMSG(client.getNickname(), (*channel)->getName(), message);
-            send((*it)->getSocket(), line.c_str(), line.size(), 0);
+            sendServerReply(*(*it), PRIVMSG(client.getNickname(), (*channel)->getName(), message));
         }
     }
     else
