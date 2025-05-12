@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 12:54:31 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:57:55 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,9 @@ void handleModes(std::istringstream& iss, Channel& channel, std::string modes, C
                     ((modes[i] != 'l' && modes[i] != 'k') || isPositive))
                     iss >> option;
             }
-            sendServerReply(client,
-                            ERR_UNKNOWNMODE(client.getNickname(), modeToSend, "Unknown mode"));
+            else
+                sendServerReply(client,
+                                ERR_UNKNOWNMODE(client.getNickname(), modeToSend, "Unknown mode"));
         }
     }
 }

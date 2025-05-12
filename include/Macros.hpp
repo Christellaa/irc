@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 16:24:52 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:47:01 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ class Channel;
 #include <csignal> //signal, sigaction
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <exception>
 #include <fcntl.h> //fcntl
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <netdb.h>      //getprotobyname, gethostbyname, getaddrinfo...
@@ -100,6 +102,7 @@ std::string welcomeClient(Client& client);
 std::string userPrefix(Client& client);
 std::string intToString(int number);
 std::string getIrcDate();
+std::string ft_tolower(std::string const& word);
 
 void removeClientFromChannel(std::string const& clientNickname, Channel& channel);
 void removeOperator(std::string const& operatorNickname, Channel& channel);

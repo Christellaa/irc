@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 14:26:20 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:46:20 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ std::string intToString(int number)
     return oss.str();
 }
 
-#include <ctime>
-#include <iomanip>
-
 std::string getIrcDate()
 {
     time_t     now = time(NULL);
@@ -62,4 +59,12 @@ std::string getIrcDate()
         << std::setfill('0') << t->tm_sec << " " << (1900 + t->tm_year);
 
     return oss.str();
+}
+
+std::string ft_tolower(std::string const& word)
+{
+    std::string result = word;
+    std::transform(result.begin(), result.end(), result.begin(),
+                   static_cast<int (*)(int)>(std::tolower));
+    return result;
 }

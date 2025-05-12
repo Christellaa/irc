@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 15:27:41 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:47:07 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ bool checkModes(std::string password, Channel& channel, Client& client)
     bool modeOk = true;
     if (!channel.getPassword().empty())
         modeOk = checkModeK(password, channel, client);
-    std::cout << "mode Ok: " << modeOk << std::endl;
+    std::cout << "mode Ok key: " << modeOk << std::endl;
     if (channel.getUserLimit() != 0)
         modeOk = checkModeL(channel, client);
-    std::cout << "mode Ok: " << modeOk << std::endl;
+    std::cout << "mode Ok limit: " << modeOk << std::endl;
     if (channel.isInviteOnly())
         modeOk = checkModeI(client, channel);
-    std::cout << "mode Ok: " << modeOk << std::endl;
+    std::cout << "mode Ok invite: " << modeOk << std::endl;
     return modeOk;
 }
 
@@ -67,6 +67,7 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
     std::string channelName, password;
     iss >> channelName >> password;
     channelName             = channelName.substr(1);
+    channelName             = ft_tolower(channelName);
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel != theServer.getChannels().end())
     {
