@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 12:50:30 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:47:15 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void quit(Client* client, Server& theServer);
 void privmsg(Client& client, Server& theServer, std::istringstream& iss);
 void part(Client& client, Server& theServer, std::istringstream& iss);
 void kick(Client& client, Server& theServer, std::istringstream& iss);
+void invite(Client& client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 
@@ -136,10 +137,8 @@ class SignalQuit : public std::exception
     ":" + nickname + " MODE #" + channelName + " " + mode + " " + option + "\r\n"
 #define KICK(nickname, channelName, target, message)                                               \
     ":" + nickname + " KICK #" + channelName + " " + target + " :" + message + "\r\n"
-// KICK #test codespac0 :message de la mort
 #define INVITE(nickname, channelName, target)                                                      \
     ":" + nickname + " INVITE " + target + " #" + channelName + "\r\n"
-// INVITE codespac0 #test
 #define TOPIC(nickname, channelName, target, message)                                              \
     ":" + nickname + " TOPIC #" + channelName + " :" + message + "\r\n"
 // TOPIC #test :lolololol
@@ -164,8 +163,8 @@ class SignalQuit : public std::exception
         "\r\n"
 #define ERR_NEEDMOREPARAMS(nickname, command, message)                                             \
     ":ircserv 461 " + nickname + " " + command + " :" + message + "\r\n"
-#define ERR_USERNOTINCHANNEL(nickname, otherNickname, channelName, message)                        \
-    ":ircserv 441 " + nickname + " " + otherNickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_USERNOTINCHANNEL(nickname, target, channelName, message)                               \
+    ":ircserv 441 " + nickname + " " + target + " #" + channelName + " :" + message + "\r\n"
 #define ERR_CHANOPRIVSNEEDED(nickname, channelName, message)                                       \
     ":ircserv 482 " + nickname + " #" + channelName + " :" + message + "\r\n"
 #define ERR_UNKNOWNMODE(nickname, mode, message)                                                   \
@@ -173,5 +172,9 @@ class SignalQuit : public std::exception
 #define ERR_UMODEUNKNOWNFLAG(nickname, message) ":ircserv 501 " + nickname + " :" + message + "\r\n"
 #define ERR_NOSUCHCHANNEL(nickname, channelName, message)                                          \
     ":ircserv 403 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_USERONCHANNEL(nickname, target, channelName, message)                                  \
+    ":ircserv 443 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"
+#define ERR_NOSUCHNICK(nickname, target, message)                                                  \
+    ":ircserv 401 " + nickname + " " + target + " :" + message + "\r\n"
 
 #endif

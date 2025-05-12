@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 10:01:44 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:20:05 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ class Client
     std::string _buffer;
 
     ChannelVec _isInvited;
-    // quand clientA invite clientB, on va dans clientB et on rajoute le channel
-    // de clientA dans le vector isInvited ici on check si on trouve le channel
-    // que clientB tente de join dans son vector isInvited
 
     Client();
 
@@ -48,7 +45,8 @@ class Client
     void setNickname(std::string const& nickname);
     void setUsername(std::string const& username);
 
-    Channel* findInvitedChannel(Channel& channel);
+    ChannelIterator findInvitedChannel(Channel& channel);
+    ChannelVec&     getInvitedChannels();
 
     void readClientMessage(Server& theServer);
     void sameNickname(Server& theServer);

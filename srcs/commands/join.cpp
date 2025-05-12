@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 10:47:12 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:27:41 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool checkModeL(Channel& channel, Client& client)
 
 bool checkModeI(Client& client, Channel& channel)
 {
-    if (client.findInvitedChannel(channel))
+    if (client.findInvitedChannel(channel) != client.getInvitedChannels().end())
         return true;
     sendServerReply(client, ERR_INVITEONLYCHAN(client.getNickname(), channel.getName(),
                                                "Not invited to this channel"));
@@ -75,6 +75,11 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
         if (checkModes(password, *(*channel), *client))
         {
             (*channel)->getClients().push_back(client);
+            if ((*channel)->isInviteOnly())
+            {
+                ChannelIterator channelToDel = client->findInvitedChannel(*(*channel));
+                client->getInvitedChannels().erase(channelToDel);
+            }
             std::cout << "Added " << client->getNickname() << " to channel "
                       << (*channel)->getName() << std::endl;
             sendServerReply(*client, JOIN(client->getNickname(), (*channel)->getName()));

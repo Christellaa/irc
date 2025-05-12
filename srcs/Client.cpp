@@ -6,24 +6,24 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 12:57:52 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:15:52 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 #include "Server.hpp"
 
-//####
-//#Constructor & Destructor
-//##################
+// ####
+// #Constructor & Destructor
+// ##################
 
 Client::Client(int socketfd) : _socketfd(socketfd), isWelcome(true) {}
 
 Client::~Client() {}
 
-//####
-//#Getters & Setters
-//##################
+// ####
+// #Getters & Setters
+// ##################
 
 std::string& Client::getNickname(void)
 {
@@ -65,24 +65,29 @@ void Client::setUsername(std::string const& username)
     this->_username = username;
 }
 
-//####
-//#Exceptions
-//##################
+// ####
+// #Exceptions
+// ##################
 
-//####
-//#Functions
-//##################
+// ####
+// #Functions
+// ##################
 
-Channel* Client::findInvitedChannel(Channel& channel)
+ChannelIterator Client::findInvitedChannel(Channel& channel)
 {
     ChannelIterator it  = this->_isInvited.begin();
     ChannelIterator ite = this->_isInvited.end();
     for (; it != ite; ++it)
     {
         if ((*it)->getName() == channel.getName())
-            return *it;
+            return it;
     }
-    return NULL;
+    return ite;
+}
+
+ChannelVec& Client::getInvitedChannels()
+{
+    return this->_isInvited;
 }
 
 bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
@@ -151,6 +156,8 @@ bool Client::parseClientMessage(const std::string& line, Server& theServer)
         part(*this, theServer, iss);
     else if (word == "KICK")
         kick(*this, theServer, iss);
+    else if (word == "INVITE")
+        invite(*this, theServer, iss);
     return true;
 }
 
