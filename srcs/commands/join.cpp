@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 16:47:07 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:05:26 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ void join(Client* client, Server& theServer, std::istringstream& iss)
             std::cout << "Added " << client->getNickname() << " to channel "
                       << (*channel)->getName() << std::endl;
             sendServerReply(*client, JOIN(client->getNickname(), (*channel)->getName()));
+            if ((*channel)->getTopicScope())
+                sendServerReply(*client, RPL_TOPIC((*client).getNickname(), (*channel)->getName(),
+                                                   " :" + (*channel)->getTopicMessage()));
         }
         return;
     }
