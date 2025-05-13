@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 16:57:55 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 12:29:57 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ bool handleK(std::string const& option, Channel& channel, bool isPositive, Clien
     return true;
 }
 
-void handleModes(std::istringstream& iss, Channel& channel, std::string modes, Client& client)
+void  handleModes(std::istringstream& iss, Channel& channel, std::string modes, Client& client)
 {
     std::string modesAllowed            = "oitlk";
     bool (*toHandle[5])(std::string const& option, Channel& channel, bool isPositive,

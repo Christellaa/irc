@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 12:11:29 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 13:35:35 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 static bool client_is_in_channel(Client& client, Channel& channel)
 {
-	const std::vector<Client*>& clientsToSearch = channel.getClients();
-	for (std::vector<Client*>::const_iterator it = clientsToSearch.begin(); it != clientsToSearch.end(); ++it)
+	ClientVec clientsToSearch = channel.getClients();
+	for (ClientVec::iterator it = clientsToSearch.begin(); it != clientsToSearch.end(); ++it)
 	{
 		if (*it == &client)
 			return true;
@@ -54,9 +54,8 @@ void topic(Client& client, Server& theServer, std::istringstream& iss)
 			sendServerReply(client, RPL_TOPIC(client.getNickname(), (*channel)->getName(), " :" + (*channel)->getTopicMessage()));
 		return ;
 	}
-
 	ClientIterator chanop = (*channel)->findOperator(client.getNickname());
-    if ((*channel)->getTopicScope() && chanop == (*channel)->findOperator(client.getNickname()))
+    if ((*channel)->getTopicScope() && chanop == (*channel)->getOperators().end())
     {
         sendServerReply(client, ERR_CHANOPRIVSNEEDED(client.getNickname(), channelName, client.getNickname() + " does not have the necessary privileges"));
         return;
