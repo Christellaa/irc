@@ -6,28 +6,46 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 17:56:06 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 12:11:29 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Macros.hpp"
 #include "Server.hpp"
 
+static bool client_is_in_channel(Client& client, Channel& channel)
+{
+	const std::vector<Client*>& clientsToSearch = channel.getClients();
+	for (std::vector<Client*>::const_iterator it = clientsToSearch.begin(); it != clientsToSearch.end(); ++it)
+	{
+		if (*it == &client)
+			return true;
+	}
+	return false;
+}
+
 void topic(Client& client, Server& theServer, std::istringstream& iss)
 {
 	std::string channelName;
 	iss >> channelName;
-	channelName = channelName.substr(1);
+	if (!channelName.empty())
+		channelName = channelName.substr(1);
+	else
+		channelName = "";
 	ChannelIterator channel = theServer.findChannel(channelName);
 	if (channel == theServer.getChannels().end())
 	{
-		sendServerReply(client, ERR_NOSUCHCHANNEL(client.getNickname(), (*channel)->getName(), " :Channel not found"));
+		sendServerReply(client, ERR_NOSUCHCHANNEL(client.getNickname(), channelName, " :Channel not found"));
 		return ;
 	}
-	//client est pas dans le channel -> a faire ?
+	if (!client_is_in_channel(client, *(*channel)))
+	{
+		sendServerReply(client, ERR_NOTONCHANNEL(client.getNickname(), (*channel)->getName(), " :Client not in the channel"));
+		return ;
+	}
 	std::string message;
 	std::getline(iss, message);
-	message.substr(2);
+	message = message.substr(2);
 	if (message.empty())
 	{
 		if ((*channel)->getTopicMessage().empty())
@@ -38,12 +56,11 @@ void topic(Client& client, Server& theServer, std::istringstream& iss)
 	}
 
 	ClientIterator chanop = (*channel)->findOperator(client.getNickname());
-    if ((*channel)->getTopicScope() && chanop == (*channel)->getOperators().end())
+    if ((*channel)->getTopicScope() && chanop == (*channel)->findOperator(client.getNickname()))
     {
         sendServerReply(client, ERR_CHANOPRIVSNEEDED(client.getNickname(), channelName, client.getNickname() + " does not have the necessary privileges"));
         return;
     }
-
 	(*channel)->setTopicMessage(message);
 	ClientIterator it  = (*channel)->getClients().begin();
     ClientIterator ite = (*channel)->getClients().end();

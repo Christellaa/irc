@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 17:53:34 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 12:07:29 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,37 +151,38 @@ class SignalQuit : public std::exception
 
 /****** DEFINE ERRORS ******/
 
-#define ERR_PASSWORD(nickname) ":ircserv 464 " + nickname + " :Password incorrect\r\n"
-#define ERR_BADCHANNELKEY(nickname, channelName, message)                                          \
-    ":ircserv 475 " + nickname + " #" + channelName + " :" + message + "\r\n"
-#define ERR_INVITEONLYCHAN(nickname, channelName, message)                                         \
-    ":ircserv 473 " + nickname + " #" + channelName + " :" + message + "\r\n"
-#define ERR_CHANNELISFULL(nickname, channelName, message)                                          \
-    ":ircserv 471 " + nickname + " #" + channelName + " :" + message + "\r\n"
-#define ERR_BADCHANNAME(nickname, channelName, message)                                            \
-    ":ircserv 479 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_NOSUCHNICK(nickname, target, message)                                                  \
+    ":ircserv 401 " + nickname + " " + target + " :" + message + "\r\n"
+#define ERR_NOSUCHCHANNEL(nickname, channelName, message)                                          \
+    ":ircserv 403 " + nickname + " #" + channelName + " :" + message + "\r\n"
 #define ERR_TOOMANYCHANNELS(nickname, channelName, message)                                        \
     ":ircserv 405 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_NICKNAMEINUSE(nickname, message) ":ircserv 433 * " + nickname + message + "\r\n"
+#define ERR_USERNOTINCHANNEL(nickname, target, channelName, message)                               \
+    ":ircserv 441 " + nickname + " " + target + " #" + channelName + " :" + message + "\r\n"
+#define ERR_NOTONCHANNEL(nickname, channelName, message) ":ircserv 442 " + nickname + " #" + channelName + message + "\r\n"
+#define ERR_USERONCHANNEL(nickname, target, channelName, message)                                  \
+    ":ircserv 443 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"
+#define ERR_NEEDMOREPARAMS(nickname, command, message)                                             \
+    ":ircserv 461 " + nickname + " " + command + " :" + message + "\r\n"
+#define ERR_PASSWORD(nickname) ":ircserv 464 " + nickname + " :Password incorrect\r\n"
 #define ERR_KEYSET(nickname, channelName, message)                                                 \
     ":ircserv 467 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_CHANNELISFULL(nickname, channelName, message)                                          \
+    ":ircserv 471 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_UNKNOWNMODE(nickname, mode, message)                                                   \
+    ":ircserv 472 " + nickname + " " + mode + " :" + message + "\r\n"
+#define ERR_INVITEONLYCHAN(nickname, channelName, message)                                         \
+    ":ircserv 473 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_BADCHANNELKEY(nickname, channelName, message)                                          \
+    ":ircserv 475 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_BADCHANNAME(nickname, channelName, message)                                            \
+    ":ircserv 479 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_CHANOPRIVSNEEDED(nickname, channelName, message)                                       \
+    ":ircserv 482 " + nickname + " #" + channelName + " :" + message + "\r\n"
+#define ERR_UMODEUNKNOWNFLAG(nickname, message) ":ircserv 501 " + nickname + " :" + message + "\r\n"
 #define ERR_INVALIDMODEPARAM(nickname, channelName, mode, option, message)                         \
     ":ircserv 696 " + nickname + " #" + channelName + " " + mode + " " + option + " :" + message + \
         "\r\n"
-#define ERR_NEEDMOREPARAMS(nickname, command, message)                                             \
-    ":ircserv 461 " + nickname + " " + command + " :" + message + "\r\n"
-#define ERR_USERNOTINCHANNEL(nickname, target, channelName, message)                               \
-    ":ircserv 441 " + nickname + " " + target + " #" + channelName + " :" + message + "\r\n"
-#define ERR_CHANOPRIVSNEEDED(nickname, channelName, message)                                       \
-    ":ircserv 482 " + nickname + " #" + channelName + " :" + message + "\r\n"
-#define ERR_UNKNOWNMODE(nickname, mode, message)                                                   \
-    ":ircserv 472 " + nickname + " " + mode + " :" + message + "\r\n"
-#define ERR_UMODEUNKNOWNFLAG(nickname, message) ":ircserv 501 " + nickname + " :" + message + "\r\n"
-#define ERR_NOSUCHCHANNEL(nickname, channelName, message)                                          \
-    ":ircserv 403 " + nickname + " #" + channelName + " :" + message + "\r\n"
-#define ERR_USERONCHANNEL(nickname, target, channelName, message)                                  \
-    ":ircserv 443 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"
-#define ERR_NOSUCHNICK(nickname, target, message)                                                  \
-    ":ircserv 401 " + nickname + " " + target + " :" + message + "\r\n"
-#define ERR_NICKNAMEINUSE(nickname, message) ":ircserv 433 * " + nickname + message + "\r\n"
 
 #endif
