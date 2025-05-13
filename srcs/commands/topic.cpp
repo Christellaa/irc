@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:11:09 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:56:10 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ void topic(Client& client, Server& theServer, std::istringstream& iss)
                                  client.getNickname() + " does not have the necessary privileges"));
         return;
     }
+	if (message.size() > 50)
+	{
+		sendServerReply(client, ERR_INPUTTOOLONG(client.getNickname(), channelName, "Input line was too long"));
+		return ;
+	}
     (*channel)->setTopicMessage(message);
     ClientIterator it  = (*channel)->getClients().begin();
     ClientIterator ite = (*channel)->getClients().end();

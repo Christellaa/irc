@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:51:29 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:08:05 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ class SignalQuit : public std::exception
     ":ircserv 403 " + nickname + " " + channelName + " :" + message + "\r\n"
 #define ERR_TOOMANYCHANNELS(nickname, channelName, message)                                        \
     ":ircserv 405 " + nickname + " " + channelName + " :" + message + "\r\n"
+#define ERR_INPUTTOOLONG(nickname, channelName, message)                                           \
+    ":ircserv 417 " + nickname + " " + channelName + " :" + message + "\r\n"
 #define ERR_NICKNAMEINUSE(nickname, message) ":ircserv 433 * " + nickname + message + "\r\n"
 #define ERR_USERNOTINCHANNEL(nickname, target, channelName, message)                               \
     ":ircserv 441 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"
