@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 16:46:20 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:30:26 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,21 @@ std::string ft_tolower(std::string const& word)
     std::transform(result.begin(), result.end(), result.begin(),
                    static_cast<int (*)(int)>(std::tolower));
     return result;
+}
+
+bool hasForbiddenChars(std::string const& name, std::string const& type)
+{
+    std::cout << BOLD RED "NAME: [" << name << "]" RESET << std::endl;
+    if (type == "channel")
+    {
+        size_t hasForbidden = name.find('\a');
+        if (hasForbidden != std::string::npos)
+            return true;
+    }
+    else if (type == "client")
+    {
+        if (name[0] == '#')
+            return true;
+    }
+    return false;
 }
