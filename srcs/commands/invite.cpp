@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:35:54 by cde-sous          #+#    #+#             */
-/*   Updated: 2025/05/13 15:10:30 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:22:45 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,5 @@ void invite(Client& client, Server& theServer, std::istringstream& iss)
     }
     (*clientTarget)->getInvitedChannels().push_back(*channel);
     sendServerReply(client, INVITE(client.getNickname(), channelName, target));
+    sendServerReply(*(*clientTarget), INVITE(client.getNickname(), channelName, target));
 }
