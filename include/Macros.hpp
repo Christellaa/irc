@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 13:41:27 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 14:42:59 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,10 @@ class SignalQuit : public std::exception
 #define RPL_CREATED(nickname, date)                                                                \
     ":ircserv 003 " + nickname + " :This server was created " + date + "\r\n"
 #define RPL_SAVENICK(oldnickname, nickname) ":" + oldnickname + " NICK" + " :" + nickname + "\r\n"
-#define RPL_NOTOPICSET(nickname, channelName, message) ":ircserv 331 " +  nickname + " #" + channelName + message + "\r\n"
-#define RPL_TOPIC(nickname, channelName, message) ":ircserv 332 " + nickname + " #" + channelName + message + "\r\n"
-
+#define RPL_NOTOPICSET(nickname, channelName, message)                                             \
+    ":ircserv 331 " + nickname + " #" + channelName + message + "\r\n"
+#define RPL_TOPIC(nickname, channelName, message)                                                  \
+    ":ircserv 332 " + nickname + " #" + channelName + message + "\r\n"
 #define PRIVMSG(nickname, target, message)                                                         \
     ":" + nickname + " PRIVMSG #" + target + " :" + message + "\r\n"
 // if target is clientB and not channelA?
@@ -146,7 +147,7 @@ class SignalQuit : public std::exception
     ":" + nickname + " KICK #" + channelName + " " + target + " :" + message + "\r\n"
 #define INVITE(nickname, channelName, target)                                                      \
     ":" + nickname + " INVITE " + target + " #" + channelName + "\r\n"
-#define TOPIC(nickname, channelName, message)                                              \
+#define TOPIC(nickname, channelName, message)                                                      \
     ":" + nickname + " TOPIC #" + channelName + " :" + message + "\r\n"
 
 /****** DEFINE ERRORS ******/
@@ -160,7 +161,8 @@ class SignalQuit : public std::exception
 #define ERR_NICKNAMEINUSE(nickname, message) ":ircserv 433 * " + nickname + message + "\r\n"
 #define ERR_USERNOTINCHANNEL(nickname, target, channelName, message)                               \
     ":ircserv 441 " + nickname + " " + target + " #" + channelName + " :" + message + "\r\n"
-#define ERR_NOTONCHANNEL(nickname, channelName, message) ":ircserv 442 " + nickname + " #" + channelName + message + "\r\n"
+#define ERR_NOTONCHANNEL(nickname, channelName, message)                                           \
+    ":ircserv 442 " + nickname + " #" + channelName + message + "\r\n"
 #define ERR_USERONCHANNEL(nickname, target, channelName, message)                                  \
     ":ircserv 443 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"
 #define ERR_NEEDMOREPARAMS(nickname, command, message)                                             \
