@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:10:49 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:18:54 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void part(Client& client, Server& theServer, std::istringstream& iss)
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel != theServer.getChannels().end())
     {
-        removeClientFromChannel(client.getNickname(), *(*channel));
+        removeClientFromChannel(client.getNickname(), *(*channel), false);
         removeOperator(client.getNickname(), *(*channel));
         if ((*channel)->getClients().size() == 0)
         {
@@ -28,11 +28,6 @@ void part(Client& client, Server& theServer, std::istringstream& iss)
         }
         else if ((*channel)->getOperators().size() == 0)
             (*channel)->giveOperatorRights((*channel)->getClients().begin());
-
-        ClientIterator it  = (*channel)->getClients().begin();
-        ClientIterator ite = (*channel)->getClients().end();
-        for (; it != ite; ++it)
-            sendServerReply(*(*it), PART(client.getNickname(), channelName));
         sendServerReply(client, PART(client.getNickname(), channelName));
     }
 }

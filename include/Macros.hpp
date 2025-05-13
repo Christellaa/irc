@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:03:35 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:14:17 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ std::string intToString(int number);
 std::string getIrcDate();
 std::string ft_tolower(std::string const& word);
 
-void removeClientFromChannel(std::string const& clientNickname, Channel& channel);
+void removeClientFromChannel(std::string const& clientNickname, Channel& channel, bool isKicked);
 void removeOperator(std::string const& operatorNickname, Channel& channel);
 
 void handle_signals(void);

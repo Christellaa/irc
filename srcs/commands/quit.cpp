@@ -6,17 +6,19 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 14:52:43 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:14:57 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void removeClientFromChannel(std::string const& clientNickname, Channel& channel)
+void removeClientFromChannel(std::string const& clientNickname, Channel& channel, bool isKicked)
 {
     ClientIterator client = channel.findClient(clientNickname);
     if (client != channel.getClients().end())
         channel.getClients().erase(client);
+    if (isKicked)
+        return;
     ClientIterator it  = channel.getClients().begin();
     ClientIterator ite = channel.getClients().end();
     for (; it != ite; ++it)
@@ -35,7 +37,7 @@ void removeClientFromChannels(Client* client, Server& theServer)
     ChannelIterator currentChannel = theServer.getChannels().begin();
     while (currentChannel != theServer.getChannels().end())
     {
-        removeClientFromChannel(client->getNickname(), *(*currentChannel));
+        removeClientFromChannel(client->getNickname(), *(*currentChannel), false);
         removeOperator(client->getNickname(), *(*currentChannel));
         if ((*currentChannel)->getClients().size() == 0)
         {
