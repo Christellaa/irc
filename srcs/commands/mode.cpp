@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 13:58:52 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 15:10:43 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ bool handleK(std::string const& option, Channel& channel, bool isPositive, Clien
     return true;
 }
 
-void  handleModes(std::istringstream& iss, Channel& channel, std::string modes, Client& client)
+void handleModes(std::istringstream& iss, Channel& channel, std::string modes, Client& client)
 {
     std::string modesAllowed            = "oitlk";
     bool (*toHandle[5])(std::string const& option, Channel& channel, bool isPositive,
@@ -166,7 +166,6 @@ void mode(Client& client, Server& theServer, std::istringstream& iss)
 {
     std::string channelName, modes;
     iss >> channelName >> modes;
-    channelName             = channelName.substr(1);
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel != theServer.getChannels().end())
     {

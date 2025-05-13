@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:35:54 by cde-sous          #+#    #+#             */
-/*   Updated: 2025/05/12 16:16:17 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:10:30 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void invite(Client& client, Server& theServer, std::istringstream& iss)
 {
     std::string target, channelName;
     iss >> target >> channelName;
-    channelName             = channelName.substr(1);
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel == theServer.getChannels().end())
     {

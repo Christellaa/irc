@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:58:18 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 13:53:20 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 15:10:24 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void kick(Client& client, Server& theServer, std::istringstream& iss)
 {
     std::string channelName, clientToKick;
     iss >> channelName >> clientToKick;
-    channelName             = channelName.substr(1);
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel != theServer.getChannels().end())
     {

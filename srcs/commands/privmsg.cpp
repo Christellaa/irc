@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 14:27:20 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:10:55 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void privmsg(Client& client, Server& theServer, std::istringstream& iss)
 {
     std::string channelName;
     iss >> channelName;
-    channelName = channelName.substr(1);
     std::string message;
     std::getline(iss, message);
     int pos = message.find(':');

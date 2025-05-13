@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 14:48:15 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:10:49 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void part(Client& client, Server& theServer, std::istringstream& iss)
 {
     std::string channelName;
     iss >> channelName;
-    channelName = channelName.substr(1);
-
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel != theServer.getChannels().end())
     {
