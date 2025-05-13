@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 12:07:29 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 13:41:27 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ class SignalQuit : public std::exception
     ":" + nickname + " KICK #" + channelName + " " + target + " :" + message + "\r\n"
 #define INVITE(nickname, channelName, target)                                                      \
     ":" + nickname + " INVITE " + target + " #" + channelName + "\r\n"
-#define TOPIC(nickname, channelName, target, message)                                              \
+#define TOPIC(nickname, channelName, message)                                              \
     ":" + nickname + " TOPIC #" + channelName + " :" + message + "\r\n"
 
 /****** DEFINE ERRORS ******/

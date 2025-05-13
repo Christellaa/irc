@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 17:21:34 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 13:59:10 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void Channel::setInviteOnly(bool value)
 
 void Channel::setTopicScope(bool value)
 {
-    this->_inviteOnly = value;
+    this->_topicScope = value;
 }
 
 void Channel::setTopicMessage(std::string message)

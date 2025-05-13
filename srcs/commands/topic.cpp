@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 13:35:35 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/13 13:41:33 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ void topic(Client& client, Server& theServer, std::istringstream& iss)
 	ClientIterator it  = (*channel)->getClients().begin();
     ClientIterator ite = (*channel)->getClients().end();
 	for (; it != ite; ++it)
-    	sendServerReply(*(*it), TOPIC(client.getNickname(), channelName, clientToKick, message));
+    	sendServerReply(*(*it), TOPIC(client.getNickname(), channelName, message));
 }
