@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 11:20:06 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:36:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,8 @@ public:
     ":ircserv 401 " + nickname + " " + target + " :" + message + "\r\n"
 #define ERR_NOSUCHCHANNEL(nickname, channelName, message) \
     ":ircserv 403 " + nickname + " " + channelName + " :" + message + "\r\n"
+#define ERR_CANNOTSENDTOCHAN(nickname, channelName, message) \
+    ":ircserv 404 " + nickname + " " + channelName + " :" + message + "\r\n"
 #define ERR_TOOMANYCHANNELS(nickname, channelName, message) \
     ":ircserv 405 " + nickname + " " + channelName + " :" + message + "\r\n"
 #define ERR_INPUTTOOLONG(nickname, channelName, message) \
