@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:58:18 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 09:56:32 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:14:50 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,5 @@ void kick(Client &client, Server &theServer, std::istringstream &iss)
         else if ((*channel)->getOperators().size() == 0)
             (*channel)->giveOperatorRights((*channel)->getClients().begin());
     }
+    sendServerReply(client, ERR_NOSUCHCHANNEL(client.getNickname(), channelName, "Channel does not exist"));
 }
