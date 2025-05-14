@@ -6,33 +6,30 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:14:57 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/14 09:57:53 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void removeClientFromChannel(std::string const& clientNickname, Channel& channel, bool isKicked)
+void removeClientFromChannel(std::string const &clientNickname, Channel &channel, bool isKicked)
 {
     ClientIterator client = channel.findClient(clientNickname);
     if (client != channel.getClients().end())
         channel.getClients().erase(client);
     if (isKicked)
         return;
-    ClientIterator it  = channel.getClients().begin();
-    ClientIterator ite = channel.getClients().end();
-    for (; it != ite; ++it)
-        sendServerReply(*(*it), PART(clientNickname, channel.getName()));
+    messageChannel(channel, PART(clientNickname, channel.getName()));
 }
 
-void removeOperator(std::string const& operatorNickname, Channel& channel)
+void removeOperator(std::string const &operatorNickname, Channel &channel)
 {
     ClientIterator channelOperator = channel.findOperator(operatorNickname);
     if (channelOperator != channel.getOperators().end())
         channel.getOperators().erase(channelOperator);
 }
 
-void removeClientFromChannels(Client* client, Server& theServer)
+void removeClientFromChannels(Client *client, Server &theServer)
 {
     ChannelIterator currentChannel = theServer.getChannels().begin();
     while (currentChannel != theServer.getChannels().end())
@@ -53,7 +50,7 @@ void removeClientFromChannels(Client* client, Server& theServer)
     }
 }
 
-void quit(Client* client, Server& theServer)
+void quit(Client *client, Server &theServer)
 {
     removeClientFromChannels(client, theServer);
     ClientIterator clientIt = theServer.findClient(client->getSocket());

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 16:56:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/14 09:57:15 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Macros.hpp"
 #include "Server.hpp"
 
-static bool client_is_in_channel(Client& client, Channel& channel)
+static bool client_is_in_channel(Client &client, Channel &channel)
 {
     ClientVec clientsToSearch = channel.getClients();
     for (ClientVec::iterator it = clientsToSearch.begin(); it != clientsToSearch.end(); ++it)
@@ -24,7 +24,7 @@ static bool client_is_in_channel(Client& client, Channel& channel)
     return false;
 }
 
-void topic(Client& client, Server& theServer, std::istringstream& iss)
+void topic(Client &client, Server &theServer, std::istringstream &iss)
 {
     std::string channelName;
     iss >> channelName;
@@ -63,14 +63,11 @@ void topic(Client& client, Server& theServer, std::istringstream& iss)
                                  client.getNickname() + " does not have the necessary privileges"));
         return;
     }
-	if (message.size() > 50)
-	{
-		sendServerReply(client, ERR_INPUTTOOLONG(client.getNickname(), channelName, "Input line was too long"));
-		return ;
-	}
+    if (message.size() > 50)
+    {
+        sendServerReply(client, ERR_INPUTTOOLONG(client.getNickname(), channelName, "Input line was too long"));
+        return;
+    }
     (*channel)->setTopicMessage(message);
-    ClientIterator it  = (*channel)->getClients().begin();
-    ClientIterator ite = (*channel)->getClients().end();
-    for (; it != ite; ++it)
-        sendServerReply(*(*it), TOPIC(client.getNickname(), channelName, message));
+    messageChannel(*(*channel), TOPIC(client.getNickname(), channelName, message));
 }
