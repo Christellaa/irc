@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 09:42:17 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:20:06 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ class Channel;
 #define MAX_CHAR_MSG 512
 #define MAX_CHAR_CHANNEL 50
 #define MAX_PASS_LEN 15
-#define MAX_CHANNELS 3
+#define MAX_CHANNELS 30
 
 /****** TYPEDEFS ******/
 
@@ -162,6 +162,8 @@ public:
     ":ircserv 405 " + nickname + " " + channelName + " :" + message + "\r\n"
 #define ERR_INPUTTOOLONG(nickname, channelName, message) \
     ":ircserv 417 " + nickname + " " + channelName + " :" + message + "\r\n"
+#define ERR_ERRONEUSNICKNAME(nickname, newNickname, message) \
+    ":ircserv 432 " + nickname + " " + newNickname + " :" + message + "\r\n"
 #define ERR_NICKNAMEINUSE(nickname, message) ":ircserv 433 * " + nickname + message + "\r\n"
 #define ERR_USERNOTINCHANNEL(nickname, target, channelName, message) \
     ":ircserv 441 " + nickname + " " + target + " " + channelName + " :" + message + "\r\n"

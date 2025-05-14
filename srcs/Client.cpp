@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 13:17:12 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/14 11:23:21 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@ Client::~Client() {}
 // #Getters & Setters
 // ##################
 
-std::string& Client::getNickname(void)
+std::string &Client::getNickname(void)
 {
     return this->_nickname;
 }
 
-std::string& Client::getPassword(void)
+std::string &Client::getPassword(void)
 {
     return this->_password;
 }
 
-std::string& Client::getUsername(void)
+std::string &Client::getUsername(void)
 {
     return this->_username;
 }
 
-std::string& Client::getMsg(void)
+std::string &Client::getMsg(void)
 {
     return this->_msg;
 }
@@ -50,17 +50,17 @@ int Client::getSocket(void)
     return this->_socketfd;
 }
 
-void Client::setPassword(std::string const& password)
+void Client::setPassword(std::string const &password)
 {
     this->_password = password;
 }
 
-void Client::setNickname(std::string const& nickname)
+void Client::setNickname(std::string const &nickname)
 {
     this->_nickname = nickname;
 }
 
-void Client::setUsername(std::string const& username)
+void Client::setUsername(std::string const &username)
 {
     this->_username = username;
 }
@@ -73,9 +73,9 @@ void Client::setUsername(std::string const& username)
 // #Functions
 // ##################
 
-ChannelIterator Client::findInvitedChannel(Channel& channel)
+ChannelIterator Client::findInvitedChannel(Channel &channel)
 {
-    ChannelIterator it  = this->_isInvited.begin();
+    ChannelIterator it = this->_isInvited.begin();
     ChannelIterator ite = this->_isInvited.end();
     for (; it != ite; ++it)
     {
@@ -85,15 +85,15 @@ ChannelIterator Client::findInvitedChannel(Channel& channel)
     return ite;
 }
 
-ChannelVec& Client::getInvitedChannels()
+ChannelVec &Client::getInvitedChannels()
 {
     return this->_isInvited;
 }
 
-bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
+bool Client::parseWelcomeMessage(const std::string &line, Server &theServer)
 {
     std::istringstream iss(line);
-    std::string        word;
+    std::string word;
     iss >> word;
 
     if (word == "PASS")
@@ -106,6 +106,16 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
         iss >> word;
         if (word.length() > 8)
             word = word.substr(0, 8);
+        if (hasForbiddenChars(word, "client"))
+        {
+            sendServerReply(*this, ERR_ERRONEUSNICKNAME(this->getNickname(), word, "Nickname has invalid characters"));
+            close(this->getSocket());
+            ClientIterator hasClient = theServer.findClientWithName(this->getNickname());
+            if (hasClient != theServer.getClients().end())
+                theServer.getClients().erase(hasClient);
+            delete this;
+            return false;
+        }
         this->setNickname(word);
     }
     else if (word == "USER")
@@ -131,12 +141,12 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
     return true;
 }
 
-bool Client::parseClientMessage(const std::string& line, Server& theServer)
+bool Client::parseClientMessage(const std::string &line, Server &theServer)
 {
     std::istringstream iss(line);
-    std::string        word;
+    std::string word;
     iss >> word;
-	
+
     if (word == "JOIN")
         join(this, theServer, iss);
     else if (word == "QUIT")
@@ -158,14 +168,14 @@ bool Client::parseClientMessage(const std::string& line, Server& theServer)
         kick(*this, theServer, iss);
     else if (word == "INVITE")
         invite(*this, theServer, iss);
-	else if (word == "TOPIC")
+    else if (word == "TOPIC")
         topic(*this, theServer, iss);
     return true;
 }
 
-void Client::readClientMessage(Server& theServer)
+void Client::readClientMessage(Server &theServer)
 {
-    char    buffer[MAX_CHAR_MSG];
+    char buffer[MAX_CHAR_MSG];
     ssize_t bytes = recv(this->getSocket(), buffer, sizeof(buffer), MSG_DONTWAIT);
     if (bytes == -1)
     {
@@ -200,7 +210,7 @@ void Client::readClientMessage(Server& theServer)
     }
 }
 
-bool Client::badPassword(Server& theServer)
+bool Client::badPassword(Server &theServer)
 {
     if (this->getPassword() != theServer.getPassword())
     {
@@ -218,23 +228,23 @@ bool Client::badPassword(Server& theServer)
     return false;
 }
 
-void Client::sameNickname(Server& theServer)
+void Client::sameNickname(Server &theServer)
 {
-    int         suffix   = 0;
-    bool        conflict = true;
+    int suffix = 0;
+    bool conflict = true;
     std::string baseName = this->getNickname();
-    std::string newName  = baseName;
+    std::string newName = baseName;
     while (conflict)
     {
-        conflict           = false;
-        ClientIterator it  = theServer.getClients().begin();
+        conflict = false;
+        ClientIterator it = theServer.getClients().begin();
         ClientIterator ite = theServer.getClients().end();
         for (; it != ite; ++it)
         {
             if (this != *it && (*it)->getNickname() == newName)
             {
                 conflict = true;
-                newName  = baseName + intToString(suffix++);
+                newName = baseName + intToString(suffix++);
                 break;
             }
         }
