@@ -6,20 +6,20 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/12 15:04:59 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:58:09 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "parsing.hpp"
 
-//####
-//#Constructor & Destructor
-//##################
+// ####
+// #Constructor & Destructor
+// ##################
 
 Server::Server(int port, std::string password)
 {
-    this->_port     = port;
+    this->_port = port;
     this->_password = password;
     this->_epoll_fd = -1;
     this->_socketfd = -1;
@@ -28,7 +28,7 @@ Server::Server(int port, std::string password)
 Server::~Server()
 {
     {
-        ClientIterator it  = this->_clients.begin();
+        ClientIterator it = this->_clients.begin();
         ClientIterator ite = this->_clients.end();
         for (; it != ite; ++it)
         {
@@ -38,7 +38,7 @@ Server::~Server()
         this->_clients.clear();
     }
     {
-        ChannelIterator it  = this->_channels.begin();
+        ChannelIterator it = this->_channels.begin();
         ChannelIterator ite = this->_channels.end();
         for (; it != ite; ++it)
         {
@@ -52,9 +52,9 @@ Server::~Server()
         close(this->_socketfd);
 }
 
-//####
-//#Getters & Setters
-//##################
+// ####
+// #Getters & Setters
+// ##################
 
 std::string Server::getPassword(void)
 {
@@ -71,14 +71,19 @@ int Server::getSocket(void)
     return this->_socketfd;
 }
 
-ClientVec& Server::getClients(void)
+ClientVec &Server::getClients(void)
 {
     return this->_clients;
 }
 
-ChannelVec& Server::getChannels(void)
+ChannelVec &Server::getChannels(void)
 {
     return this->_channels;
+}
+
+Bot &Server::getBot()
+{
+    return this->_bot;
 }
 
 int Server::getEpollfd(void)
@@ -91,33 +96,33 @@ void Server::setEpollfd(int fd)
     this->_epoll_fd = fd;
 }
 
-//####
-//#Exceptions
-//##################
+// ####
+// #Exceptions
+// ##################
 
-const char* Server::InvalidSocket::what() const throw()
+const char *Server::InvalidSocket::what() const throw()
 {
     return BOLD RED "Error: socket creation failure" RESET;
 }
 
-const char* Server::SetsockoptFailure::what() const throw()
+const char *Server::SetsockoptFailure::what() const throw()
 {
     return BOLD RED "Error: setsockopt failure" RESET;
 }
 
-const char* Server::BindingFailure::what() const throw()
+const char *Server::BindingFailure::what() const throw()
 {
     return BOLD RED "Error: binding failure" RESET;
 }
 
-const char* Server::ListenFailure::what() const throw()
+const char *Server::ListenFailure::what() const throw()
 {
     return BOLD RED "Error: listen failure" RESET;
 }
 
-//####
-//#Functions
-//##################
+// ####
+// #Functions
+// ##################
 
 void Server::setting_server_socket(void)
 {
@@ -129,14 +134,14 @@ void Server::setting_server_socket(void)
 
     struct sockaddr_in address;
     std::memset(&address, 0, sizeof(address));
-    address.sin_family      = AF_INET;
-    address.sin_port        = htons(_port);
+    address.sin_family = AF_INET;
+    address.sin_port = htons(_port);
     address.sin_addr.s_addr = INADDR_ANY;
 
     int reusePort = 1;
     if (setsockopt(this->_socketfd, SOL_SOCKET, SO_REUSEADDR, &reusePort, sizeof(reusePort)) == -1)
         throw Server::SetsockoptFailure();
-    if (bind(_socketfd, (struct sockaddr*) &address, sizeof(address)) == INVALID_BIND)
+    if (bind(_socketfd, (struct sockaddr *)&address, sizeof(address)) == INVALID_BIND)
         throw Server::BindingFailure();
     if (listen(_socketfd, 5) == INVALID_LISTEN)
         throw Server::ListenFailure();
@@ -151,7 +156,7 @@ void Server::launch_angrybots_server(void)
     setting_server_socket();
 }
 
-void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
+void Server::addNewClient(int epoll_fd, struct epoll_event &ev)
 {
     int clientfd = accept(this->getSocket(), NULL, NULL);
     if (clientfd == -1)
@@ -160,13 +165,13 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
     }
     if (this->getClients().size() >= MAX_CLIENTS)
     {
-        const char* msg = "Server full. Try again later.\n";
+        const char *msg = "Server full. Try again later.\n";
         send(clientfd, msg, strlen(msg), 0);
         close(clientfd);
         return;
     }
     set_socket_non_blocking(clientfd);
-    ev.events  = EPOLLIN | EPOLLET;
+    ev.events = EPOLLIN | EPOLLET;
     ev.data.fd = clientfd;
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientfd, &ev) == -1)
     {
@@ -178,7 +183,7 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 
 ClientIterator Server::findClient(int clientfd)
 {
-    ClientIterator it  = this->getClients().begin();
+    ClientIterator it = this->getClients().begin();
     ClientIterator ite = this->getClients().end();
     for (; it != ite; ++it)
     {
@@ -188,9 +193,9 @@ ClientIterator Server::findClient(int clientfd)
     return ite;
 }
 
-ClientIterator Server::findClientWithName(std::string const& nickname)
+ClientIterator Server::findClientWithName(std::string const &nickname)
 {
-    ClientIterator it  = this->getClients().begin();
+    ClientIterator it = this->getClients().begin();
     ClientIterator ite = this->getClients().end();
     for (; it != ite; ++it)
     {
@@ -200,9 +205,9 @@ ClientIterator Server::findClientWithName(std::string const& nickname)
     return ite;
 }
 
-ChannelIterator Server::findChannel(std::string const& channelName)
+ChannelIterator Server::findChannel(std::string const &channelName)
 {
-    ChannelIterator it  = this->getChannels().begin();
+    ChannelIterator it = this->getChannels().begin();
     ChannelIterator ite = this->getChannels().end();
     for (; it != ite; ++it)
     {

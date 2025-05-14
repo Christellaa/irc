@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 12:37:06 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:06:45 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ void privmsgChannel(Server &theServer, Client &client, std::string const &channe
         else if (!(*channel)->getPassword().empty())
         {
             sendServerReply(client, ERR_CANNOTSENDTOCHAN(client.getNickname(), (*channel)->getName(), "You cannot send message to channel needing a key"));
+            return;
+        }
+        std::string command = message.substr(0, ' ');
+        if (theServer.getBot().findCommand(command))
+        {
+            theServer.getBot().executeCommand(client, channelName, command);
             return;
         }
         ClientIterator it = (*channel)->getClients().begin();

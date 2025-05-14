@@ -15,7 +15,8 @@ INC		=	-I./include
 HEADERS		=	include/Macros.hpp \
 				include/Server.hpp \
 				include/Client.hpp \
-				include/Channel.hpp
+				include/Channel.hpp \
+				include/Bot.hpp
 
 ################################################################################
 #                                 Sources                                      #
@@ -26,6 +27,7 @@ SRC			=	main.cpp \
 				srcs/Server.cpp \
 				srcs/Client.cpp \
 				srcs/Channel.cpp \
+				srcs/Bot.cpp \
 				srcs/Macros.cpp \
 				srcs/signal.cpp \
 				srcs/commands/kick.cpp \
