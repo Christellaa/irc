@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 10:36:41 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:45:41 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void privmsgChannel(Server &theServer, Client &client, std::string const &channe
             return;
         }
         std::string command = message.substr(0, ' ');
-        if (theServer.getBot().FindAndExecuteCommand(client, channelName, command))
+        if (theServer.getBot().FindAndExecuteCommand(client, channelName, command, theServer))
             return;
         ClientIterator it = (*channel)->getClients().begin();
         ClientIterator ite = (*channel)->getClients().end();

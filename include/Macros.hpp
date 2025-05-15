@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 10:46:09 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:45:15 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef std::vector<Channel *> ChannelVec;
 typedef ClientVec::iterator ClientIterator;
 typedef ChannelVec::iterator ChannelIterator;
 
-typedef std::map<std::string, void (Bot::*)(Client &, std::string const &)>::iterator botIterator;
+typedef std::map<std::string, void (Bot::*)(Client &, std::string const&, Server &)>::iterator botIterator;
 
 /****** UTIL FUNCTIONS ******/
 
