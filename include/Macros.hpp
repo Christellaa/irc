@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 12:36:13 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:46:09 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 class Client;
 class Server;
 class Channel;
+class Bot;
 
 /****** LIBRARIES ******/
 
@@ -41,6 +42,7 @@ class Channel;
 #include <sys/socket.h> //socket, setsockopt, getsockname...
 #include <unistd.h>     //close, lseek
 #include <vector>
+#include <map>
 
 /****** COLORS ******/
 
@@ -82,6 +84,8 @@ typedef std::vector<Channel *> ChannelVec;
 
 typedef ClientVec::iterator ClientIterator;
 typedef ChannelVec::iterator ChannelIterator;
+
+typedef std::map<std::string, void (Bot::*)(Client &, std::string const &)>::iterator botIterator;
 
 /****** UTIL FUNCTIONS ******/
 

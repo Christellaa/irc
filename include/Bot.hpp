@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:18:27 by cde-sous          #+#    #+#             */
-/*   Updated: 2025/05/14 15:16:48 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:05:59 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Bot
 {
 private:
 	std::string _name;
-	std::vector<std::string> _commands;
+	std::map<std::string, void (Bot::*)(Client &, std::string const &)> _commands;
 
 public:
 	Bot();
@@ -28,11 +28,15 @@ public:
 
 	std::string const &getName();
 
-	bool findCommand(std::string const &command);
+	bool FindAndExecuteCommand(Client &client, std::string const &channelName, std::string const &command);
 
-	void executeCommand(Client &client, std::string const &channelName, std::string const &command);
+	void handleHelp(Client &client, std::string const &channelName);
+
+	void handleBot(Client &client, std::string const &channelName);
 
 	void handleRoll(Client &client, std::string const &channelName);
+
+	void handleDate(Client &client, std::string const &channelName);
 };
 
 #endif
