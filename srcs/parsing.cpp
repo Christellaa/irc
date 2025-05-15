@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:57:21 by jewu              #+#    #+#             */
-/*   Updated: 2025/04/28 14:54:52 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:25:27 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static bool is_valid_port(std::string const& port_str)
 	return port_number >= 1024 && port_number <= 49151;
 }
 
-bool check_arguments(int argc, char **argv)
+bool check_arguments(int argc, char** argv)
 {
 	if (argc != 3)
 	{
@@ -55,7 +55,6 @@ bool check_arguments(int argc, char **argv)
 		std::cerr << BOLD BORDEAUX "Error: invalid password, try a password like 'angrybots' with no spaces" RESET << std::endl;
 		return FALSE;
 	}
-	std::cout << BOLD NEON_GREEN "YAY PARSING WORKS" RESET << std::endl;
 	return TRUE;
 }
 

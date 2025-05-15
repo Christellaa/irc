@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 09:41:40 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:25:16 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,30 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-void sendServerReply(Client &client, std::string const &reply)
+void sendServerReply(Client& client, std::string const& reply)
 {
     send(client.getSocket(), reply.c_str(), reply.length(), 0);
     std::cout << reply << std::endl;
 }
 
-std::string welcomeClient(Client &client)
+void messageChannel(Channel& channel, std::string const& serverReply)
+{
+    ClientIterator it = channel.getClients().begin();
+    ClientIterator ite = channel.getClients().end();
+    for (; it != ite; ++it)
+        sendServerReply(*(*it), serverReply);
+}
+
+std::string welcomeClient(Client& client)
 {
     std::string date = getIrcDate();
     return RPL_WELCOME(client.getNickname(), userPrefix(client)) +
            RPL_YOURHOST(client.getNickname()) + RPL_CREATED(client.getNickname(), date);
 }
 
-std::string userPrefix(Client &client)
+std::string userPrefix(Client& client)
 {
     return client.getNickname() + "!" + client.getUsername() + "@localhost";
-}
-
-const char *SignalQuit::what() const throw()
-{
-    return BOLD BLUE "\nQuitting server..." RESET;
-}
-
-std::string intToString(int number)
-{
-    std::ostringstream oss;
-    oss << number;
-    return oss.str();
 }
 
 std::string getIrcDate()
@@ -62,7 +58,14 @@ std::string getIrcDate()
     return oss.str();
 }
 
-std::string ft_tolower(std::string const &word)
+std::string intToString(int number)
+{
+    std::ostringstream oss;
+    oss << number;
+    return oss.str();
+}
+
+std::string ft_tolower(std::string const& word)
 {
     std::string result = word;
     std::transform(result.begin(), result.end(), result.begin(),
@@ -70,9 +73,8 @@ std::string ft_tolower(std::string const &word)
     return result;
 }
 
-bool hasForbiddenChars(std::string const &name, std::string const &type)
+bool hasForbiddenChars(std::string const& name, std::string const& type)
 {
-    std::cout << BOLD RED "NAME: [" << name << "]" RESET << std::endl;
     if (type == "channel")
     {
         size_t hasForbidden = name.find('\a');
@@ -87,10 +89,7 @@ bool hasForbiddenChars(std::string const &name, std::string const &type)
     return false;
 }
 
-void messageChannel(Channel &channel, std::string const &serverReply)
+const char *SignalQuit::what() const throw()
 {
-    ClientIterator it = channel.getClients().begin();
-    ClientIterator ite = channel.getClients().end();
-    for (; it != ite; ++it)
-        sendServerReply(*(*it), serverReply);
+    return BOLD BLUE "\nQuitting server..." RESET;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 13:59:10 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/15 15:01:28 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,9 @@ Channel::Channel(std::string const& name)
 
 Channel::~Channel() {}
 
-std::string& Channel::getName()
-{
-    return this->_name;
-}
-ClientVec& Channel::getClients(void)
-{
-    return this->_clients;
-}
-ClientVec& Channel::getOperators(void)
-{
-    return this->_operators;
-}
+std::string& Channel::getName(void) { return this->_name; }
+
+std::string Channel::getTopicMessage(void) { return this->_topic; }
 
 std::string Channel::getPassword(void)
 {
@@ -41,9 +32,9 @@ std::string Channel::getPassword(void)
     return "";
 }
 
-std::string Channel::getTopicMessage(void){ return this->_topic; }
+bool Channel::getTopicScope(void) { return this->_topicScope; }
 
-bool Channel::getTopicScope(void){ return this->_topicScope; }
+bool Channel::isInviteOnly(void) { return this->_inviteOnly; }
 
 int Channel::getUserLimit(void)
 {
@@ -52,36 +43,26 @@ int Channel::getUserLimit(void)
     return 0;
 }
 
-bool Channel::isInviteOnly(void)
-{
-    return this->_inviteOnly;
-}
+ClientVec& Channel::getClients(void) { return this->_clients; }
 
-void Channel::setInviteOnly(bool value)
-{
-    this->_inviteOnly = value;
-}
+ClientVec& Channel::getOperators(void) { return this->_operators; }
 
-void Channel::setTopicScope(bool value)
-{
-    this->_topicScope = value;
-}
-
-void Channel::setTopicMessage(std::string message)
-{
-    this->_topic = message;
-}
-
-void Channel::setUserLimit(bool value, int newLimit)
-{
-    this->_hasUserLimit = value;
-    this->_userLimit    = newLimit;
-}
+void Channel::setTopicMessage(std::string message) { this->_topic = message; }
 
 void Channel::setPassword(bool value, std::string const& password)
 {
     this->_hasPassword = value;
     this->_password    = password;
+}
+
+void Channel::setTopicScope(bool value) { this->_topicScope = value; }
+
+void Channel::setInviteOnly(bool value) { this->_inviteOnly = value; }
+
+void Channel::setUserLimit(bool value, int newLimit)
+{
+    this->_hasUserLimit = value;
+    this->_userLimit    = newLimit;
 }
 
 void Channel::giveOperatorRights(ClientIterator oldestClient)
@@ -101,6 +82,18 @@ void Channel::removeOperatorRights(Client& client)
         this->getOperators().erase(clientToRemove);
 }
 
+ClientIterator Channel::findClient(std::string const& clientNickname)
+{
+    ClientIterator it  = this->getClients().begin();
+    ClientIterator ite = this->getClients().end();
+    for (; it != ite; ++it)
+    {
+        if (clientNickname == (*it)->getNickname())
+            return it;
+    }
+    return ite;
+}
+
 ClientIterator Channel::findOperator(std::string const& operatorNickname)
 {
     ClientIterator it  = this->getOperators().begin();
@@ -113,14 +106,3 @@ ClientIterator Channel::findOperator(std::string const& operatorNickname)
     return ite;
 }
 
-ClientIterator Channel::findClient(std::string const& clientNickname)
-{
-    ClientIterator it  = this->getClients().begin();
-    ClientIterator ite = this->getClients().end();
-    for (; it != ite; ++it)
-    {
-        if (clientNickname == (*it)->getNickname())
-            return it;
-    }
-    return ite;
-}

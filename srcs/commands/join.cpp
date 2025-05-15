@@ -6,13 +6,13 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 10:01:09 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:26:57 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-bool checkModeK(std::string password, Channel &channel, Client &client)
+bool checkModeK(std::string password, Channel& channel, Client& client)
 {
     if (password.empty())
     {
@@ -29,7 +29,7 @@ bool checkModeK(std::string password, Channel &channel, Client &client)
     return true;
 }
 
-bool checkModeL(Channel &channel, Client &client)
+bool checkModeL(Channel& channel, Client& client)
 {
     if ((int)channel.getClients().size() < channel.getUserLimit() || channel.getUserLimit() == 0)
         return true;
@@ -38,7 +38,7 @@ bool checkModeL(Channel &channel, Client &client)
     return false;
 }
 
-bool checkModeI(Client &client, Channel &channel)
+bool checkModeI(Client& client, Channel& channel)
 {
     if (client.findInvitedChannel(channel) != client.getInvitedChannels().end())
         return true;
@@ -47,22 +47,19 @@ bool checkModeI(Client &client, Channel &channel)
     return false;
 }
 
-bool checkModes(std::string password, Channel &channel, Client &client)
+bool checkModes(std::string password, Channel& channel, Client& client)
 {
     bool modeOk = true;
     if (!channel.getPassword().empty())
         modeOk = checkModeK(password, channel, client);
-    std::cout << "mode Ok key: " << modeOk << std::endl;
     if (channel.getUserLimit() != 0)
         modeOk = checkModeL(channel, client);
-    std::cout << "mode Ok limit: " << modeOk << std::endl;
     if (channel.isInviteOnly())
         modeOk = checkModeI(client, channel);
-    std::cout << "mode Ok invite: " << modeOk << std::endl;
     return modeOk;
 }
 
-std::vector<std::string> splitString(std::string const &str, char delimiter)
+std::vector<std::string> splitString(std::string const& str, char delimiter)
 {
     std::vector<std::string> res;
     std::string current;
@@ -80,7 +77,7 @@ std::vector<std::string> splitString(std::string const &str, char delimiter)
     return res;
 }
 
-void joinChannel(Channel &channel, Client *client, std::string const &password)
+void joinChannel(Channel& channel, Client* client, std::string const& password)
 {
     if (checkModes(password, channel, *client))
     {
@@ -90,8 +87,6 @@ void joinChannel(Channel &channel, Client *client, std::string const &password)
             ChannelIterator channelToDel = client->findInvitedChannel(channel);
             client->getInvitedChannels().erase(channelToDel);
         }
-        std::cout << "Added " << client->getNickname() << " to channel " << channel.getName()
-                  << std::endl;
         messageChannel(channel, JOIN(client->getNickname(), channel.getName()));
         if (!channel.getTopicMessage().empty())
             sendServerReply(*client, RPL_TOPIC((*client).getNickname(), channel.getName(),
@@ -99,7 +94,7 @@ void joinChannel(Channel &channel, Client *client, std::string const &password)
     }
 }
 
-void createAndJoinChannel(std::string const &channelName, Client *client, Server &theServer)
+void createAndJoinChannel(std::string const& channelName, Client* client, Server& theServer)
 {
     if (channelName.length() > MAX_CHAR_CHANNEL)
         sendServerReply(*client,
@@ -116,19 +111,15 @@ void createAndJoinChannel(std::string const &channelName, Client *client, Server
         theServer.getChannels().push_back(newChannel);
         newChannel->getClients().push_back(client);
         newChannel->getOperators().push_back(client);
-        std::cout << "Added " << client->getNickname() << " to NEW channel "
-                  << newChannel->getName() << std::endl;
         sendServerReply(*client, JOIN(client->getNickname(), newChannel->getName()));
     }
 }
 
-void join(Client *client, Server &theServer, std::istringstream &iss)
+void join(Client *client, Server& theServer, std::istringstream& iss)
 {
     std::string allChannels;
     std::string allPasswords;
     iss >> allChannels >> allPasswords;
-    std::cout << BOLD GREEN "Channels: [" << allChannels << "]" << std::endl
-              << " Passwords: [" << allPasswords << "]" RESET << std::endl;
     std::vector<std::string> channels = splitString(allChannels, ',');
     std::vector<std::string> passwords = splitString(allPasswords, ',');
 
@@ -136,8 +127,6 @@ void join(Client *client, Server &theServer, std::istringstream &iss)
     {
         std::string channelName = channels[i];
         std::string password = (i < passwords.size()) ? passwords[i] : "";
-        std::cout << BOLD GREEN "ChannelName: [" << channelName << "]" << std::endl
-                  << " Password: [" << password << "]" RESET << std::endl;
         if (hasForbiddenChars(channelName, "channel"))
         {
             sendServerReply(*client, ERR_BADCHANNAME((*client).getNickname(), channelName,

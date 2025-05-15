@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 14:58:09 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:25:56 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,73 +56,33 @@ Server::~Server()
 // #Getters & Setters
 // ##################
 
-std::string Server::getPassword(void)
-{
-    return this->_password;
-}
+int Server::getPort(void) { return this->_port; }
 
-int Server::getPort(void)
-{
-    return this->_port;
-}
+int Server::getSocket(void) { return this->_socketfd; }
 
-int Server::getSocket(void)
-{
-    return this->_socketfd;
-}
+int Server::getEpollfd(void) { return this->_epoll_fd; }
 
-ClientVec &Server::getClients(void)
-{
-    return this->_clients;
-}
+std::string Server::getPassword(void) { return this->_password; }
 
-ChannelVec &Server::getChannels(void)
-{
-    return this->_channels;
-}
+ClientVec &Server::getClients(void) { return this->_clients; }
 
-Bot &Server::getBot()
-{
-    return this->_bot;
-}
+ChannelVec &Server::getChannels(void) { return this->_channels; }
 
-int Server::getEpollfd(void)
-{
-    return this->_epoll_fd;
-}
+Bot &Server::getBot() { return this->_bot; }
 
-void Server::setEpollfd(int fd)
-{
-    this->_epoll_fd = fd;
-}
-
-// ####
-// #Exceptions
-// ##################
-
-const char *Server::InvalidSocket::what() const throw()
-{
-    return BOLD RED "Error: socket creation failure" RESET;
-}
-
-const char *Server::SetsockoptFailure::what() const throw()
-{
-    return BOLD RED "Error: setsockopt failure" RESET;
-}
-
-const char *Server::BindingFailure::what() const throw()
-{
-    return BOLD RED "Error: binding failure" RESET;
-}
-
-const char *Server::ListenFailure::what() const throw()
-{
-    return BOLD RED "Error: listen failure" RESET;
-}
+void Server::setEpollfd(int fd) { this->_epoll_fd = fd; }
 
 // ####
 // #Functions
 // ##################
+
+void Server::launch_angrybots_server(void)
+{
+    std::cout << CYAN "SERVER PORT: " << RESET << getPort() << std::endl;
+    std::cout << CYAN "SERVER PASSWORD: " << RESET << getPassword() << std::endl;
+
+    setting_server_socket();
+}
 
 void Server::setting_server_socket(void)
 {
@@ -147,22 +107,11 @@ void Server::setting_server_socket(void)
         throw Server::ListenFailure();
 }
 
-void Server::launch_angrybots_server(void)
-{
-    std::cout << BOLD PURPLE "HELLO ANGRYBOTS" RESET << std::endl;
-    std::cout << CYAN "SERVER PORT: " << RESET << getPort() << std::endl;
-    std::cout << CYAN "SERVER PASSWORD: " << RESET << getPassword() << std::endl;
-
-    setting_server_socket();
-}
-
-void Server::addNewClient(int epoll_fd, struct epoll_event &ev)
+void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
 {
     int clientfd = accept(this->getSocket(), NULL, NULL);
     if (clientfd == -1)
-    {
         throw std::runtime_error("Error: client connexion failure");
-    }
     if (this->getClients().size() >= MAX_CLIENTS)
     {
         const char *msg = "Server full. Try again later.\n";
@@ -174,9 +123,7 @@ void Server::addNewClient(int epoll_fd, struct epoll_event &ev)
     ev.events = EPOLLIN | EPOLLET;
     ev.data.fd = clientfd;
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientfd, &ev) == -1)
-    {
         throw std::runtime_error("Error: epoll_ctl failure");
-    }
     this->getClients().push_back(new Client(clientfd));
     std::cout << BOLD NEON_GREEN "New client connected on fd " RESET << clientfd << std::endl;
 }
@@ -193,7 +140,7 @@ ClientIterator Server::findClient(int clientfd)
     return ite;
 }
 
-ClientIterator Server::findClientWithName(std::string const &nickname)
+ClientIterator Server::findClientWithName(std::string const& nickname)
 {
     ClientIterator it = this->getClients().begin();
     ClientIterator ite = this->getClients().end();
@@ -205,7 +152,7 @@ ClientIterator Server::findClientWithName(std::string const &nickname)
     return ite;
 }
 
-ChannelIterator Server::findChannel(std::string const &channelName)
+ChannelIterator Server::findChannel(std::string const& channelName)
 {
     ChannelIterator it = this->getChannels().begin();
     ChannelIterator ite = this->getChannels().end();
@@ -215,4 +162,28 @@ ChannelIterator Server::findChannel(std::string const &channelName)
             return it;
     }
     return ite;
+}
+
+// ####
+// #Exceptions
+// ##################
+
+const char *Server::InvalidSocket::what() const throw()
+{
+    return BOLD RED "Error: socket creation failure" RESET;
+}
+
+const char *Server::SetsockoptFailure::what() const throw()
+{
+    return BOLD RED "Error: setsockopt failure" RESET;
+}
+
+const char *Server::BindingFailure::what() const throw()
+{
+    return BOLD RED "Error: binding failure" RESET;
+}
+
+const char *Server::ListenFailure::what() const throw()
+{
+    return BOLD RED "Error: listen failure" RESET;
 }

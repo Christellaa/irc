@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 11:23:21 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:24:36 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,45 +25,23 @@ Client::~Client() {}
 // #Getters & Setters
 // ##################
 
-std::string &Client::getNickname(void)
-{
-    return this->_nickname;
-}
+int Client::getSocket(void) { return this->_socketfd; }
 
-std::string &Client::getPassword(void)
-{
-    return this->_password;
-}
+std::string& Client::getNickname(void) { return this->_nickname; }
 
-std::string &Client::getUsername(void)
-{
-    return this->_username;
-}
+std::string& Client::getUsername(void) { return this->_username; }
 
-std::string &Client::getMsg(void)
-{
-    return this->_msg;
-}
+std::string& Client::getPassword(void) { return this->_password; }
 
-int Client::getSocket(void)
-{
-    return this->_socketfd;
-}
+std::string& Client::getMsg(void) { return this->_msg; }
 
-void Client::setPassword(std::string const &password)
-{
-    this->_password = password;
-}
+ChannelVec& Client::getInvitedChannels() { return this->_isInvited; }
 
-void Client::setNickname(std::string const &nickname)
-{
-    this->_nickname = nickname;
-}
+void Client::setNickname(std::string const& nickname) { this->_nickname = nickname; }
 
-void Client::setUsername(std::string const &username)
-{
-    this->_username = username;
-}
+void Client::setUsername(std::string const& username) { this->_username = username; }
+
+void Client::setPassword(std::string const& password) { this->_password = password; }
 
 // ####
 // #Exceptions
@@ -73,107 +51,7 @@ void Client::setUsername(std::string const &username)
 // #Functions
 // ##################
 
-ChannelIterator Client::findInvitedChannel(Channel &channel)
-{
-    ChannelIterator it = this->_isInvited.begin();
-    ChannelIterator ite = this->_isInvited.end();
-    for (; it != ite; ++it)
-    {
-        if ((*it)->getName() == channel.getName())
-            return it;
-    }
-    return ite;
-}
-
-ChannelVec &Client::getInvitedChannels()
-{
-    return this->_isInvited;
-}
-
-bool Client::parseWelcomeMessage(const std::string &line, Server &theServer)
-{
-    std::istringstream iss(line);
-    std::string word;
-    iss >> word;
-
-    if (word == "PASS")
-    {
-        iss >> word;
-        this->setPassword(word);
-    }
-    else if (word == "NICK")
-    {
-        iss >> word;
-        if (word.length() > 8)
-            word = word.substr(0, 8);
-        if (hasForbiddenChars(word, "client"))
-        {
-            sendServerReply(*this, ERR_ERRONEUSNICKNAME(this->getNickname(), word, "Nickname has invalid characters"));
-            close(this->getSocket());
-            ClientIterator hasClient = theServer.findClientWithName(this->getNickname());
-            if (hasClient != theServer.getClients().end())
-                theServer.getClients().erase(hasClient);
-            delete this;
-            return false;
-        }
-        this->setNickname(word);
-    }
-    else if (word == "USER")
-    {
-        std::string user, unused1, unused2, realName;
-        iss >> user >> unused1 >> unused2;
-        std::getline(iss, realName);
-        if (!realName.empty())
-            realName = realName.substr(2);
-        std::cout << "USERNAME: [" << realName << "]" << std::endl;
-        this->setUsername(realName);
-    }
-
-    if (!this->getPassword().empty() && !this->getNickname().empty() &&
-        !this->getUsername().empty())
-    {
-        sameNickname(theServer);
-        if (badPassword(theServer))
-            return false;
-        sendServerReply(*this, welcomeClient(*this));
-        this->isWelcome = false;
-    }
-    return true;
-}
-
-bool Client::parseClientMessage(const std::string &line, Server &theServer)
-{
-    std::istringstream iss(line);
-    std::string word;
-    iss >> word;
-
-    if (word == "JOIN")
-        join(this, theServer, iss);
-    else if (word == "QUIT")
-    {
-        quit(this, theServer);
-        return false;
-    }
-    else if (word == "MODE")
-        mode(*this, theServer, iss);
-    else if (word == "PING")
-        pong(*this);
-    else if (word == "NICK")
-        nick(*this, theServer, iss);
-    else if (word == "PRIVMSG")
-        privmsg(*this, theServer, iss);
-    else if (word == "PART")
-        part(*this, theServer, iss);
-    else if (word == "KICK")
-        kick(*this, theServer, iss);
-    else if (word == "INVITE")
-        invite(*this, theServer, iss);
-    else if (word == "TOPIC")
-        topic(*this, theServer, iss);
-    return true;
-}
-
-void Client::readClientMessage(Server &theServer)
+void Client::readClientMessage(Server& theServer)
 {
     char buffer[MAX_CHAR_MSG];
     ssize_t bytes = recv(this->getSocket(), buffer, sizeof(buffer), MSG_DONTWAIT);
@@ -210,7 +88,89 @@ void Client::readClientMessage(Server &theServer)
     }
 }
 
-bool Client::badPassword(Server &theServer)
+bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
+{
+    std::istringstream iss(line);
+    std::string word;
+    iss >> word;
+
+    if (word == "PASS")
+    {
+        iss >> word;
+        this->setPassword(word);
+    }
+    else if (word == "NICK")
+    {
+        iss >> word;
+        if (word.length() > 8)
+            word = word.substr(0, 8);
+        if (hasForbiddenChars(word, "client"))
+        {
+            sendServerReply(*this, ERR_ERRONEUSNICKNAME(this->getNickname(), word, "Nickname has invalid characters"));
+            close(this->getSocket());
+            ClientIterator hasClient = theServer.findClientWithName(this->getNickname());
+            if (hasClient != theServer.getClients().end())
+                theServer.getClients().erase(hasClient);
+            delete this;
+            return false;
+        }
+        this->setNickname(word);
+    }
+    else if (word == "USER")
+    {
+        std::string user, unused1, unused2, realName;
+        iss >> user >> unused1 >> unused2;
+        std::getline(iss, realName);
+        if (!realName.empty())
+            realName = realName.substr(2);
+        this->setUsername(realName);
+    }
+
+    if (!this->getPassword().empty() && !this->getNickname().empty() &&
+        !this->getUsername().empty())
+    {
+        sameNickname(theServer);
+        if (badPassword(theServer))
+            return false;
+        sendServerReply(*this, welcomeClient(*this));
+        this->isWelcome = false;
+    }
+    return true;
+}
+
+bool Client::parseClientMessage(const std::string& line, Server& theServer)
+{
+    std::istringstream iss(line);
+    std::string word;
+    iss >> word;
+
+    if (word == "JOIN")
+        join(this, theServer, iss);
+    else if (word == "QUIT")
+    {
+        quit(this, theServer);
+        return false;
+    }
+    else if (word == "MODE")
+        mode(*this, theServer, iss);
+    else if (word == "PING")
+        pong(*this);
+    else if (word == "NICK")
+        nick(*this, theServer, iss);
+    else if (word == "PRIVMSG")
+        privmsg(*this, theServer, iss);
+    else if (word == "PART")
+        part(*this, theServer, iss);
+    else if (word == "KICK")
+        kick(*this, theServer, iss);
+    else if (word == "INVITE")
+        invite(*this, theServer, iss);
+    else if (word == "TOPIC")
+        topic(*this, theServer, iss);
+    return true;
+}
+
+bool Client::badPassword(Server& theServer)
 {
     if (this->getPassword() != theServer.getPassword())
     {
@@ -219,7 +179,6 @@ bool Client::badPassword(Server &theServer)
         {
             sendServerReply(*this, ERR_PASSWORD(this->getNickname()));
             close(this->getSocket());
-            std::cout << BOLD RED "Connection failed: wrong password" RESET << std::endl;
             theServer.getClients().erase(client);
             delete this;
             return true;
@@ -228,7 +187,7 @@ bool Client::badPassword(Server &theServer)
     return false;
 }
 
-void Client::sameNickname(Server &theServer)
+void Client::sameNickname(Server& theServer)
 {
     int suffix = 0;
     bool conflict = true;
@@ -250,4 +209,16 @@ void Client::sameNickname(Server &theServer)
         }
     }
     this->setNickname(newName);
+}
+
+ChannelIterator Client::findInvitedChannel(Channel& channel)
+{
+    ChannelIterator it = this->_isInvited.begin();
+    ChannelIterator ite = this->_isInvited.end();
+    for (; it != ite; ++it)
+    {
+        if ((*it)->getName() == channel.getName())
+            return it;
+    }
+    return ite;
 }

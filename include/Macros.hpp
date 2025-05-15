@@ -6,12 +6,14 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 14:45:15 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:21:55 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MACROS_HPP
 #define MACROS_HPP
+
+/****** CLASSES ******/
 
 class Client;
 class Server;
@@ -79,42 +81,44 @@ class Bot;
 
 /****** TYPEDEFS ******/
 
-typedef std::vector<Client *> ClientVec;
-typedef std::vector<Channel *> ChannelVec;
+typedef std::vector<Client*> ClientVec;
+typedef std::vector<Channel*> ChannelVec;
 
 typedef ClientVec::iterator ClientIterator;
 typedef ChannelVec::iterator ChannelIterator;
 
-typedef std::map<std::string, void (Bot::*)(Client &, std::string const&, Server &)>::iterator botIterator;
+typedef std::map<std::string, void (Bot::*)(Client&, std::string const&, Server&)>::iterator botIterator;
 
-/****** UTIL FUNCTIONS ******/
+/****** COMMANDS ******/
 
-void join(Client *client, Server &theServer, std::istringstream &iss);
-void nick(Client &client, Server &theServer, std::istringstream &iss);
-void pong(Client &client);
-void mode(Client &client, Server &theServer, std::istringstream &iss);
-void quit(Client *client, Server &theServer);
-void privmsg(Client &client, Server &theServer, std::istringstream &iss);
-void part(Client &client, Server &theServer, std::istringstream &iss);
-void kick(Client &client, Server &theServer, std::istringstream &iss);
-void invite(Client &client, Server &theServer, std::istringstream &iss);
-void topic(Client &client, Server &theServer, std::istringstream &iss);
+void invite(Client& client, Server& theServer, std::istringstream& iss);
+void join(Client *client, Server& theServer, std::istringstream& iss);
+void kick(Client& client, Server& theServer, std::istringstream& iss);
+void mode(Client& client, Server& theServer, std::istringstream& iss);
+void nick(Client& client, Server& theServer, std::istringstream& iss);
+void part(Client& client, Server& theServer, std::istringstream& iss);
+void pong(Client& client);
+void privmsg(Client& client, Server& theServer, std::istringstream& iss);
+void quit(Client *client, Server& theServer);
+void topic(Client& client, Server& theServer, std::istringstream& iss);
 
 /****** FUNCTIONS ******/
 
-void sendServerReply(Client &client, std::string const &reply);
-std::string welcomeClient(Client &client);
-std::string userPrefix(Client &client);
-std::string intToString(int number);
-std::string getIrcDate();
-std::string ft_tolower(std::string const &word);
-bool hasForbiddenChars(std::string const &name, std::string const &type);
-void messageChannel(Channel &channel, std::string const &serverReply);
-
-void removeClientFromChannel(std::string const &clientNickname, Channel &channel, bool isKicked);
-void removeOperator(std::string const &operatorNickname, Channel &channel);
+void removeClientFromChannel(std::string const& clientNickname, Channel& channel, bool isKicked);
+void removeOperator(std::string const& operatorNickname, Channel& channel);
 
 void handle_signals(void);
+
+void sendServerReply(Client& client, std::string const& reply);
+void messageChannel(Channel& channel, std::string const& serverReply);
+
+std::string welcomeClient(Client& client);
+std::string userPrefix(Client& client);
+
+std::string getIrcDate();
+std::string intToString(int number);
+std::string ft_tolower(std::string const& word);
+bool        hasForbiddenChars(std::string const& name, std::string const& type);
 
 /****** SIGNALS ******/
 
@@ -141,7 +145,6 @@ public:
     ":ircserv 332 " + nickname + " " + channelName + message + "\r\n"
 #define PRIVMSG(nickname, target, message) \
     ":" + nickname + " PRIVMSG " + target + " :" + message + "\r\n"
-// if target is clientB and not channelA?
 #define JOIN(nickname, channelName) ":" + nickname + " JOIN :" + channelName + "\r\n"
 #define PART(nickname, channelName) ":" + nickname + " PART :" + channelName + "\r\n"
 #define PONG(nickname) ":" + nickname + " PONG :ircserv" + "\r\n"

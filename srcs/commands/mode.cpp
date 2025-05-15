@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:10:43 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:51:43 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ bool handleI(std::string const& option, Channel& channel, bool isPositive, Clien
         channel.setInviteOnly(true);
     else
         channel.setInviteOnly(false);
-    std::cout << "changed +i -i" << std::endl;
     return true;
 }
 
@@ -65,7 +64,6 @@ bool handleT(std::string const& option, Channel& channel, bool isPositive, Clien
         channel.setTopicScope(true);
     else
         channel.setTopicScope(false);
-    std::cout << "changed +t -t" << std::endl;
     return true;
 }
 
@@ -132,8 +130,6 @@ void handleModes(std::istringstream& iss, Channel& channel, std::string modes, C
     bool        isPositive = true;
     std::string option;
     iss >> option;
-    std::cout << "modes: " << modes << std::endl;
-    std::cout << "option: " << option << std::endl;
     bool modeOk = true;
     for (int i = 0; modes[i]; ++i)
     {

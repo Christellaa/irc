@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:29:24 by cde-sous          #+#    #+#             */
-/*   Updated: 2025/05/15 14:44:59 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:23:18 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ std::string const &Bot::getName()
 	return this->_name;
 }
 
-void Bot::handleHelp(Client &client, std::string const& channelName, Server &theServer)
+void Bot::handleHelp(Client& client, std::string const& channelName, Server& theServer)
 {
 	(void)theServer;
 	std::vector<std::string> roasts;
@@ -48,13 +48,13 @@ void Bot::handleHelp(Client &client, std::string const& channelName, Server &the
 		sendServerReply(client, PRIVMSG(this->getName(), channelName, GREEN + (*it).first + RESET));
 }
 
-void Bot::handleBot(Client &client, std::string const& channelName, Server &theServer)
+void Bot::handleBot(Client& client, std::string const& channelName, Server& theServer)
 {
 	(void)theServer;
 	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + "HI!!!🐦 I'm AngryBird! WELCOME. I'm not angry! Don't push me!🤬" + RESET));
 }
 
-void Bot::handleRoll(Client &client, std::string const& channelName, Server &theServer)
+void Bot::handleRoll(Client& client, std::string const& channelName, Server& theServer)
 {
 	(void)theServer;
 	std::vector<std::string> roasts;
@@ -72,7 +72,7 @@ void Bot::handleRoll(Client &client, std::string const& channelName, Server &the
 	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET + GREEN + "🎲 " + ss.str() + RESET));
 }
 
-void Bot::handleDate(Client &client, std::string const& channelName, Server &theServer)
+void Bot::handleDate(Client& client, std::string const& channelName, Server& theServer)
 {
 	(void)theServer;
 	std::vector<std::string> roasts;
@@ -87,7 +87,7 @@ void Bot::handleDate(Client &client, std::string const& channelName, Server &the
 	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET + GREEN + " 📅 Here for the idiot: " + date + RESET));
 }
 
-void Bot::handleNick(Client &client, std::string const& channelName, Server &theServer)
+void Bot::handleNick(Client& client, std::string const& channelName, Server& theServer)
 {
 	std::vector<std::pair<std::string, std::string> > nicks;
 	nicks.push_back(std::make_pair("Oopsie", "I'll name you Oopsie - like your whole existence."));
@@ -109,7 +109,7 @@ void Bot::handleNick(Client &client, std::string const& channelName, Server &the
 	nick(client, theServer, iss);
 }
 
-bool Bot::FindAndExecuteCommand(Client &client, std::string const& channelName, std::string const &command, Server &theServer)
+bool Bot::FindAndExecuteCommand(Client& client, std::string const& channelName, std::string const& command, Server& theServer)
 {
 	botIterator it = this->_commands.find(command);
 	if (it != this->_commands.end())
