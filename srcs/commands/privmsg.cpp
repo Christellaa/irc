@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 14:45:41 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:15:32 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void privmsgChannel(Server &theServer, Client &client, std::string const &channe
         {
             if (client.getSocket() == (*it)->getSocket())
                 continue;
-            sendServerReply(*(*it), PRIVMSG(client.getNickname(), (*channel)->getName(), message));
+            sendServerReply(*(*it), PRIVMSG(userPrefix(client), (*channel)->getName(), message));
         }
     }
     else
@@ -52,7 +52,7 @@ void privmsgClient(Server &theServer, Client &client, std::string const &target,
     else if ((*hasTarget)->getNickname() == client.getNickname())
         sendServerReply(client, ERR_ERRONEUSNICKNAME(client.getNickname(), target, "Target cannot be yourself"));
     else
-        sendServerReply(*(*hasTarget), PRIVMSG(client.getNickname(), target, message));
+        sendServerReply(*(*hasTarget), PRIVMSG(userPrefix(client), target, message));
 }
 
 void privmsg(Client &client, Server &theServer, std::istringstream &iss)

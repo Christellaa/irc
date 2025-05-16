@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 12:06:19 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/16 16:17:32 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void handleModes(std::istringstream& iss, Channel& channel, std::string modes, C
                 modeOk = toHandle[index](option, channel, isPositive, client);
                 if (modeOk)
                     sendServerReply(
-                        client, MODE(client.getNickname(), channel.getName(), modeToSend, option));
+                        client, MODE(userPrefix(client), channel.getName(), modeToSend, option));
                 if ((modes[i] != 'i' && modes[i] != 't') &&
                     ((modes[i] != 'l' && modes[i] != 'k') || isPositive))
                     iss >> option;

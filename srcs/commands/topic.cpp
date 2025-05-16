@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 11:38:08 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/16 16:18:47 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void topic(Client &client, Server &theServer, std::istringstream &iss)
         return;
     }
     (*channel)->setTopicMessage(message);
-    messageChannel(*(*channel), TOPIC(client.getNickname(), channelName, message));
+    messageChannel(*(*channel), TOPIC(userPrefix(client), channelName, message));
 }

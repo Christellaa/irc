@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:35:54 by cde-sous          #+#    #+#             */
-/*   Updated: 2025/05/13 15:22:45 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:18:27 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ void invite(Client& client, Server& theServer, std::istringstream& iss)
         return;
     }
     (*clientTarget)->getInvitedChannels().push_back(*channel);
-    sendServerReply(client, INVITE(client.getNickname(), channelName, target));
-    sendServerReply(*(*clientTarget), INVITE(client.getNickname(), channelName, target));
+    sendServerReply(client, INVITE(userPrefix(client), channelName, target));
+    sendServerReply(*(*clientTarget), INVITE(userPrefix(client), channelName, target));
 }

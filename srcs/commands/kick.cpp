@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:58:18 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 11:23:19 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/16 16:18:09 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void kick(Client &client, Server &theServer, std::istringstream &iss)
         std::getline(iss, message);
 		if (!message.empty())
         	message = message.substr(2);
-        messageChannel(*(*channel), KICK(client.getNickname(), channelName, clientToKick, message));
+        messageChannel(*(*channel), KICK(userPrefix(client), channelName, clientToKick, message));
         removeClientFromChannel(clientToKick, *(*channel), true);
         removeOperator(clientToKick, *(*channel));
         if ((*channel)->getClients().size() == 0)

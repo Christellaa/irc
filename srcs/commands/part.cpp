@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/13 15:18:54 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:16:42 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ void part(Client& client, Server& theServer, std::istringstream& iss)
         }
         else if ((*channel)->getOperators().size() == 0)
             (*channel)->giveOperatorRights((*channel)->getClients().begin());
-        sendServerReply(client, PART(client.getNickname(), channelName));
+        sendServerReply(client, PART(userPrefix(client), channelName));
     }
 }

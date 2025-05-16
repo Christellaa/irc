@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:54:07 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:06:28 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:16:16 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Client
     std::string _buffer;
 
     ChannelVec _isInvited;
+	std::vector<std::string> _messages;
 
     Client();
 
@@ -40,10 +41,12 @@ class Client
     std::string& getPassword(void);
     std::string& getMsg(void);
     ChannelVec&     getInvitedChannels();
+    std::vector<std::string>&     getMessages();
 
     void setNickname(std::string const& nickname);
     void setUsername(std::string const& username);
     void setPassword(std::string const& password);
+    void addMessage(std::string const& message);
 
     void readClientMessage(Server& theServer);
     bool parseWelcomeMessage(const std::string& line, Server& theServer);

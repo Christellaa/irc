@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 13:17:02 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/16 17:16:06 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,15 @@ std::string& Client::getMsg(void) { return this->_msg; }
 
 ChannelVec& Client::getInvitedChannels() { return this->_isInvited; }
 
+std::vector<std::string>& Client::getMessages() { return this->_messages; }
+
 void Client::setNickname(std::string const& nickname) { this->_nickname = nickname; }
 
 void Client::setUsername(std::string const& username) { this->_username = username; }
 
 void Client::setPassword(std::string const& password) { this->_password = password; }
+
+void Client::addMessage(std::string const& message) { this->_messages.push_back(message); }
 
 // ####
 // #Exceptions
@@ -117,12 +121,9 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
     }
     else if (word == "USER")
     {
-        std::string user, unused1, unused2, realName;
-        iss >> user >> unused1 >> unused2;
-        std::getline(iss, realName);
-        if (!realName.empty())
-            realName = realName.substr(2);
-        this->setUsername(realName);
+        std::string user;
+        iss >> user;
+        this->setUsername(user);
     }
 
     if (!this->getPassword().empty() && !this->getNickname().empty() &&

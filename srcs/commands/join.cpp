@@ -6,7 +6,7 @@
 /*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 11:30:15 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/16 16:29:26 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void joinChannel(Channel& channel, Client* client, std::string const& password)
             ChannelIterator channelToDel = client->findInvitedChannel(channel);
             client->getInvitedChannels().erase(channelToDel);
         }
-        messageChannel(channel, JOIN(client->getNickname(), channel.getName()));
+        messageChannel(channel, JOIN(userPrefix(*client), channel.getName()));
         if (!channel.getTopicMessage().empty())
             sendServerReply(*client, RPL_TOPIC((*client).getNickname(), channel.getName(),
                                                " :" + channel.getTopicMessage()));
@@ -111,7 +111,7 @@ void createAndJoinChannel(std::string const& channelName, Client* client, Server
         theServer.getChannels().push_back(newChannel);
         newChannel->getClients().push_back(client);
         newChannel->getOperators().push_back(client);
-        sendServerReply(*client, JOIN(client->getNickname(), newChannel->getName()));
+        sendServerReply(*client, JOIN(userPrefix(*client), newChannel->getName()));
     }
 }
 

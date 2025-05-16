@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:21:55 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:03:16 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,21 +143,21 @@ public:
     ":ircserv 331 " + nickname + " " + channelName + message + "\r\n"
 #define RPL_TOPIC(nickname, channelName, message) \
     ":ircserv 332 " + nickname + " " + channelName + message + "\r\n"
-#define PRIVMSG(nickname, target, message) \
-    ":" + nickname + " PRIVMSG " + target + " :" + message + "\r\n"
-#define JOIN(nickname, channelName) ":" + nickname + " JOIN :" + channelName + "\r\n"
-#define PART(nickname, channelName) ":" + nickname + " PART :" + channelName + "\r\n"
-#define PONG(nickname) ":" + nickname + " PONG :ircserv" + "\r\n"
-#define QUIT(nickname, clientSocket) \
-    ":" + nickname + " QUIT :" + nickname + " on fd " + clientSocket + " left the server" + "\r\n"
-#define MODE(nickname, channelName, mode, option) \
-    ":" + nickname + " MODE " + channelName + " " + mode + " " + option + "\r\n"
-#define KICK(nickname, channelName, target, message) \
-    ":" + nickname + " KICK " + channelName + " " + target + " :" + message + "\r\n"
-#define INVITE(nickname, channelName, target) \
-    ":" + nickname + " INVITE " + target + " " + channelName + "\r\n"
-#define TOPIC(nickname, channelName, message) \
-    ":" + nickname + " TOPIC " + channelName + " :" + message + "\r\n"
+#define PRIVMSG(prefix, target, message) \
+    ":" + prefix + " PRIVMSG " + target + " :" + message + "\r\n"
+#define JOIN(prefix, channelName) ":" + prefix + " JOIN :" + channelName + "\r\n"
+#define PART(prefix, channelName) ":" + prefix + " PART :" + channelName + "\r\n"
+#define PONG(prefix) ":" + prefix + " PONG :ircserv" + "\r\n"
+#define QUIT(prefix, clientSocket) \
+    ":" + prefix + " QUIT :" + prefix + " on fd " + clientSocket + " left the server" + "\r\n"
+#define MODE(prefix, channelName, mode, option) \
+    ":" + prefix + " MODE " + channelName + " " + mode + " " + option + "\r\n"
+#define KICK(prefix, channelName, target, message) \
+    ":" + prefix + " KICK " + channelName + " " + target + " :" + message + "\r\n"
+#define INVITE(prefix, channelName, target) \
+    ":" + prefix + " INVITE " + target + " " + channelName + "\r\n"
+#define TOPIC(prefix, channelName, message) \
+    ":" + prefix + " TOPIC " + channelName + " :" + message + "\r\n"
 
 /****** DEFINE ERRORS ******/
 
