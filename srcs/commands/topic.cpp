@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 09:57:15 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:38:08 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ void topic(Client &client, Server &theServer, std::istringstream &iss)
     }
     std::string message;
     std::getline(iss, message);
-    message = message.substr(2);
+	if (!message.empty())
+	    message = message.substr(2);
     if (message.empty())
     {
         if ((*channel)->getTopicMessage().empty())

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 14:51:43 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:06:19 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool handleO(std::string const& option, Channel& channel, bool isPositive, Clien
         }
         sendServerReply(
             client, ERR_USERNOTINCHANNEL(client.getNickname(), option, channel.getName(),
-                                         std::string(option) + " is not in #" + channel.getName()));
+                                         std::string(option) + " is not in " + channel.getName()));
     }
     else
     {

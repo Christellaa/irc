@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:26:57 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:30:15 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,8 @@ void join(Client *client, Server& theServer, std::istringstream& iss)
     for (size_t i = 0; i < channels.size(); ++i)
     {
         std::string channelName = channels[i];
+		if (channelName[0] != '#')
+			channelName = "#" + channelName;
         std::string password = (i < passwords.size()) ? passwords[i] : "";
         if (hasForbiddenChars(channelName, "channel"))
         {
