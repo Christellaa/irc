@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:24:36 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:17:02 by jewu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void Client::readClientMessage(Server& theServer)
     }
     _buffer.append(buffer, bytes);
     size_t pos;
-    std::cout << _buffer << std::endl;
     while ((pos = _buffer.find("\n")) != std::string::npos)
     {
         std::string line = _buffer.substr(0, pos);
