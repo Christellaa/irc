@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:54:54 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 void removeClientFromChannel(std::string const &clientNickname, Channel &channel, bool isKicked)
 {
     ClientIterator client = channel.findClient(clientNickname);
-    if (client != channel.getClients().end())
-        channel.getClients().erase(client);
+    if (client == channel.getClients().end())
+        return;
+    channel.getClients().erase(client);
     if (isKicked)
         return;
     messageChannel(channel, PART(clientNickname, channel.getName()));
