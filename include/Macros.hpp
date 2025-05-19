@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:39:16 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 17:03:16 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:43:35 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Bot;
 #include <unistd.h>     //close, lseek
 #include <vector>
 #include <map>
+#include <queue>
 
 /****** COLORS ******/
 
@@ -109,7 +110,8 @@ void removeOperator(std::string const& operatorNickname, Channel& channel);
 
 void handle_signals(void);
 
-void sendServerReply(Client& client, std::string const& reply);
+void saveServerReply(Client& client, std::string const& reply);
+void sendServerReply(Client& client);
 void messageChannel(Channel& channel, std::string const& serverReply);
 
 std::string welcomeClient(Client& client);
@@ -122,7 +124,7 @@ bool        hasForbiddenChars(std::string const& name, std::string const& type);
 
 /****** SIGNALS ******/
 
-extern int g_signal;
+extern volatile int g_signal;
 
 class SignalQuit : public std::exception
 {

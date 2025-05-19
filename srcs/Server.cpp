@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:04 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:25:56 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:52:43 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void Server::addNewClient(int epoll_fd, struct epoll_event& ev)
         return;
     }
     set_socket_non_blocking(clientfd);
-    ev.events = EPOLLIN | EPOLLET;
+    ev.events = EPOLLIN | EPOLLOUT;
     ev.data.fd = clientfd;
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientfd, &ev) == -1)
         throw std::runtime_error("Error: epoll_ctl failure");

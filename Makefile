@@ -4,7 +4,7 @@
 
 NAME		= ircserv
 CC			= c++
-CFLAG		= -std=c++98 -Wall -Wextra -Werror -g3 ${INC}
+CFLAG		= -std=c++98 -Wall -Wextra -Werror ${INC}
 
 ################################################################################
 #                                 Include                                      #

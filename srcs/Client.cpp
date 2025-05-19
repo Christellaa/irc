@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 17:16:06 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:42:22 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ std::string& Client::getMsg(void) { return this->_msg; }
 
 ChannelVec& Client::getInvitedChannels() { return this->_isInvited; }
 
-std::vector<std::string>& Client::getMessages() { return this->_messages; }
+std::queue<std::string>& Client::getMessages() { return this->_messages; }
 
 void Client::setNickname(std::string const& nickname) { this->_nickname = nickname; }
 
@@ -45,7 +45,13 @@ void Client::setUsername(std::string const& username) { this->_username = userna
 
 void Client::setPassword(std::string const& password) { this->_password = password; }
 
-void Client::addMessage(std::string const& message) { this->_messages.push_back(message); }
+void Client::addMessage(std::string const& message) { this->_messages.push(message); }
+
+void Client::deleteMessages()
+{
+    while (this->getMessages().size() != 0)
+        this->getMessages().pop();
+}
 
 // ####
 // #Exceptions
@@ -70,6 +76,7 @@ void Client::readClientMessage(Server& theServer)
     {
         std::cout << BOLD RED "Client " << this->getSocket() << " left the server" RESET
                   << std::endl;
+        quit(this, theServer);
         return;
     }
     _buffer.append(buffer, bytes);
@@ -109,7 +116,7 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
             word = word.substr(0, 8);
         if (hasForbiddenChars(word, "client"))
         {
-            sendServerReply(*this, ERR_ERRONEUSNICKNAME(this->getNickname(), word, "Nickname has invalid characters"));
+            saveServerReply(*this, ERR_ERRONEUSNICKNAME(this->getNickname(), word, "Nickname has invalid characters"));
             close(this->getSocket());
             ClientIterator hasClient = theServer.findClientWithName(this->getNickname());
             if (hasClient != theServer.getClients().end())
@@ -132,7 +139,7 @@ bool Client::parseWelcomeMessage(const std::string& line, Server& theServer)
         sameNickname(theServer);
         if (badPassword(theServer))
             return false;
-        sendServerReply(*this, welcomeClient(*this));
+        saveServerReply(*this, welcomeClient(*this));
         this->isWelcome = false;
     }
     return true;
@@ -177,7 +184,8 @@ bool Client::badPassword(Server& theServer)
         ClientIterator client = theServer.findClient(this->getSocket());
         if (client != theServer.getClients().end())
         {
-            sendServerReply(*this, ERR_PASSWORD(this->getNickname()));
+            std::string reply = ERR_PASSWORD(this->getNickname());
+            send(this->getSocket(), reply.c_str(), reply.length(), 0);
             close(this->getSocket());
             theServer.getClients().erase(client);
             delete this;

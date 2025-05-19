@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 16:17:32 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool handleO(std::string const& option, Channel& channel, bool isPositive, Clien
 {
     if (option.empty())
     {
-        sendServerReply(client,
+        saveServerReply(client,
                         ERR_NEEDMOREPARAMS(client.getNickname(), "MODE",
                                            "No client given to give or remove operator rights"));
         return false;
@@ -29,7 +29,7 @@ bool handleO(std::string const& option, Channel& channel, bool isPositive, Clien
             channel.giveOperatorRights(clientIt);
             return true;
         }
-        sendServerReply(
+        saveServerReply(
             client, ERR_USERNOTINCHANNEL(client.getNickname(), option, channel.getName(),
                                          std::string(option) + " is not in " + channel.getName()));
     }
@@ -73,20 +73,20 @@ bool handleL(std::string const& option, Channel& channel, bool isPositive, Clien
     {
         if (option.empty())
         {
-            sendServerReply(client,
+            saveServerReply(client,
                             ERR_NEEDMOREPARAMS(client.getNickname(), "MODE", "No limit given"));
             return false;
         }
         if (option.length() > 2)
         {
-            sendServerReply(client, ERR_INVALIDMODEPARAM(client.getNickname(), channel.getName(),
+            saveServerReply(client, ERR_INVALIDMODEPARAM(client.getNickname(), channel.getName(),
                                                          "+l", option, "Maximum user limit is 10"));
             return false;
         }
         int number = std::atoi(option.c_str());
         if (number < 1 || number > MAX_CLIENTS)
         {
-            sendServerReply(client,
+            saveServerReply(client,
                             ERR_INVALIDMODEPARAM(client.getNickname(), channel.getName(), "+l",
                                                  option, "User limit must be between 1 and 10"));
             return false;
@@ -104,13 +104,13 @@ bool handleK(std::string const& option, Channel& channel, bool isPositive, Clien
     {
         if (option.empty())
         {
-            sendServerReply(client,
+            saveServerReply(client,
                             ERR_NEEDMOREPARAMS(client.getNickname(), "MODE", "No password given"));
             return false;
         }
         else if (option.length() < 1 || option.length() > MAX_PASS_LEN)
         {
-            sendServerReply(client, ERR_KEYSET(client.getNickname(), channel.getName(),
+            saveServerReply(client, ERR_KEYSET(client.getNickname(), channel.getName(),
                                                "Password must be between 1 and 15 characters"));
             return false;
         }
@@ -145,14 +145,14 @@ void handleModes(std::istringstream& iss, Channel& channel, std::string modes, C
             {
                 modeOk = toHandle[index](option, channel, isPositive, client);
                 if (modeOk)
-                    sendServerReply(
+                    saveServerReply(
                         client, MODE(userPrefix(client), channel.getName(), modeToSend, option));
                 if ((modes[i] != 'i' && modes[i] != 't') &&
                     ((modes[i] != 'l' && modes[i] != 'k') || isPositive))
                     iss >> option;
             }
             else
-                sendServerReply(client,
+                saveServerReply(client,
                                 ERR_UNKNOWNMODE(client.getNickname(), modeToSend, "Unknown mode"));
         }
     }
@@ -169,12 +169,12 @@ void mode(Client& client, Server& theServer, std::istringstream& iss)
         if (channelOperator != (*channel)->getOperators().end())
             handleModes(iss, *(*channel), modes, client);
         else
-            sendServerReply(client, ERR_CHANOPRIVSNEEDED(
+            saveServerReply(client, ERR_CHANOPRIVSNEEDED(
                                         client.getNickname(), channelName,
                                         client.getNickname() +
                                             " does not have the necessary privileges for MODE"));
     }
     else
-        sendServerReply(client, ERR_UMODEUNKNOWNFLAG(client.getNickname(),
+        saveServerReply(client, ERR_UMODEUNKNOWNFLAG(client.getNickname(),
                                                      "MODE can only affect an existing channel"));
 }

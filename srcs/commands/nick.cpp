@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/14 11:26:36 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static bool check_same_nickame(Client &client, Server &theServer, std::string &n
 	{
 		if (newNick == (*it)->getNickname())
 		{
-			sendServerReply(client, ERR_NICKNAMEINUSE(newNick, " :Nickname is already in use."));
+			saveServerReply(client, ERR_NICKNAMEINUSE(newNick, " :Nickname is already in use."));
 			return true;
 		}
 	}
@@ -33,14 +33,14 @@ void nick(Client &client, Server &theServer, std::istringstream &iss)
 	iss >> word;
 	if (word.empty())
 	{
-		sendServerReply(client, ERR_ERRONEUSNICKNAME(client.getNickname(), word, "No nickname given"));
+		saveServerReply(client, ERR_ERRONEUSNICKNAME(client.getNickname(), word, "No nickname given"));
 		return;
 	}
 	if (word.length() > 8)
 		word = word.substr(0, 8);
 	if (hasForbiddenChars(word, "client"))
 	{
-		sendServerReply(client, ERR_ERRONEUSNICKNAME(client.getNickname(), word, "Nickname has invalid characters"));
+		saveServerReply(client, ERR_ERRONEUSNICKNAME(client.getNickname(), word, "Nickname has invalid characters"));
 		return;
 	}
 	std::string oldNickname = client.getNickname();
@@ -48,6 +48,6 @@ void nick(Client &client, Server &theServer, std::istringstream &iss)
 	{
 		client.setNickname(word);
 		client.sameNickname(theServer);
-		sendServerReply(client, RPL_SAVENICK(oldNickname, client.getNickname()));
+		saveServerReply(client, RPL_SAVENICK(oldNickname, client.getNickname()));
 	}
 }

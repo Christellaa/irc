@@ -6,13 +6,13 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:00:31 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:17:56 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:18:26 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Macros.hpp"
 
-int g_signal = 0;
+volatile int g_signal = 0;
 
 void	sigint(int code)
 {

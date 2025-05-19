@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:29:24 by cde-sous          #+#    #+#             */
-/*   Updated: 2025/05/15 15:23:18 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,17 @@ void Bot::handleHelp(Client& client, std::string const& channelName, Server& the
 	roasts.push_back("You are so useless🤣");
 	std::srand(time(0));
 	std::string message = roasts[std::rand() % 4];
-	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + "🤬📢 " + message + RESET));
+	saveServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + "🤬📢 " + message + RESET));
 	botIterator it = this->_commands.begin();
 	botIterator ite = this->_commands.end();
 	for (; it != ite; ++it)
-		sendServerReply(client, PRIVMSG(this->getName(), channelName, GREEN + (*it).first + RESET));
+		saveServerReply(client, PRIVMSG(this->getName(), channelName, GREEN + (*it).first + RESET));
 }
 
 void Bot::handleBot(Client& client, std::string const& channelName, Server& theServer)
 {
 	(void)theServer;
-	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + "HI!!!🐦 I'm AngryBird! WELCOME. I'm not angry! Don't push me!🤬" + RESET));
+	saveServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + "HI!!!🐦 I'm AngryBird! WELCOME. I'm not angry! Don't push me!🤬" + RESET));
 }
 
 void Bot::handleRoll(Client& client, std::string const& channelName, Server& theServer)
@@ -69,7 +69,7 @@ void Bot::handleRoll(Client& client, std::string const& channelName, Server& the
 	int randomNumber = std::rand() % 6 + 1;
 	std::stringstream ss;
 	ss << randomNumber;
-	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET + GREEN + "🎲 " + ss.str() + RESET));
+	saveServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET + GREEN + "🎲 " + ss.str() + RESET));
 }
 
 void Bot::handleDate(Client& client, std::string const& channelName, Server& theServer)
@@ -84,7 +84,7 @@ void Bot::handleDate(Client& client, std::string const& channelName, Server& the
 	std::srand(time(0));
 	std::string message = roasts[std::rand() % 4];
 	std::string date = getIrcDate();
-	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET + GREEN + " 📅 Here for the idiot: " + date + RESET));
+	saveServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET + GREEN + " 📅 Here for the idiot: " + date + RESET));
 }
 
 void Bot::handleNick(Client& client, std::string const& channelName, Server& theServer)
@@ -104,7 +104,7 @@ void Bot::handleNick(Client& client, std::string const& channelName, Server& the
 	int randomNumber = std::rand() % 7;
 	std::string message = nicks[randomNumber].second;
 	std::string newNick = nicks[randomNumber].first;
-	sendServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET));
+	saveServerReply(client, PRIVMSG(this->getName(), channelName, BOLD RED + message + RESET));
 	std::istringstream iss(newNick);
 	nick(client, theServer, iss);
 }

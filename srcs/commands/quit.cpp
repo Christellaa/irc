@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 16:17:14 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void quit(Client *client, Server &theServer)
     {
         std::ostringstream oss;
         oss << client->getSocket();
-        sendServerReply(*client, QUIT(userPrefix(*client), oss.str()));
+        saveServerReply(*client, QUIT(userPrefix(*client), oss.str()));
         close(client->getSocket());
         delete client;
         theServer.getClients().erase(clientIt);

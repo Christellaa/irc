@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 16:29:26 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ bool checkModeK(std::string password, Channel& channel, Client& client)
 {
     if (password.empty())
     {
-        sendServerReply(client, ERR_BADCHANNELKEY(client.getNickname(), channel.getName(),
+        saveServerReply(client, ERR_BADCHANNELKEY(client.getNickname(), channel.getName(),
                                                   "No password given to join the channel"));
         return false;
     }
     else if (password != channel.getPassword())
     {
-        sendServerReply(client, ERR_BADCHANNELKEY(client.getNickname(), channel.getName(),
+        saveServerReply(client, ERR_BADCHANNELKEY(client.getNickname(), channel.getName(),
                                                   "Wrong password given to join the channel"));
         return false;
     }
@@ -33,7 +33,7 @@ bool checkModeL(Channel& channel, Client& client)
 {
     if ((int)channel.getClients().size() < channel.getUserLimit() || channel.getUserLimit() == 0)
         return true;
-    sendServerReply(client,
+    saveServerReply(client,
                     ERR_CHANNELISFULL(client.getNickname(), channel.getName(), "Channel is full"));
     return false;
 }
@@ -42,7 +42,7 @@ bool checkModeI(Client& client, Channel& channel)
 {
     if (client.findInvitedChannel(channel) != client.getInvitedChannels().end())
         return true;
-    sendServerReply(client, ERR_INVITEONLYCHAN(client.getNickname(), channel.getName(),
+    saveServerReply(client, ERR_INVITEONLYCHAN(client.getNickname(), channel.getName(),
                                                "Not invited to this channel"));
     return false;
 }
@@ -89,7 +89,7 @@ void joinChannel(Channel& channel, Client* client, std::string const& password)
         }
         messageChannel(channel, JOIN(userPrefix(*client), channel.getName()));
         if (!channel.getTopicMessage().empty())
-            sendServerReply(*client, RPL_TOPIC((*client).getNickname(), channel.getName(),
+            saveServerReply(*client, RPL_TOPIC((*client).getNickname(), channel.getName(),
                                                " :" + channel.getTopicMessage()));
     }
 }
@@ -97,12 +97,12 @@ void joinChannel(Channel& channel, Client* client, std::string const& password)
 void createAndJoinChannel(std::string const& channelName, Client* client, Server& theServer)
 {
     if (channelName.length() > MAX_CHAR_CHANNEL)
-        sendServerReply(*client,
+        saveServerReply(*client,
                         ERR_BADCHANNAME(client->getNickname(), channelName,
                                         "Channel name must be maximum " +
                                             intToString(MAX_CHAR_CHANNEL) + " characters"));
     else if (theServer.getChannels().size() >= MAX_CHANNELS)
-        sendServerReply(*client, ERR_TOOMANYCHANNELS(client->getNickname(), channelName,
+        saveServerReply(*client, ERR_TOOMANYCHANNELS(client->getNickname(), channelName,
                                                      "Too many channels in the server"));
 
     else
@@ -111,7 +111,7 @@ void createAndJoinChannel(std::string const& channelName, Client* client, Server
         theServer.getChannels().push_back(newChannel);
         newChannel->getClients().push_back(client);
         newChannel->getOperators().push_back(client);
-        sendServerReply(*client, JOIN(userPrefix(*client), newChannel->getName()));
+        saveServerReply(*client, JOIN(userPrefix(*client), newChannel->getName()));
     }
 }
 
@@ -131,7 +131,7 @@ void join(Client *client, Server& theServer, std::istringstream& iss)
         std::string password = (i < passwords.size()) ? passwords[i] : "";
         if (hasForbiddenChars(channelName, "channel"))
         {
-            sendServerReply(*client, ERR_BADCHANNAME((*client).getNickname(), channelName,
+            saveServerReply(*client, ERR_BADCHANNAME((*client).getNickname(), channelName,
                                                      "Channel name has forbidden chars"));
             continue;
         }

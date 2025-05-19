@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:25:58 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/07 12:23:21 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:44:59 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_event* events, int epoll_fd)
 {
 	int waitingfd;
-	while (1)
+	while (g_signal == 0)
 	{
 		waitingfd = epoll_wait(epoll_fd, events, MAX_CLIENTS, -1);
 		if (waitingfd == -1)
@@ -25,20 +25,24 @@ static void epoll_loop(Server& theServer, struct epoll_event& ev, struct epoll_e
 		{
 			int currentClientfd = events[i].data.fd;
 			if (currentClientfd == theServer.getSocket())
-				theServer.addNewClient(epoll_fd, ev);
-			else
 			{
-				ClientIterator client = theServer.findClient(currentClientfd);
-				if (client != theServer.getClients().end())
-				{
-					if (events[i].events & (EPOLLERR | EPOLLHUP))
-					{
-						quit(*client, theServer);
-						continue;
-					}
-					(*client)->readClientMessage(theServer);
-				}
+				theServer.addNewClient(epoll_fd, ev);
+				continue;
 			}
+			ClientIterator client = theServer.findClient(currentClientfd);
+			if (client == theServer.getClients().end())
+				continue;
+			if (events[i].events & (EPOLLERR | EPOLLHUP))
+			{
+				(*client)->deleteMessages();
+				quit(*client, theServer);
+				sendServerReply(*(*client));
+				continue;
+			}
+			if (events[i].events & EPOLLOUT)
+				sendServerReply(*(*client));
+			if (events[i].events & EPOLLIN)
+				(*client)->readClientMessage(theServer);
 		}
 	}
 }

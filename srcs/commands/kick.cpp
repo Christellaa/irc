@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:58:18 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 16:18:09 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void kick(Client &client, Server &theServer, std::istringstream &iss)
         ClientIterator chanop = (*channel)->findOperator(client.getNickname());
         if (chanop == (*channel)->getOperators().end())
         {
-            sendServerReply(client,
+            saveServerReply(client,
                             ERR_CHANOPRIVSNEEDED(client.getNickname(), channelName,
                                                  client.getNickname() +
                                                      " does not have the necessary privileges"));
@@ -32,7 +32,7 @@ void kick(Client &client, Server &theServer, std::istringstream &iss)
         ClientIterator hasClient = (*channel)->findClient(clientToKick);
         if (hasClient == (*channel)->getClients().end())
         {
-            sendServerReply(client,
+            saveServerReply(client,
                             ERR_USERNOTINCHANNEL(client.getNickname(), clientToKick, channelName,
                                                  clientToKick + " is not in the channel"));
             return;
@@ -53,5 +53,5 @@ void kick(Client &client, Server &theServer, std::istringstream &iss)
             (*channel)->giveOperatorRights((*channel)->getClients().begin());
     }
     else
-        sendServerReply(client, ERR_NOSUCHCHANNEL(client.getNickname(), channelName, "Channel does not exist"));
+        saveServerReply(client, ERR_NOSUCHCHANNEL(client.getNickname(), channelName, "Channel does not exist"));
 }

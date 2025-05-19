@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Macros.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jewu <jewu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/16 17:03:25 by jewu             ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,21 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-void sendServerReply(Client& client, std::string const& reply)
+void saveServerReply(Client& client, std::string const& reply)
 {
-    send(client.getSocket(), reply.c_str(), reply.length(), 0);
-    std::cout << reply << std::endl;
+    client.addMessage(reply);
+}
+
+void sendServerReply(Client& client)
+{
+    if (client.getMessages().size() != 0)
+    {
+        std::string reply = client.getMessages().front();
+        send(client.getSocket(), reply.c_str(), reply.length(), 0);
+        std::cout << BOLD BLUE "SENDING" RESET << " to client " << client.getNickname() << " the reply:" << std::endl;
+        std::cout << reply << std::endl;
+        client.getMessages().pop();
+    }
 }
 
 void messageChannel(Channel& channel, std::string const& serverReply)
@@ -25,7 +36,7 @@ void messageChannel(Channel& channel, std::string const& serverReply)
     ClientIterator it = channel.getClients().begin();
     ClientIterator ite = channel.getClients().end();
     for (; it != ite; ++it)
-        sendServerReply(*(*it), serverReply);
+        saveServerReply(*(*it), serverReply);
 }
 
 std::string welcomeClient(Client& client)
