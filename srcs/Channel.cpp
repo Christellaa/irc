@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/15 15:01:28 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:31:12 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void Channel::giveOperatorRights(ClientIterator oldestClient)
 void Channel::removeOperatorRights(Client& client)
 {
     ClientIterator clientToRemove = this->findOperator(client.getNickname());
-    if (clientToRemove != this->getOperators().end())
+    if (clientToRemove != this->getOperators().end() && this->getOperators().size() > 1)
         this->getOperators().erase(clientToRemove);
 }
 

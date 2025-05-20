@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:38:01 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/20 10:18:23 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void sendServerReply(Client& client)
     {
         std::string reply = client.getMessages().front();
         send(client.getSocket(), reply.c_str(), reply.length(), 0);
-        std::cout << BOLD BLUE "SENDING" RESET << " to client " << client.getNickname() << " the reply:" << std::endl;
+        std::cout << BOLD BLUE "SENDING" RESET << " to client [" << client.getNickname() << "] the reply:" << std::endl;
         std::cout << reply << std::endl;
         client.getMessages().pop();
     }

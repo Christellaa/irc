@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:02:32 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:09:19 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ void privmsgChannel(Server &theServer, Client &client, std::string const &channe
     ChannelIterator channel = theServer.findChannel(channelName);
     if (channel != theServer.getChannels().end())
     {
-        if ((*channel)->isInviteOnly())
+        if ((*channel)->isInviteOnly() && (*channel)->findClient(client.getNickname()) == (*channel)->getClients().end())
         {
             saveServerReply(client, ERR_CANNOTSENDTOCHAN(client.getNickname(), (*channel)->getName(), "You cannot send message to invite only channel"));
             return;
         }
-        else if (!(*channel)->getPassword().empty())
+        else if (!(*channel)->getPassword().empty()  && (*channel)->findClient(client.getNickname()) == (*channel)->getClients().end())
         {
             saveServerReply(client, ERR_CANNOTSENDTOCHAN(client.getNickname(), (*channel)->getName(), "You cannot send message to channel needing a key"));
             return;

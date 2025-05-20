@@ -6,7 +6,7 @@
 /*   By: cde-sous <cde-sous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:28:05 by jewu              #+#    #+#             */
-/*   Updated: 2025/05/19 13:39:13 by cde-sous         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:28:51 by cde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ bool handleO(std::string const& option, Channel& channel, bool isPositive, Clien
                                            "No client given to give or remove operator rights"));
         return false;
     }
+    ClientIterator clientIt = channel.findClient(option);
     if (isPositive)
     {
-        ClientIterator clientIt = channel.findClient(option);
         if (clientIt != channel.getClients().end())
         {
             channel.giveOperatorRights(clientIt);
@@ -41,6 +41,10 @@ bool handleO(std::string const& option, Channel& channel, bool isPositive, Clien
             channel.removeOperatorRights(*(*channelOperator));
             return true;
         }
+        else if (clientIt == channel.getClients().end())
+            saveServerReply(
+                client, ERR_USERNOTINCHANNEL(client.getNickname(), option, channel.getName(),
+                                         std::string(option) + " is not in " + channel.getName()));
     }
     return false;
 }
@@ -145,8 +149,7 @@ void handleModes(std::istringstream& iss, Channel& channel, std::string modes, C
             {
                 modeOk = toHandle[index](option, channel, isPositive, client);
                 if (modeOk)
-                    saveServerReply(
-                        client, MODE(userPrefix(client), channel.getName(), modeToSend, option));
+                    messageChannel(channel, MODE(userPrefix(client), channel.getName(), modeToSend, option));
                 if ((modes[i] != 'i' && modes[i] != 't') &&
                     ((modes[i] != 'l' && modes[i] != 'k') || isPositive))
                     iss >> option;
@@ -174,7 +177,9 @@ void mode(Client& client, Server& theServer, std::istringstream& iss)
                                         client.getNickname() +
                                             " does not have the necessary privileges for MODE"));
     }
-    else
+    else if (channelName[0] == '#')
         saveServerReply(client, ERR_UMODEUNKNOWNFLAG(client.getNickname(),
                                                      "MODE can only affect an existing channel"));
+    else
+        saveServerReply(client, ERR_INVALIDMODEPARAM(client.getNickname(), channelName, "MODE", "", "First parameter of MODE must be a channel name"));
 }
